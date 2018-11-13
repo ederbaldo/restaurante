@@ -1,0 +1,276 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Pre-Cadastro de Veiculos</ui:define>
+
+    <ui:define name="head">
+        <style type="text/css">
+            .ui-panelgrid.form-elements .ui-grc-2 {
+                padding-left: 80px;
+            }
+
+            @media (max-width:1024px) {
+                .ui-panelgrid.form-elements .ui-grc-2 {
+                    padding-left: 20px;
+                }
+            }
+
+            @media (max-width:640px) {
+                .ui-panelgrid.form-elements .ui-grc-2 {
+                    padding-left: 6px;
+                }
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="ui-fluid">
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <h:form id="formPreCadastro">
+                        <p:growl id="menssagem" showDetail="true" sticky="false"/>           
+                        <div class="card card-w-title">
+                            <h1>Pre-Cadastro de Veículos</h1>
+                            <h3>Dados do Veiculo</h3>
+                            <p:panelGrid columns="6" columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1,ui-g-12 ui-md-4, ui-g-12 ui-md-1, ui-g-12 ui-md-4" layout="grid" 
+                                         styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">                   
+                                <p:outputLabel value="Chassi:" indicateRequired="false"/>
+                                <p:inputText id="chassi" value = "#{veiculoMB.veiculo.chassi}" required="true" requiredMessage="Chassi obrigatório!"/>                                                          
+                                <p:outputLabel for="marca" value="Marca:"/>
+                                <p:selectOneMenu id="marca" value="#{veiculoMB.veiculo.marca.idMarca}">
+                                    <f:selectItems itemLabel="Selecionar" itemValue="0"/>
+                                    <f:selectItems value="#{veiculoMB.selectMarca}"/>
+                                </p:selectOneMenu>
+                                <p:outputLabel value="Modelo:" indicateRequired="false"/>
+
+                                <p:autoComplete id="modelo" maxResults="20" value="#{veiculoMB.veiculo.modelo}" completeMethod="#{veiculoMB.buscarModeloPorNome}" size="50" converter="modeloConverter"
+                                                var="modelo" itemLabel="#{modelo.descricao}" itemValue="#{modelo}"
+                                                forceSelection="true" required="true" requiredMessage="Modelo obrigatório!">
+                                </p:autoComplete>
+                                <p:outputLabel value="Renavam:" indicateRequired="false"/>
+                                <p:inputText id="renavam" value="#{veiculoMB.veiculo.renavam}" required="true" requiredMessage="Renavam obrigatório!"/>
+
+                                <p:outputLabel for="cor" value="Cor:"/>
+                                <p:selectOneMenu id="cor" value="#{veiculoMB.veiculo.cor.idCor}">
+                                    <f:selectItems itemLabel="Selecionar" itemValue="0" />
+                                    <f:selectItems value="#{veiculoMB.selectCorVeiculo}"/>
+                                </p:selectOneMenu> 
+                                <p:outputLabel value="Ano / Modelo:" indicateRequired="false"/>
+                                <p:panelGrid columns="3" columnClasses="ui-g-12 ui-md-5,ui-g-12 ui-md-1,ui-g-12 ui-md-6" layout="grid" 
+                                             styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                                    <p:inputMask id="ano" value="#{veiculoMB.veiculo.ano}" mask="9999" required="true" requiredMessage="Ano obrigatório!"/>
+                                    <p:outputLabel  value="/" />
+                                    <p:inputMask id="anoModelo" value="#{veiculoMB.veiculo.anoModelo}" mask="9999" required="true" requiredMessage="Modelo obrigatório!"/>
+                                    <p:outputLabel/>
+                                </p:panelGrid>
+
+                                <p:outputLabel value="Placa:" indicateRequired="false"/>
+                                <p:inputMask id="placa" value="#{veiculoMB.veiculo.placa}" mask="aaa-9999" required="true" requiredMessage="Placa obrigatória!"/>
+                                <p:outputLabel for="combustivel" value="Combustível:"/>
+                                <p:selectOneMenu id="combustivel" value="#{veiculoMB.veiculo.combustivel}">
+                                    <f:selectItem itemLabel="Selecionar" itemValue="1"/>
+                                    <f:selectItem itemLabel="ALCOOL" itemValue="ALCOOL"/>
+                                    <f:selectItem itemLabel="FLEX" itemValue="FLEX"/>
+                                    <f:selectItem itemLabel="DIESEL" itemValue="DIESEL"/>
+                                    <f:selectItem itemLabel="GASOLINA" itemValue="GASOLINA"/>
+                                    <f:selectItem itemLabel="GAS NATURAL" itemValue="GAS NATURAL"/>
+                                    <f:selectItem itemLabel="ELETRICO" itemValue="ELETRICO"/>
+                                </p:selectOneMenu>   
+
+                                <p:outputLabel for="cambio" value="Câmbio:"/>
+                                <p:selectOneMenu id="cambio" value="#{veiculoMB.veiculo.cambio}">
+                                    <f:selectItem itemLabel="Selecionar" itemValue="1"/>
+                                    <f:selectItem itemLabel="MANUAL" itemValue="MANUAL"/>
+                                    <f:selectItem itemLabel="AUTOMATICO" itemValue="AUTOMATICO"/>                                                                       
+                                    <f:selectItem itemLabel="SEMI-AUTOMATICO" itemValue="SEMI-AUTOMATICO"/>
+                                    <f:selectItem itemLabel="AUTOMATICO SEQUENCIAL" itemValue="AUTOMATICO SEQUENCIAL"/>
+                                    <f:selectItem itemLabel="CVT" itemValue="CVT"/>
+                                </p:selectOneMenu> 
+                                <p:outputLabel for="carroceria" value="Carroceria:"/>
+                                <p:selectOneMenu id="carroceria" value="#{veiculoMB.veiculo.tipoCarroceria}">
+                                    <f:selectItem itemLabel="Selecionar" itemValue="1"/>
+                                    <f:selectItem itemLabel="BUGGY" itemValue="BUGGY"/>
+                                    <f:selectItem itemLabel="CONVERSIVEL" itemValue="CONVERSIVEL"/>
+                                    <f:selectItem itemLabel="CUPE" itemValue="CUPE"/>
+                                    <f:selectItem itemLabel="HATCHBACK" itemValue="HATCHBACK"/>
+                                    <f:selectItem itemLabel="MINIVAN" itemValue="MINIVAN"/>
+                                    <f:selectItem itemLabel="PERUA/SW" itemValue="PERUA/SW"/>
+                                    <f:selectItem itemLabel="PICAPE" itemValue="PICAPE"/>
+                                    <f:selectItem itemLabel="SEDAN" itemValue="SEDAN"/>
+                                    <f:selectItem itemLabel="SUV" itemValue="SUV"/>
+                                    <f:selectItem itemLabel="VAN/UTILITARIO" itemValue="VAN/UTILITARIO"/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="motor" value="Motor:"/>                               
+                                <p:panelGrid columns="3" columnClasses="ui-g-12 ui-md-4,ui-g-12 ui-md-4,ui-g-12 ui-md-4" layout="grid" 
+                                             styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                                    <p:selectOneMenu id="motor" value="#{veiculoMB.veiculo.motor}">
+                                        <f:selectItem itemLabel="Selecionar" itemValue="1"/>
+                                        <f:selectItem itemLabel="1.0" itemValue="1.0"/>
+                                        <f:selectItem itemLabel="1.2" itemValue="1.2"/>
+                                        <f:selectItem itemLabel="1.3" itemValue="1.3"/>
+                                        <f:selectItem itemLabel="1.4" itemValue="1.4"/>
+                                        <f:selectItem itemLabel="1.5" itemValue="1.5"/>
+                                        <f:selectItem itemLabel="1.6" itemValue="1.6"/>
+                                        <f:selectItem itemLabel="1.8" itemValue="1.8"/>
+                                        <f:selectItem itemLabel="2.0" itemValue="2.0"/>
+                                        <f:selectItem itemLabel="2.2" itemValue="2.2"/>
+                                        <f:selectItem itemLabel="2.3" itemValue="2.3"/>
+                                        <f:selectItem itemLabel="2.4" itemValue="2.4"/>
+                                        <f:selectItem itemLabel="2.5" itemValue="2.5"/>
+                                        <f:selectItem itemLabel="2.8" itemValue="2.8"/>
+                                        <f:selectItem itemLabel="3.2" itemValue="3.2"/>
+                                        <f:selectItem itemLabel="3.4" itemValue="3.4"/>
+                                        <f:selectItem itemLabel="3.8" itemValue="3.8"/>
+                                        <f:selectItem itemLabel="4.0" itemValue="4.0"/>
+                                        <f:selectItem itemLabel="5.0" itemValue="5.0"/>
+                                    </p:selectOneMenu>
+                                    <p:outputLabel for="porta" value="Qtd. de Portas:"/>
+                                    <p:selectOneMenu id="porta" value="#{veiculoMB.veiculo.portas}">
+                                        <f:selectItem itemLabel="Selecionar" itemValue="1"/>
+                                        <f:selectItem itemLabel="0" itemValue="0"/>
+                                        <f:selectItem itemLabel="2" itemValue="2"/>
+                                        <f:selectItem itemLabel="3" itemValue="3"/>
+                                        <f:selectItem itemLabel="4" itemValue="4"/>
+                                    </p:selectOneMenu> 
+                                </p:panelGrid>
+
+
+                                <p:outputLabel value="Km:"/>
+                                <p:panelGrid columns="2" columnClasses="ui-g-12 ui-md-4,ui-g-12 ui-md-8" layout="grid" 
+                                             styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+
+                                    <p:inputText id="km" value="#{veiculoMB.veiculo.km}"/>
+                                    <p:commandButton id="idDialogButton" value="Opcionais" oncomplete="PF('dialogOpcionais').show();"
+                                                     icon="fa fa-check-square">                                 
+                                    </p:commandButton>
+
+                                </p:panelGrid>
+
+                            </p:panelGrid >                                                     
+                            <br></br>
+                            <p:panelGrid columns="5" layout="grid"
+                                         columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-4"
+                                         styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                                <p:commandButton value="Salvar" update="formPreCadastro,formPreCadastro2" actionListener="#{veiculoMB.gravar}"  
+                                                 icon="fa fa-check"/>
+                                <p:commandButton value="Cancelar" icon="fa fa-close" onclick="history.go(0); return false;"/>
+                                <p:commandButton value="Excluir" actionListener="#{veiculoMB.excluir}"
+                                                 icon="fa fa-trash" update="formPreCadastro,formPreCadastro2, menssagem" process="@this">
+                                    <p:confirm header="Confirmação" message="Você tem certeza ?" icon="ui-icon-alert" />
+                                </p:commandButton>
+                                <p:commandButton value="Pátio" icon="fa fa-taxi" action="patio" actionListener="#{compraMB.rederecionarPatio()}" />
+                                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                    <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
+                                    <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="fa fa-close" />
+                                </p:confirmDialog>
+                            </p:panelGrid>
+
+                            <p:dialog id="idDialogOpcionais" header="Opcionais" widgetVar="dialogOpcionais" responsive="true" modal="true" resizable="false">
+                                <p:panelGrid columns="1" columnClasses="ui-g-12" layout="grid" 
+                                             styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">                             
+
+                                    <p:selectManyCheckbox id="chkbox" value="#{veiculoMB.opcionaisSelecionados}" layout="responsive" columns="2" styleClass="form-group">
+                                        <f:selectItems value="#{veiculoMB.selectOpcionais}" var="opcionais" itemLabel="#{opcionais.description}" itemValue="#{opcionais.value}" />
+                                    </p:selectManyCheckbox>
+                                </p:panelGrid>
+                            </p:dialog>
+                        </div>
+
+                    </h:form>
+                    <h:form id="formPreCadastro2">
+
+                        <div class="card card-w-title">
+                            <p:dataTable id="idTabela" value="#{veiculoMB.listaVeiculos}" var="veiculo" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         rowsPerPageTemplate="10,20,30,50" emptyMessage="Nenhuma informação..." style="margin-bottom: 30px; margin-top: 5px" reflow="true" >                               
+                                <f:facet name="header">
+                                    <p:outputPanel style="float:left;margin-top: 4px">                                       
+                                        <h:commandLink title="Baixar em Excel" ><i class="fa fa-file-excel-o"></i>
+                                            <p:dataExporter type="xls" target="idTabela" fileName="relatorioPreCadastro"/>
+                                        </h:commandLink><p:spacer width="10" height="5" />
+                                        <h:commandLink title="Baixar em CSV" ><i class="fa fa-file-text-o"></i>
+                                            <p:dataExporter type="csv" target="idTabela" fileName="relatorioPreCadastro" />
+                                        </h:commandLink><p:spacer width="10" height="5" />
+                                        <h:commandLink title="Baixar em PDF" id="preCadastro"><i class="fa fa-file-pdf-o"></i>
+                                            <p:fileDownload value="#{veiculoMB.relatorioPreCadastro}" />
+                                        </h:commandLink>
+                                    </p:outputPanel>
+                                    <p:spacer width="25"></p:spacer>
+                                    <p:outputPanel style="float:right;margin-top: 4px">  
+                                        <h:commandLink title="Buscar todos" ><i class="fa fa-search"></i>
+                                        </h:commandLink>
+                                        <p:spacer width="5"></p:spacer>
+                                        <p:inputText id="globalFilter" value="#{veiculoMB.nomeSelecionado}" style="width:200px" placeholder="Pesquisar...">
+                                            <p:ajax event="change" update="formPreCadastro2:idTabela" listener="#{veiculoMB.pesquisarPlacaPreCadastro()}" process="@this" />
+                                        </p:inputText>
+
+                                    </p:outputPanel>
+                                </f:facet>
+                                <p:column headerText="Placa" width="2">
+                                    <h:outputText value="#{veiculo.placa}"/>
+                                </p:column> 
+                                <p:column headerText="Marca" width="20" sortBy="#{veiculo.marca.descricao}">
+                                    <h:outputText value="#{veiculo.marca.descricao}"/>
+                                </p:column> 
+                                <p:column headerText="Modelo" width="30" sortBy="#{veiculo.modelo.descricao}">
+                                    <h:outputText value="#{veiculo.modelo.descricao}"/>
+                                </p:column>   
+                                <p:column headerText="Ano / Modelo" width="5">
+                                    <h:outputText value="#{veiculo.ano}"/> /
+                                    <h:outputText value="#{veiculo.anoModelo}"/>
+                                </p:column>
+                                <p:column headerText="Combustivel" width="5" sortBy="#{veiculo.combustivel}">
+                                    <h:outputText value="#{veiculo.combustivel}"/>
+                                </p:column>
+                                <p:column headerText="Cor" width="5" sortBy="#{veiculo.cor.descricao}">
+                                    <h:outputText value="#{veiculo.cor.descricao}"/>
+                                </p:column>                                                                                                
+                                <p:column style="text-align: center; width:1%">                                   
+                                    <p:commandLink title="Mais Informações" id="idDialogInfoLink" oncomplete="PF('dialogInfo').show();">
+                                        <i class="fa fa-info-circle"></i>
+                                    </p:commandLink>                                 
+                                </p:column>                                
+                                <p:column style="text-align: center; width:1%">                                   
+                                    <p:commandLink title="Editar" id="alterar" actionListener="#{veiculoMB.alterarPreCadasrto()}" update="formPreCadastro" process="@this" >
+                                        <i class="fa fa-pencil-square-o"></i>
+                                    </p:commandLink>                                 
+                                </p:column>
+
+                            </p:dataTable> 
+                        </div>
+
+                        <p:dialog id="idDialogInfo" header="Informações" widgetVar="dialogInfo" responsive="true" modal="true" resizable="false">
+                            <div class="ui-fluid">                                   
+                                <p:panelGrid id="idPanelInfo" columns="4" layout="grid"
+                                             columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-g-12 ui-md-2,ui-g-12 ui-md-4"
+                                             styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">                                     
+                                    <p:outputLabel for="idMotor" value="Motor:"/>
+                                    <p:inputText  id="idMotor" value="#{veiculo.motor}" disabled="true"/>
+                                    <p:outputLabel for="idPorta" value="Nº Portas:"/>
+                                    <p:inputText  id="idPorta" value="#{veiculo.portas}" disabled="true"/>
+                                    <p:outputLabel for="idCarroceria" value="Carroceria:"/>
+                                    <p:inputText  id="idCarroceria" value="#{veiculo.tipoCarroceria}" disabled="true"/>
+                                    <p:outputLabel for="idCambio" value="Cambio:"/>
+                                    <p:inputText  id="idCambio" value="#{veiculo.cambio}" disabled="true"/>
+                                    <p:outputLabel for="idKm" value="Km:"/>
+                                    <p:inputText  id="idKm" value="#{veiculo.km}" disabled="true"/>                                      
+                                </p:panelGrid> 
+                                <p:fieldset legend="Opcionais" toggleable="true" toggleSpeed="500">
+                                    <p:ajax event="toggle"/>
+                                    <h:panelGrid columns="2" cellpadding="5">                                           
+                                        <h:outputText value="Aqui e para vir os opcionais do veiculo."></h:outputText>
+                                    </h:panelGrid>
+                                </p:fieldset>
+                            </div>
+                        </p:dialog>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+
+</ui:composition>

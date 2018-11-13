@@ -1,0 +1,56 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/templates/Layout.xhtml">
+
+    <ui:define name="content">
+        <div class="ui-fluid">
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <h:form id="formOpenLicense">
+                        <p:growl id="menssagem" showDetail="true" sticky="false" />          
+                        <div class="card card-w-title">
+                            <h1>Cadastro de Open License</h1>
+                            <p:panelGrid columns="3" layout="grid" 
+                                         columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-3,ui-g-12 ui-md-5,ui-g-12 ui-md-5,ui-g-12 ui-md-1"
+                                         styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">                                                  
+                                <p:outputLabel for="idNumeroContrato" value="Numero Contrato: " indicateRequired="false"/>
+                                <p:inputText id="idNumeroContrato" value="#{openLicenseMB.openLicense.contrato}" required="true" requiredMessage="Numero Contrato obrigatória!"/> 
+                                <p:outputLabel/>
+                                <p:outputLabel for="idFornecedor" value="Fornecedor: " indicateRequired="false"/>
+                                <p:inputText id="idFornecedor" value="#{openLicenseMB.openLicense.fornecedor}" required="true" requiredMessage="Fornecedor obrigatória!"/> 
+                                <p:outputLabel/>
+                                <p:outputLabel for="idDescricao" value="Descrição:  " indicateRequired="false"/>
+                                <p:inputText id="idDescricao" value="#{openLicenseMB.tipoLicense.descricao}" required="true" requiredMessage="Descrição obrigatória!"/> 
+                                <p:outputLabel/>
+                                <p:outputLabel for="idQuantidade" value="Quantidade:  " />
+                                <p:inputText id="idQuantidade" value="#{openLicenseMB.tipoLicense.quantidade}"/> 
+                                <p:outputLabel/>
+                            </p:panelGrid >
+                            <br/>
+                            <p:panelGrid columns="4" layout="grid"
+                                         columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2, ui-grid-col-6"
+                                         styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                                <p:commandButton value="Salvar" update="formOpenLicense"
+                                                 icon="fa fa-check" actionListener="#{openLicenseMB.gravar}"/>
+                                <p:commandButton onclick="history.go(0); return false;" value="Cancelar" update="formOpenLicense"
+                                                 icon="fa fa-close" />
+                                <p:commandButton value="Excluir" actionListener="#{openLicenseMB.excluir}"
+                                                 icon="fa fa-trash" update="formOpenLicense,menssagem" process="@this">
+                                    <p:confirm header="Confirmação" message="Você tem certeza ?" icon="ui-icon-alert" />
+                                </p:commandButton>
+                                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                    <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
+                                    <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="fa fa-close" />
+                                </p:confirmDialog>
+                            </p:panelGrid>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+
+</ui:composition>

@@ -1,5 +1,13 @@
 /* TOGGLE */
 .aw-toggle {
+	float: left;
+	line-height: 50px;
+	margin-left: 15%;
+
+	color: #fff;
+}
+
+.aw-toggle2 {
 	float: right;
 	line-height: 50px;
 	margin-right: 15px;

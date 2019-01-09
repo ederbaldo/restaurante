@@ -6,28 +6,11 @@
                 template="/WEB-INF/templates/Layout.xhtml">
 
     <ui:define name="head">
-        <style type="text/css">
-            .ui-panelgrid.form-elements .ui-grc-2 {
-                padding-left: 80px;
-            }
-
-            @media (max-width:1024px) {
-                .ui-panelgrid.form-elements .ui-grc-2 {
-                    padding-left: 20px;
-                }
-            }
-
-            @media (max-width:640px) {
-                .ui-panelgrid.form-elements .ui-grc-2 {
-                    padding-left: 6px;
-                }
-            }
-        </style>
     </ui:define>
 
     <ui:define name="content">
         <h:form id="formRelatorioCusto">
-            <p:growl id="menssagem" showDetail="true" sticky="false" />
+            <p:messages id="menssagem" showDetail="true" closable="true"/> 
             <div class="ui-fluid">
                 <div class="ui-g">
                     <div class="ui-g-12">

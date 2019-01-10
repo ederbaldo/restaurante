@@ -53,5 +53,6 @@ function desativarLiSelecionada() {
 		var menuExpandido = $(liAtiva).find('.aw-menu-tree');
 		menuExpandido.toggle('1000');
 		$(liAtiva).removeClass('is-selected');
+               
 	}
 }

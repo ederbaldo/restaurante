@@ -11,8 +11,7 @@ import model.Computador;
 import model.Colab;
 import model.Software;
 
-
-public class Dao implements Serializable{
+public class Dao implements Serializable {
 
     private EntityManagerFactory emf;
     private EntityManager em;
@@ -47,46 +46,56 @@ public class Dao implements Serializable{
     public List<?> buscarTodos(Class classe) {
         return em.createQuery("From " + classe.getName()).getResultList();
     }
-    
+
     public Computador buscarFuncionario(String nome) {
-        return (Computador) em.createNativeQuery("Select * from usinas.v_colab where nome_colab like '%" + nome+ "%'", Computador.class).getResultList();
+        return (Computador) em.createNativeQuery("Select * from usinas.v_colab where nome_colab like '%" + nome + "%'", Computador.class).getResultList();
     }
-  
-	 //-----------------Metodos para Classes converter -----------------------
+
+    //-----------------Metodos para Classes converter -----------------------
     public Computador buscarFuncionarioConverter(String nome) {
-        return (Computador) em.createNativeQuery("Select * from usinas.v_colab where nome_colab like '%" + nome+ "%'", Computador.class).getResultList();
+        return (Computador) em.createNativeQuery("Select * from usinas.v_colab where nome_colab like '%" + nome + "%'", Computador.class).getResultList();
     }
-    
+
     public List<Object[]> buscarColab() {
         TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("select nome_colab, cd_colab from v_colab where dt_demis is null");
         List<Object[]> results = query.getResultList();
         return results;
     }
-    
-     public List<Object[]> buscarColaboradores(BigDecimal mat) {
+
+    public List<Object[]> buscarNF() {
+        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT A.NRO,a.SERIE,a.DT_EMISS,a.RAZAO_SOCIAL,a.NRO_NFE,b.CD_PROD,b.DESCR_PROD FROM NF_ENT a, ITNF_ENT b WHERE a.NFENT_ID = b.NFENT_ID AND b.CD_PROD  in ('54578','54579','54160','54164') order by a.DT_EMISS");
+        List<Object[]> results = query.getResultList();
+        return results;
+    }
+
+    public List<Object[]> buscarColaboradores(BigDecimal mat) {
         TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("select nome_colab, cd_colab from v_colab where dt_demis is null and cd_colab = " + mat);
         List<Object[]> results = query.getResultList();
         return results;
     }
-    
-     public List<Software> buscarSoftware(String nome) {
+
+    public List<Software> buscarSoftware(String nome) {
         return (List<Software>) em.createNativeQuery("SELECT * FROM software where key like '%" + nome + "%'", Software.class).getResultList();
     }
-     public List<Computador> buscarComputador(String nome) {
+
+    public List<Computador> buscarComputador(String nome) {
         return (List<Computador>) em.createNativeQuery("SELECT * FROM computador where descricao like '%" + nome + "%'", Computador.class).getResultList();
     }
-     public List<Colab> buscarColaborador(int mat) {
+
+    public List<Colab> buscarColaborador(int mat) {
         return (List<Colab>) em.createNativeQuery("SELECT nome_colab, cd_colab FROM v_colab where dt_demis is null  and cd_colab = " + mat, Colab.class).getResultList();
     }
-     
-      //----------------Classes converter -----------------------
-     public Software buscarSoftwareConverter(String nome) {
+
+    //----------------Classes converter -----------------------
+    public Software buscarSoftwareConverter(String nome) {
         return (Software) em.createNativeQuery("SELECT * FROM software where key = '" + nome + "'", Software.class).getSingleResult();
     }
-     public Computador buscarComputadorConverter(String nome) {
+
+    public Computador buscarComputadorConverter(String nome) {
         return (Computador) em.createNativeQuery("SELECT * FROM computador where descricao = '" + nome + "'", Computador.class).getSingleResult();
     }
-     public Colab buscarColabConverter(String nome) {
+
+    public Colab buscarColabConverter(String nome) {
         return (Colab) em.createNativeQuery("SELECT nome_colab, cd_colab FROM v_colab where nome_colab = '" + nome + "'", Colab.class).getSingleResult();
     }
 }

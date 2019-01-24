@@ -6,6 +6,7 @@
 package model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,40 +34,39 @@ public class Ip implements Serializable{
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "IP_SEQ")
     @SequenceGenerator(sequenceName = "SEQ_IP", allocationSize = 1, name = "IP_SEQ")
     @Column(name = "id_ip", unique = true, nullable = false)
-    private int idIp;
+    private Integer idIp;
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_computador", nullable = false, foreignKey = @ForeignKey(name = "id_computador_ip"))
+    @JoinColumn(name = "id_computador", nullable = true, foreignKey = @ForeignKey(name = "id_computador_ip"))
     private Computador computador;
     @Column(name = "colab_id", nullable = true)
-    private int colabId;
+    private BigDecimal colabId;
     @Column(name = "numero_ip", nullable = true)
-    private int numeroIp;
+    private String numeroIp;
     @Column(name = "faixa", nullable = true)
-    private int faixa;
+    private Integer faixa;
     @Column(name = "solicitante_id", nullable = true)
-    private int solicitanteId;
+    private Integer solicitanteId;
     @Column(name = "mac", nullable = true)
     private String mac;
     @Temporal(value = TemporalType.DATE)
-    @Column(name = "data_inicio", nullable = false)
+    @Column(name = "data_inicio", nullable = true)
     private Date dataInicio;
     @Temporal(value = TemporalType.DATE)
-    @Column(name = "data_fim", nullable = false)
+    @Column(name = "data_fim", nullable = true)
     private Date dataFim;
     @Column(name = "dispositivo", nullable = true)
     private String dispositivo;
     @Column(name = "terceiro", nullable = true)
     private String terceiro;
     @Type(type = "yes_no")
-    @Column(name = "tipo", nullable = false)
+    @Column(name = "tipo", nullable = true)
     private Boolean tipo;
-    
 
-    public int getIdIp() {
+    public Integer getIdIp() {
         return idIp;
     }
 
-    public void setIdIp(int idIp) {
+    public void setIdIp(Integer idIp) {
         this.idIp = idIp;
     }
 
@@ -78,35 +78,35 @@ public class Ip implements Serializable{
         this.computador = computador;
     }
 
-    public int getColabId() {
+    public BigDecimal getColabId() {
         return colabId;
     }
 
-    public void setColabId(int colabId) {
+    public void setColabId(BigDecimal colabId) {
         this.colabId = colabId;
     }
 
-    public int getNumeroIp() {
+    public String getNumeroIp() {
         return numeroIp;
     }
 
-    public void setNumeroIp(int numeroIp) {
+    public void setNumeroIp(String numeroIp) {
         this.numeroIp = numeroIp;
     }
 
-    public int getFaixa() {
+    public Integer getFaixa() {
         return faixa;
     }
 
-    public void setFaixa(int faixa) {
+    public void setFaixa(Integer faixa) {
         this.faixa = faixa;
     }
 
-    public int getSolicitanteId() {
+    public Integer getSolicitanteId() {
         return solicitanteId;
     }
 
-    public void setSolicitanteId(int solicitanteId) {
+    public void setSolicitanteId(Integer solicitanteId) {
         this.solicitanteId = solicitanteId;
     }
 
@@ -157,7 +157,7 @@ public class Ip implements Serializable{
     public void setTipo(Boolean tipo) {
         this.tipo = tipo;
     }
-
+    
 
     
     

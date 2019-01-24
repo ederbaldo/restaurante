@@ -9,108 +9,135 @@
         <div class="ui-fluid">
             <div class="ui-g">
                 <div class="ui-g-12">
-                    <h:form id="formIp">
-                        <p:growl id="menssagem" showDetail="true" sticky="false" />          
-                        <div class="card card-w-title">
-                            <h1>ips</h1>
-                            <p:panelGrid columns="6" columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1,ui-g-12 ui-md-4, ui-g-12 ui-md-1, ui-g-12 ui-md-4" layout="grid" 
-                                         styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
-                                <p:outputLabel for="idComputador" value="Computador" indicateRequired="false"/>
-                                <p:autoComplete id="idComputador" maxResults="20" value="#{ipMB.ip.computador}" completeMethod="#{ipMB.buscarComputador}" converter="computadorConverter"
-                                                var="computador" itemLabel="#{computador.descricao}" itemValue="#{computador}"
-                                                forceSelection="true" required="true" requiredMessage="Computador obrigatório!">
-                                    <p:ajax event="itemSelect" update="formIp:notaFiscal2, :formIp:data2, :formIp:fornecedor2"/>
-                                </p:autoComplete> 
-                                <p:outputLabel for="notaFiscal2" value="Nota Fiscal: "/>
-                                <p:inputText id="notaFiscal2" value="#{ipMB.ip.computador.nf}" disabled="true" />
-                                <p:outputLabel value="Data:"/>
-                                <p:inputText id="data2" value="#{ipMB.ip.computador.data}" disabled="true"/>
-                                <p:outputLabel value="Fornecedor: "/>
-                                <p:inputText id="fornecedor2" value="#{ipMB.ip.computador.fornecedor}" disabled="true"/>   
-                            </p:panelGrid>
-                            <br/>
-                            <p:panelGrid columns="6" id="pnlPessoa" layout="grid"
-                                         columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-3,ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1,ui-g-12 ui-md-4"  
-                                         styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">                         
-                                <p:outputLabel id="lbPessoa" value="*Pessoa: " 
-                                               style="float: left;" />
-                                <p:selectOneRadio id="pessoa" layout="responsive" columns="2" value="#{ipMB.ip.tipo}" 
-                                                  requiredMessage="Campo [Pessoa] é obrigatório." >
-                                    <f:selectItem itemLabel="Colab" itemValue="#{true}" />
-                                    <f:selectItem itemLabel="Consultor" itemValue="#{false}" />
-                                    <p:ajax event="change" update="pnlPessoa" process="pessoa"/>                                  
-                                </p:selectOneRadio>
-                                <p:outputLabel id="idCpf" value="Matricula:" rendered="#{ipMB.ip.tipo=='true'}"/>
-                                <p:autoComplete rendered="#{ipMB.ip.tipo=='true'}" id="idColab" maxResults="20" value="#{ipMB.matricula}" completeMethod="#{ipMB.buscarColaboradores}" 
-                                                var="colab" itemLabel="#{colab.matricula}" itemValue="#{matricula}"
-                                                forceSelection="true" required="true" requiredMessage="Matricula obrigatório!">
-                                    <p:ajax event="itemSelect" update="formIp:nome"/>
-                                </p:autoComplete> 
-                                <p:outputLabel rendered="#{ipMB.ip.tipo=='true'}" for="nome" value="Nome: "/>
-                                <p:inputText id="nome" value="#{ipMB.colab.nome}" disabled="true" />
+                    <h3>Scrollable</h3>
+                    <p:commandButton value="Modal" type="button" onclick="PF('dlg2').show();" />
+                    <p:tabView scrollable="true">
+                        <p:tab title="Tab 1">
+                            <div class="card card-w-title">
+                                <p:dataTable id="idTabela" value="#{ipMB.listarIp}" var="ip" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             rowsPerPageTemplate="10,20,30,50" emptyMessage="Nenhuma informação..." style="margin-bottom: 30px; margin-top: 5px" reflow="true" >
+                                    <f:facet name="header">
+                                        <p:spacer width="25"></p:spacer>
+                                    </f:facet>
+                                    <p:column headerText="computador" width="100" sortBy="#{ip.computador.descricao}">
+                                        <h:outputText value="#{ip.computador.descricao}"/>
+                                    </p:column> 
+                                    <p:column style="text-align: center; width:1%">                                   
+                                        <p:commandLink title="Editar" id="alterar" actionListener="#{ip.alterar()}"  process="@this">
+                                            <i class="fa fa-pencil-square-o" ></i>
+                                        </p:commandLink>                                 
+                                    </p:column>
+                                </p:dataTable> 
+                            </div>
+                        </p:tab>
+                        <p:tab title="Tab 2">Tab 2 Content</p:tab>
+                        <p:tab title="Tab 3">Tab 3 Content</p:tab>
+                        <p:tab title="Tab 4">Tab 4 Content</p:tab>
+                        <p:tab title="Tab 5">Tab 5 Content</p:tab>
+                        <p:tab title="Tab 6">Tab 6 Content</p:tab>
+                        <p:tab title="Tab 7">Tab 7 Content</p:tab>
+                        <p:tab title="Tab 8">Tab 8 Content</p:tab>
+                        <p:tab title="Tab 9">Tab 9 Content</p:tab>
+                        <p:tab title="Tab 10">Tab 10 Content</p:tab>
+                        <p:tab title="Tab 11">Tab 11 Content</p:tab>
+                        <p:tab title="Tab 12">Tab 12 Content</p:tab>
+                        <p:tab title="Tab 13">Tab 13 Content</p:tab>
+                        <p:tab title="Tab 14">Tab 14 Content</p:tab>
+                        <p:tab title="Tab 15">Tab 15 Content</p:tab>
+                        <p:tab title="Tab 16">Tab 16 Content</p:tab>
+                        <p:tab title="Tab 17">Tab 17 Content</p:tab>
+                        <p:tab title="Tab 18">Tab 18 Content</p:tab>
+                        <p:tab title="Tab 19">Tab 19 Content</p:tab>
+                        <p:tab title="Tab 20">Tab 20 Content</p:tab>
+                        <p:tab title="Tab 21">Tab 21 Content</p:tab>
+                        <p:tab title="Tab 22">Tab 22 Content</p:tab>
+                        <p:tab title="Tab 23">Tab 23 Content</p:tab>
+                        <p:tab title="Tab 24">Tab 24 Content</p:tab>
+                        <p:tab title="Tab 25">Tab 25 Content</p:tab>                
+                    </p:tabView>
+
+                    <p:dialog header="Modal Dialog" widgetVar="dlg2" modal="true">
+                        <h:form id="formIp">
+                            <p:growl id="menssagem" showDetail="true" sticky="false" />          
+                            <div class="card card-w-title">
+                                <h1>ips</h1>
+                                <p:panelGrid columns="6" columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1,ui-g-12 ui-md-4, ui-g-12 ui-md-1, ui-g-12 ui-md-4" layout="grid" 
+                                             styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                                    <p:outputLabel for="idComputador" value="Computador" indicateRequired="false"/>
+                                    <p:autoComplete id="idComputador" maxResults="20" value="#{ipMB.ip.computador}" completeMethod="#{ipMB.buscarComputador}" converter="computadorConverter"
+                                                    var="computador" itemLabel="#{computador.descricao}" itemValue="#{computador}"
+                                                    forceSelection="true" required="true" requiredMessage="Computador obrigatório!">
+                                        <p:ajax event="itemSelect" update="formIp:notaFiscal2, :formIp:data2, :formIp:fornecedor2"/>
+                                    </p:autoComplete> 
+                                    <p:outputLabel for="notaFiscal2" value="Nota Fiscal: "/>
+                                    <p:inputText id="notaFiscal2" value="#{ipMB.ip.computador.nf}" disabled="true" />
+                                    <p:outputLabel value="Data:"/>
+                                    <p:inputText id="data2" value="#{ipMB.ip.computador.data}" disabled="true"/>
+                                    <p:outputLabel value="Fornecedor: "/>
+                                    <p:inputText id="fornecedor2" value="#{ipMB.ip.computador.fornecedor}" disabled="true"/>   
+                                </p:panelGrid>
+                                <br/>
+                                <p:panelGrid columns="6" id="pnlPessoa" layout="grid"
+                                             columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-3,ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1,ui-g-12 ui-md-4"  
+                                             styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">                         
+                                    <p:outputLabel id="lbPessoa" value="*Pessoa: " 
+                                                   style="float: left;" />
+                                    <p:selectOneRadio id="pessoa" layout="responsive" columns="2" value="#{ipMB.ip.tipo}" 
+                                                      requiredMessage="Campo [Pessoa] é obrigatório." >
+                                        <f:selectItem itemLabel="Colab" itemValue="#{true}" />
+                                        <f:selectItem itemLabel="Consultor" itemValue="#{false}" />
+                                        <p:ajax event="change" update="pnlPessoa" process="pessoa"/>                                  
+                                    </p:selectOneRadio>
+
+                                    <p:outputLabel value="Matricula" rendered="#{ipMB.ip.tipo=='true'}"/>
+                                    <p:inputText id="matricula" rendered="#{ipMB.ip.tipo=='true'}" value="#{ipMB.matricula}"> 
+                                        <p:ajax event="change" update="formIp:nomeColab :formIp:colabId" listener="#{ipMB.buscarColaboradores}" process="@this" />
+                                    </p:inputText>   
+
+                                    <p:outputLabel value="nomeColab" rendered="#{ipMB.ip.tipo=='true'}"/>
+                                    <p:inputText id="nomeColab" rendered="#{ipMB.ip.tipo=='true'}" value="#{ipMB.nomeColab}"/> 
+
+                                    <p:inputText   id="colabId" rendered="#{ipMB.ip.tipo=='true'}" value="#{ipMB.ip.colabId}"/> 
 
 
-                                <p:outputLabel id="idCnpj" value="Nome Consultor:"  rendered="#{ipMB.ip.tipo=='false'}"/> 
-                                <p:inputText  id="msCnpj" rendered="#{ipMB.ip.tipo=='false'}"
-                                              value="#{ipMB.ip.terceiro}" />
-                            </p:panelGrid>
-                            <p:panelGrid columns="4" layout="grid"
-                                         columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2, ui-grid-col-6"
-                                         styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
-                                <p:commandButton value="Salvar" update="formIp,formIp2"
-                                                 icon="fa fa-check" actionListener="#{ipMB.gravar}"/>
-                                <p:commandButton onclick="history.go(0); return false;" value="Cancelar" update="formIp,formIp2"
-                                                 icon="fa fa-close" />
-                                <p:commandButton value="Excluir" actionListener="#{ipMB.excluir}"
-                                                 icon="fa fa-trash" update="formIp,menssagem" process="@this">
-                                    <p:confirm header="Confirmação" message="Você tem certeza ?" icon="ui-icon-alert" />
-                                </p:commandButton>
-                                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                                    <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
-                                    <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="fa fa-close" />
-                                </p:confirmDialog>
-                            </p:panelGrid>
-                        </div>
-                    </h:form>
-                    <h:form id="formIp2">
-                        <div class="card card-w-title">
-                            <p:dataTable id="idTabela" value="#{ipMB.listarIp}" var="ip" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                         rowsPerPageTemplate="10,20,30,50" emptyMessage="Nenhuma informação..." style="margin-bottom: 30px; margin-top: 5px" reflow="true" >
-                                <f:facet name="header">
-                                    <p:outputPanel style="float:left;margin-top: 4px">                                       
-                                        <h:commandLink title="Baixar em Excel" ><i class="fa fa-file-excel-o"></i>
-                                            <p:dataExporter type="xls" target="idTabela" fileName="relatorioMarca"/>
-                                        </h:commandLink><p:spacer width="10" height="5" />
-                                        <h:commandLink title="Baixar em CSV" ><i class="fa fa-file-text-o"></i>
-                                            <p:dataExporter type="csv" target="idTabela" fileName="relatorioMarca" />
-                                        </h:commandLink><p:spacer width="10" height="5" />
-                                        <h:commandLink title="Baixar em PDF" id="marca"><i class="fa fa-file-pdf-o"></i>
-                                            <p:fileDownload value="#{ipMB.relatorio}" />
-                                        </h:commandLink>
-                                    </p:outputPanel>
-                                    <p:spacer width="25"></p:spacer>
-                                    <p:outputPanel style="float:right;margin-top: 4px">  
-                                       
-                                        <p:spacer width="5"></p:spacer>
-                                        <p:inputText id="globalFilter"  style="width:200px" placeholder="Pesquisar...">
-                                            <p:ajax event="change" update="formIp2:idTabela"  process="@this" />
-                                        </p:inputText>
-                                    </p:outputPanel>
-                                </f:facet>
-                                <p:column headerText="computador" width="100" sortBy="#{ip.computador.descricao}">
-                                    <h:outputText value="#{ip.computador.descricao}"/>
-                                </p:column> 
-                                <p:column style="text-align: center; width:1%">                                   
-                                    <p:commandLink title="Editar" id="alterar" actionListener="#{ip.alterar()}" update="formIp, formIp2" process="@this">
-                                        <i class="fa fa-pencil-square-o" ></i>
-                                    </p:commandLink>                                 
-                                </p:column>
-                            </p:dataTable> 
-                        </div>
-                    </h:form>
+                                    <p:outputLabel id="idCnpj" value="Nome Consultor:"  rendered="#{ipMB.ip.tipo=='false'}"/> 
+                                    <p:inputText  id="msCnpj" rendered="#{ipMB.ip.tipo=='false'}"
+                                                  value="#{ipMB.ip.terceiro}" />
+                                </p:panelGrid>
+                                
+                                <p:panelGrid columns="6" columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1,ui-g-12 ui-md-4, ui-g-12 ui-md-1, ui-g-12 ui-md-4" layout="grid" 
+                                             styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                                    <p:outputLabel for="dataInicio" value="Data Inicio: "/>
+                                    <p:calendar id="dataInicio" locale="br" value="#{ipMB.ip.dataInicio}" pattern="dd/MM/yyyy"/>
+                                    <p:outputLabel for="dataFim" value="Data Fim: "/>
+                                    <p:calendar id="dataFim" locale="br" value="#{ipMB.ip.dataFim}" pattern="dd/MM/yyyy"/>
+
+                                    <p:outputLabel value="Ip"/>
+                                    <p:inputText id="ip" value="#{ipMB.ip.numeroIp}"/>
+                                    <p:outputLabel value="Mac: "/>
+                                    <p:inputText id="mac" value="#{ipMB.ip.mac}"/>   
+                                </p:panelGrid>
+                                <p:panelGrid columns="4" layout="grid"
+                                             columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2, ui-grid-col-6"
+                                             styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                                    <p:commandButton value="Salvar" update="formIp"
+                                                     icon="fa fa-check" actionListener="#{ipMB.gravar}"/>
+                                    <p:commandButton onclick="history.go(0); return false;" value="Cancelar" update="formIp"
+                                                     icon="fa fa-close" />
+                                    <p:commandButton value="Excluir" actionListener="#{ipMB.excluir}"
+                                                     icon="fa fa-trash" update="formIp,menssagem" process="@this">
+                                        <p:confirm header="Confirmação" message="Você tem certeza ?" icon="ui-icon-alert" />
+                                    </p:commandButton>
+                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
+                                        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="fa fa-close" />
+                                    </p:confirmDialog>
+                                </p:panelGrid>
+                            </div>
+                        </h:form>
+                    </p:dialog>
                 </div>
             </div>
         </div>
     </ui:define>
-
 </ui:composition>

@@ -12,10 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import model.Colab;
 import model.Computador;
 import model.Ip;
+import util.FacesUtil;
 
 /**
  *
@@ -44,32 +46,42 @@ public class IpMB implements Serializable {
         ip.setComputador(new Computador());
         colab = new Colab();
         listarIp= new ArrayList<Ip>();
+        listaColab = new ArrayList<Colab>();
         listarIp = (List<Ip>) dao.buscarTodos(Ip.class);
         //BuscarColab();
-        setListaColab(new ArrayList<Colab>());
-        BuscarColaboradores();
     }
     public List<Computador> buscarComputador(String nome) {
         setListaComputador((List<Computador>) dao.buscarComputador(nome));
         return getListaComputador();
     }
-    public List<Colab> buscarColaboradores(BigDecimal mat) {
-        //setListaColab((List<Colab>) dao.buscarColaborador(mat));
+    public void buscarColaboradores() {
+//        //setListaColab((List<Colab>) dao.buscarColaborador(mat));
         
-        List<Object[]> results = dao.buscarColaboradores(mat);
-        Colab colab;
+        List<Object[]> results = dao.buscarColaboradores(getMatricula());
+        Colab colab = null;
+        
         for (Object[] result : results) {
             colab = new Colab();
-            colab.setNome((String) result[0]);
+            colab.setColabId((BigDecimal) result[0]);
             colab.setMatricula((BigDecimal) result[1]);
+            colab.setNome((String) result[2]);
             getListaColab().add(colab);
-        }
-        setNomeColab(getColab().getNome());
-        return getListaColab();
-        
-        
+            ip.setColabId(colab.getColabId());
+            setNomeColab(colab.getNome());
+        }       
     }
-    
+    public void gravar (ActionEvent evt)
+    {
+        try {
+            dao.gravar(ip);
+            /*listarMarcaVeiculo = (List<Marca>) dao.buscarTodos(Marca.class);*/
+            ip = new Ip();
+             FacesUtil.addInfoMessage("Informação", "Ip salva com sucesso!");
+        } catch (Exception ex) {
+            FacesUtil.addErrorMessage("Erro", "Entre em contato com suporte!");
+            ex.printStackTrace();
+        }
+    }
     public void BuscarColaboradores() {
         //novoTotal();
         

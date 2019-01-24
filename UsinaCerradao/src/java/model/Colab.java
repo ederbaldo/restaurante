@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 public class Colab implements Serializable {
     private String nome;
     private BigDecimal matricula;
+    private BigDecimal colabId;
 
     public String getNome() {
         return nome;
@@ -31,6 +32,18 @@ public class Colab implements Serializable {
     public void setMatricula(BigDecimal matricula) {
         this.matricula = matricula;
     }
+
+    public BigDecimal getColabId() {
+        return colabId;
+    }
+
+    public void setColabId(BigDecimal colabId) {
+        this.colabId = colabId;
+    }
+
+    
+
+    
 
 
 

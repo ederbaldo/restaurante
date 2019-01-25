@@ -5,7 +5,7 @@
 	version="3.1">
 
 	<welcome-file-list>
-		<welcome-file>sistema/dashboard.xhtml</welcome-file>
+		<welcome-file>login.xhtml</welcome-file>
 	</welcome-file-list>
 
 	<context-param>

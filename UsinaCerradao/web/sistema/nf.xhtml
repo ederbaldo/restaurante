@@ -29,19 +29,21 @@
                                        
                                     </p:outputPanel>
                                 </f:facet>
-                                <p:column headerText="N°" width="5" sortBy="#{nf.numero}">
+                                <p:column headerText="N°" width="1" sortBy="#{nf.numero}">
                                     <h:outputText value="#{nf.numero}"/>
                                 </p:column> 
-                                <p:column headerText="Serie" width="29" sortBy="#{nf.serie}">
+                                <p:column headerText="Série" width="1" sortBy="#{nf.serie}">
                                     <h:outputText value="#{nf.serie}"/>
-                                </p:column>                                                            
-                                <p:column headerText="Data Emissao" width="29" sortBy="#{nf.data}">
-                                    <h:outputText value="#{nf.data}"/>
+                                </p:column>
+                                <p:column headerText="Data Emissão" width="5" sortBy="#{nf.data}">
+                                    <h:outputText value="#{nf.data}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime> 
+                                    </h:outputText>
                                 </p:column>  
-                                <p:column headerText="Razao Social" width="29" sortBy="#{nf.razaoSocial}">
+                                <p:column headerText="Razão Social" width="45" sortBy="#{nf.razaoSocial}">
                                     <h:outputText value="#{nf.razaoSocial}"/>
                                 </p:column>
-                                <p:column headerText="Danf" width="29" sortBy="#{nf.danf}">
+                                <p:column headerText="Danfe" width="45" sortBy="#{nf.danf}">
                                     <h:outputText value="#{nf.danf}"/>
                                 </p:column>
                             </p:dataTable>                            

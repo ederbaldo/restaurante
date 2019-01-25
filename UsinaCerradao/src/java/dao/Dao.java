@@ -69,11 +69,13 @@ public class Dao implements Serializable {
         List<Object[]> results = query.getResultList();
         return results;
     }
+
     public List<Object[]> buscarNfPorCodigo(int nf, String data) {
-        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT A.NRO,a.SERIE,a.DT_EMISS,a.RAZAO_SOCIAL,a.NRO_NFE,b.CD_PROD,b.DESCR_PROD FROM NF_ENT a, ITNF_ENT b WHERE a.NFENT_ID = b.NFENT_ID AND b.CD_PROD  in ('54578','54579','54160','54164') and a.nro = "+nf+" and a.DT_EMISS  = '"+data+"' order by a.DT_EMISS");
+        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT A.NRO,a.SERIE,a.DT_EMISS,a.RAZAO_SOCIAL,a.NRO_NFE,b.CD_PROD,b.DESCR_PROD FROM NF_ENT a, ITNF_ENT b WHERE a.NFENT_ID = b.NFENT_ID AND b.CD_PROD  in ('54578','54579','54160','54164') and a.nro = " + nf + " and a.DT_EMISS  = '" + data + "' order by a.DT_EMISS");
         List<Object[]> results = query.getResultList();
         return results;
     }
+
     public List<Object[]> buscarColaboradores(BigDecimal mat) {
         TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("select colab_id, cd_colab, nome_colab from v_colab where dt_demis is null and cd_colab = " + mat);
         List<Object[]> results = query.getResultList();
@@ -91,6 +93,27 @@ public class Dao implements Serializable {
     public List<Colab> buscarColaborador(int mat) {
         return (List<Colab>) em.createNativeQuery("SELECT nome_colab, cd_colab FROM v_colab where dt_demis is null  and cd_colab = " + mat, Colab.class).getResultList();
     }
+    //----------------CanaDiaFrenteMB -----------------------
+
+    public List<Object[]> buscarEntradaDeCanaFrente() {
+        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT FRE.DESCR FRENTE\n"
+                + "      ,FRC.CAPAC_COLHE\n"
+                + "      ,(SELECT SUM(FRC.CAPAC_COLHE)\n"
+                + "        FROM FRENTE_CAPAC_DIARIA FRC\n"
+                + "          ,FRENTE FRE\n"
+                + "        WHERE FRC.FRENTE_ID = FRE.FRENTE_ID\n"
+                + "        AND '18/11/2018' BETWEEN FRC.DT_INIC and FRC.DT_FIM\n"
+                + "        AND FRE.CD IN (1,2,3,4,5,57,72,76,77) \n"
+                + "       ) total\n"
+                + "FROM FRENTE_CAPAC_DIARIA FRC\n"
+                + "    ,FRENTE FRE\n"
+                + "WHERE FRC.FRENTE_ID = FRE.FRENTE_ID\n"
+                + "AND '18/11/2018' BETWEEN FRC.DT_INIC and FRC.DT_FIM\n"
+                + "AND FRE.CD IN (1,2,3,4,5,57,72,76,77) \n"
+                + "ORDER BY 1");
+        List<Object[]> results = query.getResultList();
+        return results;
+    }
 
     //----------------Classes converter -----------------------
     public Software buscarSoftwareConverter(String nome) {
@@ -104,4 +127,5 @@ public class Dao implements Serializable {
     public Colab buscarColabConverter(String nome) {
         return (Colab) em.createNativeQuery("SELECT nome_colab, cd_colab FROM v_colab where nome_colab = '" + nome + "'", Colab.class).getSingleResult();
     }
+
 }

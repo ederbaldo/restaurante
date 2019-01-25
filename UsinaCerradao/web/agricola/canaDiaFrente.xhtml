@@ -33,7 +33,7 @@
                     </h:form>
                     <h:form id="formCanaDiaFrente2">
                         <div class="card card-w-title">
-                            <p:dataTable id="idTabela"  var="marca" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                            <p:dataTable id="idTabela" value="#{canaDiaFrenteMB.litaCanaDiaFrente}" var="canaFrente" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                          rowsPerPageTemplate="10,20,30,50" emptyMessage="Nenhuma informação..." style="margin-bottom: 30px; margin-top: 5px" reflow="true" >
                                 <f:facet name="header">
                                     <p:outputPanel style="float:left;margin-top: 4px">                                       
@@ -52,14 +52,14 @@
                                         <p:spacer width="5"></p:spacer>
                                     </p:outputPanel>
                                 </f:facet>
-                                <p:column headerText="Frentes" width="20" sortBy="">
-                                    <h:outputText value=""/>
+                                <p:column headerText="Frentes" width="20" sortBy="#{canaFrente.frente}">
+                                    <h:outputText value="#{canaFrente.frente}"/>
                                 </p:column>
-                                <p:column headerText="Cota Dia" width="5" sortBy="">
-                                    <h:outputText value=""/>
+                                <p:column headerText="Cota Dia" width="5" sortBy="#{canaFrente.capacColhe}">
+                                    <h:outputText value="#{canaFrente.capacColhe}"/>
                                 </p:column> 
-                                <p:column headerText="%Cota" width="4" sortBy="">
-                                    <h:outputText value=""/>
+                                <p:column headerText="%Cota" width="4" sortBy="#{canaFrente.cota}">
+                                    <h:outputText value="#{canaFrente.cota}"/>
                                 </p:column>
                                 <p:column headerText="Dimensionado" width="5" sortBy="">
                                     <h:outputText value=""/>

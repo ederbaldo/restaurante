@@ -15,7 +15,8 @@ import java.math.BigDecimal;
 public class CanaDiaFrente implements Serializable{
     private String frente;
     private BigDecimal capacColhe;
-    private float cota;
+    private String cota;
+    private BigDecimal total;
 
     public String getFrente() {
         return frente;
@@ -33,13 +34,29 @@ public class CanaDiaFrente implements Serializable{
         this.capacColhe = capacColhe;
     }
 
-    public float getCota() {
+    public String getCota() {
         return cota;
     }
 
-    public void setCota(float cota) {
+    public void setCota(String cota) {
         this.cota = cota;
     }
+
+ 
+
+    public BigDecimal getTotal() {
+        return total;
+    }
+
+    public void setTotal(BigDecimal total) {
+        this.total = total;
+    }
+
+
+
+    
+
+
     
     
 }

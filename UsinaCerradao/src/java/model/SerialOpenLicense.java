@@ -30,10 +30,8 @@ public class SerialOpenLicense implements Serializable{
     private int idSerial;
     @Column(name = "serial", nullable = true)
     private String serial;
-    @Column(name = "descricao", nullable = true)
-    private String descricao;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_tipo_license", nullable = false, foreignKey = @ForeignKey(name = "id_tipo_license_serial_open_lincese"))
+    @JoinColumn(name = "id_tipo_license", nullable = false, foreignKey = @ForeignKey(name = "id_tipo_license"))
     private TipoLicense idTipoLicense;
 
     public int getIdSerial() {
@@ -51,15 +49,6 @@ public class SerialOpenLicense implements Serializable{
     public void setSerial(String serial) {
         this.serial = serial;
     }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
     public TipoLicense getIdTipoLicense() {
         return idTipoLicense;
     }

@@ -76,6 +76,10 @@
                                              icon="fa fa-trash" update="formCadastro,formCadastro2, menssagem" process="@this">
                                 <p:confirm header="Confirmação" message="Você tem certeza ?" icon="ui-icon-alert" />
                             </p:commandButton>
+                            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
+                                <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="fa fa-close" />
+                            </p:confirmDialog>
                         </p:panelGrid>
                     </div>
                 </p:panel>
@@ -118,7 +122,7 @@
                             <h:outputText value="#{computador.nroDanf}"/>
                         </p:column>
                         <p:column style="text-align: center; width:1%">                                   
-                            <p:commandLink title="Editar" id="alterar" actionListener="#{marcaMB.alterar()}" update="formCadastro, formCadastro2" process="@this">
+                            <p:commandLink title="Editar" id="alterar" actionListener="#{computadorMB.alterar()}" update="formCadastro, formCadastro2" process="@this">
                                 <i class="fa fa-pencil-square-o" ></i>
                             </p:commandLink>                                 
                         </p:column>

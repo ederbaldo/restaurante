@@ -11,6 +11,8 @@
     <class>model.TipoLicense</class>
     <class>model.ComputadorSoftware</class>
     <class>model.Ip</class>
+    <class>model.CanaDiaFrente</class>
+    <class>model.FrenteCapacDiaria</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="hibernate.dialect" value="org.hibernate.dialect.OracleDialect"/>

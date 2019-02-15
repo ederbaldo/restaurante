@@ -6,6 +6,7 @@
 package model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -19,6 +20,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 /**
@@ -29,39 +31,31 @@ import javax.persistence.Table;
 @Table (name = "open_license")
 public class OpenLicense implements Serializable{
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_open_license", unique = true, nullable = false)
-    private int idOpenLicense;
-    @Column(name = "contrato", nullable = true)
-    private int contrato;
-    @Column(name = "fornecedor", nullable = true)
-    private String fornecedor;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "OPEN_LICENSE_SEQ")
+    @SequenceGenerator(sequenceName = "SEQ_OPEN_LICENSE", allocationSize = 1, name = "OPEN_LICENSE_SEQ")
+    @Column(name = "id_open_license",  unique = true, nullable = false)
     
+    private Integer idOpenLicense;
+    @Column(name = "contrato", nullable = true)
+    private Integer contrato;
+      
     @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, mappedBy = "idOpenLicense")
     private List<TipoLicense> listaTipoLicense = new ArrayList<TipoLicense>();
 
-    public int getIdOpenLicense() {
+    public Integer getIdOpenLicense() {
         return idOpenLicense;
     }
 
-    public void setIdOpenLicense(int idOpenLicense) {
+    public void setIdOpenLicense(Integer idOpenLicense) {
         this.idOpenLicense = idOpenLicense;
     }
 
-    public int getContrato() {
+    public Integer getContrato() {
         return contrato;
     }
 
-    public void setContrato(int contrato) {
+    public void setContrato(Integer contrato) {
         this.contrato = contrato;
-    }
-
-    public String getFornecedor() {
-        return fornecedor;
-    }
-
-    public void setFornecedor(String fornecedor) {
-        this.fornecedor = fornecedor;
     }
 
     public List<TipoLicense> getListaTipoLicense() {
@@ -72,6 +66,7 @@ public class OpenLicense implements Serializable{
         this.listaTipoLicense = listaTipoLicense;
     }
 
+ 
    
     
 }

@@ -7,11 +7,18 @@ package ctr;
 
 import dao.Dao;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
+import model.NotaFiscal;
 import model.OpenLicense;
 import model.SerialOpenLicense;
 import model.TipoLicense;
@@ -24,40 +31,47 @@ import util.FacesUtil;
 @ManagedBean
 @ViewScoped
 public class OpenLicenseMB implements Serializable {
+
     private OpenLicense openLicense;
     private TipoLicense tipoLicense;
     private SerialOpenLicense serialOpenLicense;
     List<OpenLicense> listaOpenLicense = new ArrayList<OpenLicense>();
     private Dao dao = new Dao();
-    
-    public OpenLicenseMB(){
+    private BigDecimal numeroContrato;
+    private BigDecimal idContrato;
+
+    public OpenLicenseMB() {
         novo();
     }
 
-    public void novo(){
+    public void novo() {
         openLicense = new OpenLicense();
-        tipoLicense= new TipoLicense();
-        tipoLicense.setIdOpenLicense(new OpenLicense());
-        listaOpenLicense= new ArrayList<OpenLicense>();
+        tipoLicense = new TipoLicense();
+        serialOpenLicense = new SerialOpenLicense();
+        listaOpenLicense = new ArrayList<OpenLicense>();
         listaOpenLicense = (List<OpenLicense>) dao.buscarTodos(OpenLicense.class);
     }
-    public void gravar (ActionEvent evt)
-    {
-        try {
-            tipoLicense.setIdOpenLicense(openLicense);
-            openLicense.getListaTipoLicense().add(tipoLicense);
-            dao.gravar(openLicense);
-            /*listarMarcaVeiculo = (List<Marca>) dao.buscarTodos(Marca.class);*/
 
-             FacesUtil.addInfoMessage("Informação", "Open License salva com sucesso!");
+    public void gravar(ActionEvent evt) {
+        try {
+
+            dao.gravar(openLicense);
+            
+            /*listarMarcaVeiculo = (List<Marca>) dao.buscarTodos(Marca.class);*/
+            openLicense = new OpenLicense();
+            
+            FacesUtil.addInfoMessage("Informação", "Tipo License salva com sucesso!");
         } catch (Exception ex) {
             FacesUtil.addErrorMessage("Erro", "Entre em contato com suporte!");
             ex.printStackTrace();
         }
     }
-    public void adicionar(ActionEvent evt){
-        
+    
+
+    public void adicionar(ActionEvent evt) {
+
     }
+
     public OpenLicense getOpenLicense() {
         return openLicense;
     }
@@ -90,7 +104,31 @@ public class OpenLicenseMB implements Serializable {
         this.dao = dao;
     }
 
+    public List<OpenLicense> getListaOpenLicense() {
+        return listaOpenLicense;
+    }
+
+    public void setListaOpenLicense(List<OpenLicense> listaOpenLicense) {
+        this.listaOpenLicense = listaOpenLicense;
+    }
+
+    public BigDecimal getNumeroContrato() {
+        return numeroContrato;
+    }
+
+    public void setNumeroContrato(BigDecimal numeroContrato) {
+        this.numeroContrato = numeroContrato;
+    }
+
+   
     
-    
-    
+
+    public BigDecimal getIdContrato() {
+        return idContrato;
+    }
+
+    public void setIdContrato(BigDecimal idContrato) {
+        this.idContrato = idContrato;
+    }
+
 }

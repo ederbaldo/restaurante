@@ -10,7 +10,10 @@ import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 import model.Computador;
 import model.Colab;
+import model.OpenLicense;
+import model.SerialOpenLicense;
 import model.Software;
+import model.TipoLicense;
 
 public class Dao implements Serializable {
 
@@ -82,6 +85,24 @@ public class Dao implements Serializable {
         return results;
     }
 
+    //----------------ComputadorSoftwareMB -----------------------
+    public List<Object[]> buscarSoftRelacionadoMicro(String key) {
+        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT\n"
+                + "  CO.DESCRICAO MICRO ,\n"
+                + "  SO.DESCRICAO,\n"
+                + "  SO.KEY\n"
+                + "FROM\n"
+                + "  SOFTWARE SO ,\n"
+                + "  COMPUTADOR CO ,\n"
+                + "  COMPUTADOR_SOFTWARE CS\n"
+                + "WHERE\n"
+                + "  SO.ID_SOFTWARE     = CS.ID_SOFTWARE\n"
+                + "AND CS.ID_COMPUTADOR = CO.ID_COMPUTADOR\n"
+                + "AND SO.KEY           = '" + key + "'");
+        List<Object[]> results = query.getResultList();
+        return results;
+    }
+
     public List<Software> buscarSoftware(String nome) {
         return (List<Software>) em.createNativeQuery("SELECT * FROM software where key like '%" + nome + "%'", Software.class).getResultList();
     }
@@ -104,7 +125,10 @@ public class Dao implements Serializable {
                 + "        WHERE FRC.FRENTE_ID = FRE.FRENTE_ID\n"
                 + "        AND '18/11/2018' BETWEEN FRC.DT_INIC and FRC.DT_FIM\n"
                 + "        AND FRE.CD IN (1,2,3,4,5,57,72,76,77) \n"
-                + "       ) total\n"
+                + "       ) total  \n"
+                + "       ,FRE.CD\n"
+                + "       ,FRC.DT_INIC\n"
+                + "       ,FRC.DT_FIM\n"
                 + "FROM FRENTE_CAPAC_DIARIA FRC\n"
                 + "    ,FRENTE FRE\n"
                 + "WHERE FRC.FRENTE_ID = FRE.FRENTE_ID\n"
@@ -113,6 +137,44 @@ public class Dao implements Serializable {
                 + "ORDER BY 1");
         List<Object[]> results = query.getResultList();
         return results;
+    }
+
+    public List<Object[]> buscarEntradaDeCanaFrente2(BigDecimal idFrente) {
+        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT (SUM(CC.PESO_BRUTO)-SUM(CC.TARA))/1000 TON_CANA\n"
+                + "FROM CERT_CAMPO CC ,\n"
+                + "  FRENTE FR ,\n"
+                + "  LIB_COLH LC\n"
+                + "WHERE LC.FRENTE_ID   = FR.FRENTE_ID\n"
+                + "AND LC.LIBCOLH_ID  = CC.LIBCOLH_ID\n"
+                + "AND TO_CHAR(CC.DT_HR_REF,'DD/MM/YYYY') = '18/11/2018'\n"
+                + "AND FR.CD = " + idFrente + "\n"
+                + "AND LC.MOTLIBER_ID = '1'\n"
+                + "");
+        List<Object[]> results = query.getResultList();
+        return results;
+    }
+
+    //----------------Open License -----------------------
+    public List<Object[]> buscarContrato(BigDecimal contrato) {
+        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT ID_OPEN_LICENSE, CONTRATO FROM OPEN_LICENSE where CONTRATO = " + contrato);
+        List<Object[]> results = query.getResultList();
+        return results;
+    }
+
+    //----------------Tipo License -----------------------        
+    public List<TipoLicense> buscarTabelaTipoLicense(BigDecimal numero) {
+        return (List<TipoLicense>) em.createNativeQuery("SELECT * FROM tipo_license where id_open_license = " + numero, TipoLicense.class).getResultList();
+    }
+
+    public OpenLicense buscarContratoConverter(String numero) {
+        return (OpenLicense) em.createNativeQuery("SELECT * FROM open_license where contrato = " + numero, OpenLicense.class).getResultList();
+    }
+
+    //----------------Serial -----------------------
+    public List<SerialOpenLicense> buscarTabelaSerial(BigDecimal numero) {
+        return (List<SerialOpenLicense>) em.createNativeQuery("SELECT * FROM SERIAL_OPEN_LINCESE SE, TIPO_LICENSE TI\n"
+                + "WHERE SE.ID_TIPO_LICENSE = TI.ID_TIPO_LICENSE\n"
+                + "AND TI.ID_OPEN_LICENSE = " + numero, SerialOpenLicense.class).getResultList();
     }
 
     //----------------Classes converter -----------------------

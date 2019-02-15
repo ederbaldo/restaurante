@@ -6,6 +6,7 @@
 package model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,6 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 /**
@@ -25,26 +27,27 @@ import javax.persistence.Table;
 @Table (name = "tipo_license")
 public class TipoLicense implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_tipo_license", unique = true, nullable = false)
-    private int idTipoLicense;
+   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "TIPO_LICENSE_SEQ")
+    @SequenceGenerator(sequenceName = "SEQ_TIPO_LICENSE", allocationSize = 1, name = "TIPO_LICENSE_SEQ")
+    @Column(name = "id_tipo_license",  unique = true, nullable = false)
+    private Integer idTipoLicense;
     @Column(name = "descricao", nullable = true)
     private String descricao;
+    @Column(name = "fornecedor", nullable = true)
+    private String fornecedor;
     @Column(name = "quantidade", nullable = true)
-    private int quantidade;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_open_license", nullable = false, foreignKey = @ForeignKey(name = "id_open_license_tipo_license"))
-    private OpenLicense idOpenLicense;
+    private Integer quantidade;
+    @Column(name = "id_open_license", nullable = true)
+    private BigDecimal idOpenLicense;
 
-    public int getIdTipoLicense() {
+
+    public Integer getIdTipoLicense() {
         return idTipoLicense;
     }
 
-    public void setIdTipoLicense(int idTipoLicense) {
+    public void setIdTipoLicense(Integer idTipoLicense) {
         this.idTipoLicense = idTipoLicense;
     }
-
-
 
     public String getDescricao() {
         return descricao;
@@ -54,21 +57,32 @@ public class TipoLicense implements Serializable {
         this.descricao = descricao;
     }
 
-    public int getQuantidade() {
+    public String getFornecedor() {
+        return fornecedor;
+    }
+
+    public void setFornecedor(String fornecedor) {
+        this.fornecedor = fornecedor;
+    }
+
+    public Integer getQuantidade() {
         return quantidade;
     }
 
-    public void setQuantidade(int quantidade) {
+    public void setQuantidade(Integer quantidade) {
         this.quantidade = quantidade;
     }
 
-    public OpenLicense getIdOpenLicense() {
+    public BigDecimal getIdOpenLicense() {
         return idOpenLicense;
     }
 
-    public void setIdOpenLicense(OpenLicense idOpenLicense) {
+    public void setIdOpenLicense(BigDecimal idOpenLicense) {
         this.idOpenLicense = idOpenLicense;
     }
- 
+
+
+    
+   
     
 }

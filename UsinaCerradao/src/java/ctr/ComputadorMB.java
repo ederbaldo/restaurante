@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import model.Computador;
@@ -62,6 +63,22 @@ public class ComputadorMB implements Serializable {
             ex.printStackTrace();
         }
     }
+    public void alterar(){
+        computador = (Computador) FacesContext.getCurrentInstance().getExternalContext().getRequestMap().get("computador");
+    }
+    public void excluir(ActionEvent evt)
+    {
+        try {
+            dao.remover(computador);
+            computador = new Computador();
+            FacesUtil.addInfoMessage("Informação", "Computador excluido com sucesso");
+        } catch (Exception ex) {
+            FacesUtil.addErrorMessage("Erro", "Entre em contato com suporte!");
+            ex.printStackTrace();
+        }
+    }
+    
+    
 public List<SelectItem> getSelectMarca() {
         selectMarca = new ArrayList<SelectItem>();
         listaMarca = new ArrayList<Marca>();

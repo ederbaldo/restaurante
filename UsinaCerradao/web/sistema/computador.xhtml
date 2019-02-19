@@ -72,7 +72,7 @@
                             <p:commandButton value="Salvar" update="formCadastro,formCadastro2" actionListener="#{computadorMB.gravar}"  
                                              icon="fa fa-check"/>
                             <p:commandButton value="Cancelar" icon="fa fa-close" onclick="history.go(0); return false;"/>
-                            <p:commandButton value="Excluir" actionListener="#{computadorMB.excluir}"
+                            <p:commandButton value="Desativar" actionListener="#{computadorMB.excluir}"
                                              icon="fa fa-trash" update="formCadastro,formCadastro2, menssagem" process="@this">
                                 <p:confirm header="Confirmação" message="Você tem certeza ?" icon="ui-icon-alert" />
                             </p:commandButton>

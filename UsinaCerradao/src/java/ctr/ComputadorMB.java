@@ -54,6 +54,7 @@ public class ComputadorMB implements Serializable {
     {
         try {
             computador.toUpperCase();
+            computador.setSituacao("ATIVO");
             dao.gravar(computador);
             /*listarMarcaVeiculo = (List<Marca>) dao.buscarTodos(Marca.class);*/
             computador = new Computador();
@@ -69,9 +70,12 @@ public class ComputadorMB implements Serializable {
     public void excluir(ActionEvent evt)
     {
         try {
-            dao.remover(computador);
+            computador.toUpperCase();
+            computador.setSituacao("DESATIVADO");
+            dao.gravar(computador);
+            /*listarMarcaVeiculo = (List<Marca>) dao.buscarTodos(Marca.class);*/
             computador = new Computador();
-            FacesUtil.addInfoMessage("Informação", "Computador excluido com sucesso");
+             FacesUtil.addInfoMessage("Informação", "Computador desativado com sucesso!");
         } catch (Exception ex) {
             FacesUtil.addErrorMessage("Erro", "Entre em contato com suporte!");
             ex.printStackTrace();

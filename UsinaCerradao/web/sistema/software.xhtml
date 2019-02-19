@@ -89,24 +89,28 @@
                             <br></br><br></br>
                             <p:panelGrid columns="6" columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1,ui-g-12 ui-md-4, ui-g-12 ui-md-1, ui-g-12 ui-md-4" layout="grid" 
                                          styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">   
-                                
 
-                                <p:outputLabel value="N° Nota: " indicateRequired="false"/>
-                                <p:inputText   value="#{softwareMB.software.nf}" required="true" requiredMessage="N° Nota obrigatório!"/>
 
                                 <p:outputLabel value="Data: "/>
-                                <p:calendar    locale="br" value="#{softwareMB.software.data}" pattern="dd/MM/yyyy"/>
+                                <p:calendar locale="br" value="#{softwareMB.software.data}" pattern="dd/MM/yyyy">
+                                    <p:ajax event="dateSelect" listener="#{softwareMB.buscarNf}"/> 
+                                </p:calendar>
+                                <p:outputLabel value="N° Nota: " indicateRequired="false"/>
+
+                                <p:inputText  value="#{softwareMB.software.nf}" required="true" requiredMessage="N° Nota obrigatório!">
+                                    <p:ajax event="change" update="formCadastro:fornecedor :formCadastro:numeroDanf" listener="#{softwareMB.buscarNf}" process="@this" />
+                                </p:inputText>
 
                                 <p:outputLabel  value="Fornecedor: " indicateRequired="false"/>
-                                <p:inputText  value="#{softwareMB.software.fornecedor}"/>
+                                <p:inputText  id="fornecedor" disabled="true" value="#{softwareMB.software.fornecedor}"/>
 
                                 <p:outputLabel  value="Danf:  " indicateRequired="false"/>
-                                <p:inputText id="danf" placeholder="Danf" value="#{softwareMB.software.danf}"/> 
-                                
-                                
-                                
-                                
-                                
+                                <p:inputText id="numeroDanf" disabled="true" placeholder="Danf" value="#{softwareMB.software.danf}"/> 
+
+
+
+
+
                             </p:panelGrid>
                             <p:panelGrid columns="5" layout="grid"
                                          columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-4"
@@ -114,10 +118,14 @@
                                 <p:commandButton value="Salvar" update="formCadastro,formCadastro2" actionListener="#{softwareMB.gravar}"  
                                                  icon="fa fa-check"/>
                                 <p:commandButton value="Cancelar" icon="fa fa-close" onclick="history.go(0); return false;"/>
-                                <p:commandButton value="Excluir" actionListener="#{softwareMB.excluir}"
-                                                 icon="fa fa-trash" update="formCadastro, menssagem" process="@this">
+                                <p:commandButton value="Desativar" actionListener="#{softwareMB.desativar}"
+                                                 icon="fa fa-trash" update="formCadastro,formCadastro2, menssagem" process="@this">
                                     <p:confirm header="Confirmação" message="Você tem certeza ?" icon="ui-icon-alert" />
                                 </p:commandButton>
+                                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
+                                <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="fa fa-close" />
+                            </p:confirmDialog>
                             </p:panelGrid>
                         </div>
                     </h:form>
@@ -135,22 +143,33 @@
                                         </p:inputText>
                                     </p:outputPanel>
                                 </f:facet>
-                                <p:column headerText="Id" width="100" sortBy="#{software.idSoftware}">
-                                    <h:outputText value="#{software.idSoftware}"/>
-                                </p:column> 
-                                <p:column headerText="Descrição" width="100" sortBy="#{software.descricao}#{software.serialOpenLicenca.idTipoLicense.descricao}">
+                                <p:column headerText="Descrição" width="30" sortBy="#{software.descricao}#{software.serialOpenLicenca.idTipoLicense.descricao}">
                                     <h:outputText value="#{software.descricao}#{software.serialOpenLicenca.idTipoLicense.descricao}"/>
                                 </p:column>
-                                <p:column headerText="Nota Fiscal" width="100" sortBy="#{software.nf}">
+                                <p:column headerText="Serial" width="100" sortBy="#{software.serialOpenLicenca.serial}#{software.key}">
+                                    <h:outputText value="#{software.serialOpenLicenca.serial}#{software.key}"/>
+                                </p:column>
+                                <p:column headerText="Nota Fiscal" width="30" sortBy="#{software.nf}">
                                     <h:outputText value="#{software.nf}"/>
                                 </p:column>
-                                <p:column headerText="Data Emissão" width="100" sortBy="#{software.data}">
+                                <p:column headerText="Data Emissão" width="30" sortBy="#{software.data}">
                                     <h:outputText value="#{software.data}"/>
+                                </p:column>
+                                <p:column headerText="Fornecedor" width="100" sortBy="#{software.fornecedor}">
+                                    <h:outputText value="#{software.fornecedor}"/>
                                 </p:column>
                                 <p:column headerText="Numero Danf" width="100" sortBy="#{software.danf}">
                                     <h:outputText value="#{software.danf}"/>
                                 </p:column>
+                                <p:column headerText="Status" width="30" sortBy="#{software.situacao}">
+                                    <h:outputText value="#{software.situacao}"/>
+                                </p:column>
 
+                                <p:column style="text-align: center; width:1%">                                   
+                                    <p:commandLink title="Editar" id="alterar" actionListener="#{softwareMB.alterar()}" update="formCadastro, formCadastro2" process="@this">
+                                        <i class="fa fa-pencil-square-o" ></i>
+                                    </p:commandLink>                                 
+                                </p:column>
                             </p:dataTable> 
                         </div>
                     </h:form>

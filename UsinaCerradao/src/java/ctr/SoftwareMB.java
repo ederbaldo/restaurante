@@ -13,6 +13,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
+import model.SerialOpenLicense;
 import model.Software;
 import model.TipoSoftware;
 import util.FacesUtil;
@@ -27,11 +28,13 @@ public class SoftwareMB implements Serializable{
     private Software software;
     private List<TipoSoftware> listaTipoSoftware;
     private List<SelectItem> selectTipoSoftware;
+    private List<SerialOpenLicense> listaSerialOpen;
     private Dao dao = new Dao();
     List<Software> listaSoftware = new ArrayList<Software>();
     
     public SoftwareMB(){
         software = new Software();
+        software.setSerialOpenLicenca(new SerialOpenLicense());
         software.setTipoSoftware(new TipoSoftware());
         listaSoftware= new ArrayList<Software>();
         listaSoftware = (List<Software>) dao.buscarTodos(Software.class);
@@ -39,6 +42,10 @@ public class SoftwareMB implements Serializable{
     public void gravar (ActionEvent evt)
     {
         try {
+            if(software.getTipo().equals(false))
+            {
+               software.setSerialOpenLicenca(null); 
+            }
             software.setSituacao("Ativo");
             dao.gravar(software);
             /*listarMarcaVeiculo = (List<Marca>) dao.buscarTodos(Marca.class);*/
@@ -58,6 +65,12 @@ public class SoftwareMB implements Serializable{
             selectTipoSoftware.add(new SelectItem(c.getIdTipoSoftware(), c.getDescricao()));
         }
         return selectTipoSoftware;
+    }
+    public List<SerialOpenLicense> buscarSerialOpen(String nome) {
+        setListaSerialOpen((List<SerialOpenLicense>) dao.buscarSerialOpen(nome));
+        System.out.println("-----------------nome" + getListaSerialOpen());
+        return getListaSerialOpen();
+        
     }
     public Software getSoftware() {
         return software;
@@ -94,6 +107,14 @@ public class SoftwareMB implements Serializable{
 
     public void setSelectTipoSoftware(List<SelectItem> selectTipoSoftware) {
         this.selectTipoSoftware = selectTipoSoftware;
+    }
+
+    public List<SerialOpenLicense> getListaSerialOpen() {
+        return listaSerialOpen;
+    }
+
+    public void setListaSerialOpen(List<SerialOpenLicense> listaSerialOpen) {
+        this.listaSerialOpen = listaSerialOpen;
     }
     
     

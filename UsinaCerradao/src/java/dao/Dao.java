@@ -114,6 +114,16 @@ public class Dao implements Serializable {
     public List<Colab> buscarColaborador(int mat) {
         return (List<Colab>) em.createNativeQuery("SELECT nome_colab, cd_colab FROM v_colab where dt_demis is null  and cd_colab = " + mat, Colab.class).getResultList();
     }
+    
+    //----------------Software -----------------------
+
+    public List<SerialOpenLicense> buscarSerialOpen(String nome) {
+        return (List<SerialOpenLicense>) em.createNativeQuery("SELECT * FROM serial_open_lincese where serial like '%" + nome + "%'", SerialOpenLicense.class).getResultList();
+    }
+    
+    public SerialOpenLicense buscarSerialOpenConverter(String nome) {
+        return (SerialOpenLicense) em.createNativeQuery("SELECT * FROM serial_open_lincese where serial = '" + nome + "'", SerialOpenLicense.class).getSingleResult();
+    }
     //----------------CanaDiaFrenteMB -----------------------
 
     public List<Object[]> buscarEntradaDeCanaFrente() {

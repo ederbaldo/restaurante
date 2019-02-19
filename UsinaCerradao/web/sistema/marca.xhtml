@@ -24,9 +24,9 @@
                             <p:panelGrid columns="4" layout="grid"
                                          columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2, ui-grid-col-6"
                                          styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
-                                <p:commandButton value="Salvar" update="formMarca,formMarca2"
+                                <p:commandButton value="Salvar" update="formMarca :formMarca2"
                                                  icon="fa fa-check" actionListener="#{marcaMB.gravar}"/>
-                                <p:commandButton onclick="history.go(0); return false;" value="Cancelar" update="formMarca,formMarca2"
+                                <p:commandButton onclick="history.go(0); return false;" value="Cancelar" update="formMarca :formMarca2"
                                                  icon="fa fa-close" />
                                 <p:commandButton value="Excluir" actionListener="#{marcaMB.excluir}"
                                                  icon="fa fa-trash" update="formMarca,menssagem" process="@this">

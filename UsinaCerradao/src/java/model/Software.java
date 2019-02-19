@@ -15,11 +15,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -47,8 +50,9 @@ public class Software implements Serializable {
     private String observacao;
     @Column(name = "situacao", nullable = true)
     private String situacao;
-    @Column(name = "open_licenca", nullable = true)
-    private Integer openLicenca;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_serial",nullable = true, foreignKey = @ForeignKey(name = "id_ser_ope_software"))
+    private SerialOpenLicense serialOpenLicenca;
     @Column(name = "product_id", nullable = true)
     private String productId;
     @Column(name = "key", nullable = true)
@@ -61,7 +65,9 @@ public class Software implements Serializable {
     private String descricao;
     @Column(name = "danf", nullable = true)
     private String danf;
-    
+    @Type(type = "yes_no")
+    @Column(name = "tipo", nullable = true)
+    private Boolean tipo;
 
     public int getIdSoftware() {
         return idSoftware;
@@ -119,13 +125,15 @@ public class Software implements Serializable {
         this.situacao = situacao;
     }
 
-    public Integer getOpenLicenca() {
-        return openLicenca;
+    public SerialOpenLicense getSerialOpenLicenca() {
+        return serialOpenLicenca;
     }
 
-    public void setOpenLicenca(Integer openLicenca) {
-        this.openLicenca = openLicenca;
+    public void setSerialOpenLicenca(SerialOpenLicense serialOpenLicenca) {
+        this.serialOpenLicenca = serialOpenLicenca;
     }
+
+    
 
     public String getProductId() {
         return productId;
@@ -173,6 +181,14 @@ public class Software implements Serializable {
 
     public void setDanf(String danf) {
         this.danf = danf;
+    }
+
+    public Boolean getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(Boolean tipo) {
+        this.tipo = tipo;
     }
 
     

@@ -36,50 +36,78 @@
                         <div class="card card-w-title">
                             <h1>Cadastro de Software</h1>
                             <h3>Dados da compra</h3>
-                            <p:panelGrid columns="6" columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1,ui-g-12 ui-md-4, ui-g-12 ui-md-1, ui-g-12 ui-md-4" layout="grid" 
+
+                            <p:panelGrid columns="6" id="pnlSoftware" columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1,ui-g-12 ui-md-4, ui-g-12 ui-md-1, ui-g-12 ui-md-4" layout="grid" 
                                          styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">   
+                                <p:outputLabel id="lbSoftware" value="*Software " 
+                                               style="float: left;" />
+                                <p:selectOneRadio id="software" layout="responsive" columns="2" value="#{softwareMB.software.tipo}" 
+                                                  requiredMessage="Campo [Software] é obrigatório." >
+                                    <f:selectItem itemLabel="OpenLicense" itemValue="#{true}" />
+                                    <f:selectItem itemLabel="Outro tipos" itemValue="#{false}" />
+                                    <p:ajax event="change" update="pnlSoftware" process="software"/>                                  
+                                </p:selectOneRadio>
                                 <p:outputLabel for="tipo" value="Tipo:"/>
                                 <p:selectOneMenu id="tipo" value="#{softwareMB.software.tipoSoftware.idTipoSoftware}">
                                     <f:selectItems itemLabel="Selecionar" itemValue="0"/>
                                     <f:selectItems value="#{softwareMB.selectTipoSoftware}"/>
                                 </p:selectOneMenu>
-                                <p:outputLabel value="Descrição:" indicateRequired="false"/>
-                                <p:inputText id="descricao" value = "#{softwareMB.software.descricao}" required="true" requiredMessage="Decrição obrigatório!"/> 
-                                
-                                <p:outputLabel value="Open License: " indicateRequired="false"/>
-                                <p:inputText id="tipoLicenca" value = "#{softwareMB.software.openLicenca}" required="true" requiredMessage="Tipo Licença obrigatório!"/> 
-                            </p:panelGrid >
-                             
-                            <p:panelGrid columns="8" columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1,ui-g-12 ui-md-2, ui-g-12 ui-md-1, ui-g-12 ui-md-2,ui-g-12 ui-md-1, ui-g-12 ui-md-2" layout="grid" 
-                                         styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;"> 
-                                <p:outputLabel value="Product key:" indicateRequired="false"/>
-                                <p:inputText id="productKey" value = "#{softwareMB.software.key}" required="true" requiredMessage="Product key obrigatório!"/> 
+                                <!--  openLicense -->
+                                <p:outputLabel/>
+                                <p:outputLabel/>
+                                <p:outputLabel/>
+                                <p:outputLabel rendered="#{softwareMB.software.tipo=='true'}" for="idSerial" value="Serial: " indicateRequired="false"/>
+                                <p:autoComplete rendered="#{softwareMB.software.tipo=='true'}" id="idSerial" maxResults="20" value="#{softwareMB.software.serialOpenLicenca}" completeMethod="#{softwareMB.buscarSerialOpen}" converter="serialConverter"
+                                                var="ser" itemLabel="#{ser.serial}" itemValue="#{ser}"
+                                                forceSelection="true" required="true" requiredMessage="Software obrigatório!">
+                                    <p:ajax event="itemSelect" update="formCadastro:descricaoSerial, formCadastro:qtdeSerial" process="@this"/>
+                                </p:autoComplete> 
+                                <p:outputLabel rendered="#{softwareMB.software.tipo=='true'}" value="Descrição: "/>
+                                <p:inputText rendered="#{softwareMB.software.tipo=='true'}" value="#{softwareMB.software.serialOpenLicenca.idTipoLicense.descricao}" id="descricaoSerial" disabled="true" /> 
 
-                                <p:outputLabel value="N° Nota: " indicateRequired="false"/>
-                                <p:inputText  value="#{softwareMB.software.nf}" required="true" requiredMessage="N° Nota obrigatório!"/>
+                                <p:outputLabel rendered="#{softwareMB.software.tipo=='true'}" value="Qtde: "/>
+                                <p:inputText  rendered="#{softwareMB.software.tipo=='true'}" value="#{softwareMB.software.serialOpenLicenca.idTipoLicense.quantidade}" id="qtdeSerial" disabled="true" />
 
-                                <p:outputLabel value="Data: "/>
-                                <p:calendar locale="br" value="#{softwareMB.software.data}" pattern="dd/MM/yyyy"/>
-                                
-                                <p:outputLabel value="Fornecedor: " indicateRequired="false"/>
-                                <p:inputText  value="#{softwareMB.software.fornecedor}" required="true" requiredMessage="Fornecedor obrigatório!"/>
+                                <!--  Outros softwares -->
+                                <p:outputLabel/>
+                                <p:outputLabel rendered="#{softwareMB.software.tipo=='false'}" value="Descrição:" indicateRequired="false"/>
+                                <p:inputText rendered="#{softwareMB.software.tipo=='false'}" id="descricao" value = "#{softwareMB.software.descricao}" required="true" requiredMessage="Decrição obrigatório!"/> 
 
 
-                            </p:panelGrid >
-                            <p:panelGrid columns="8" columnClasses="ui-g-12 ui-md-3,ui-g-12 ui-md-3, ui-g-12 ui-md-3, ui-g-12 ui-md-3" layout="grid" 
+                                <p:outputLabel rendered="#{softwareMB.software.tipo=='false'}" value="Product key:" indicateRequired="false"/>
+                                <p:inputText rendered="#{softwareMB.software.tipo=='false'}" id="productKey" value = "#{softwareMB.software.key}" required="true" requiredMessage="Product key obrigatório!"/> 
+
+                                <p:outputLabel rendered="#{softwareMB.software.tipo=='false'}" value="Email: " indicateRequired="false"/>
+                                <p:inputText rendered="#{softwareMB.software.tipo=='false'}" id="email" placeholder="Email" value="#{softwareMB.software.email}"/>
+
+                                <p:outputLabel rendered="#{softwareMB.software.tipo=='false'}" value="Senha: " indicateRequired="false"/>
+                                <p:inputText rendered="#{softwareMB.software.tipo=='false'}" id="senha" placeholder="Senha" value="#{softwareMB.software.senha}"/>
+
+                                <p:outputLabel rendered="#{softwareMB.software.tipo=='false'}" value="Observação: " indicateRequired="false"/>
+                                <p:inputText rendered="#{softwareMB.software.tipo=='false'}" id="observação" placeholder="Observação" value="#{softwareMB.software.observacao}"/>
+                            </p:panelGrid >  
+                            <br></br><br></br>
+                            <p:panelGrid columns="6" columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1,ui-g-12 ui-md-4, ui-g-12 ui-md-1, ui-g-12 ui-md-4" layout="grid" 
                                          styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">   
                                 
+
+                                <p:outputLabel value="N° Nota: " indicateRequired="false"/>
+                                <p:inputText   value="#{softwareMB.software.nf}" required="true" requiredMessage="N° Nota obrigatório!"/>
+
+                                <p:outputLabel value="Data: "/>
+                                <p:calendar    locale="br" value="#{softwareMB.software.data}" pattern="dd/MM/yyyy"/>
+
+                                <p:outputLabel  value="Fornecedor: " indicateRequired="false"/>
+                                <p:inputText  value="#{softwareMB.software.fornecedor}"/>
+
+                                <p:outputLabel  value="Danf:  " indicateRequired="false"/>
                                 <p:inputText id="danf" placeholder="Danf" value="#{softwareMB.software.danf}"/> 
-
                                 
-                                <p:inputText id="email" placeholder="Email" value="#{softwareMB.software.email}"/>
-
                                 
-                                <p:inputText id="senha" placeholder="Senha" value="#{softwareMB.software.senha}"/>
                                 
-                                <p:inputText id="observação" placeholder="Observação" value="#{softwareMB.software.observacao}"/>
-                            </p:panelGrid >  
-                            <br></br>
+                                
+                                
+                            </p:panelGrid>
                             <p:panelGrid columns="5" layout="grid"
                                          columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-4"
                                          styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
@@ -100,7 +128,7 @@
                                 <f:facet name="header">
                                     <p:spacer width="25"></p:spacer>
                                     <p:outputPanel style="float:right;margin-top: 4px">  
-                                       
+
                                         <p:spacer width="5"></p:spacer>
                                         <p:inputText id="globalFilter"  style="width:200px" placeholder="Pesquisar...">
                                             <p:ajax event="change" update="formCadastro2:idTabela"  process="@this" />
@@ -110,8 +138,8 @@
                                 <p:column headerText="Id" width="100" sortBy="#{software.idSoftware}">
                                     <h:outputText value="#{software.idSoftware}"/>
                                 </p:column> 
-                                <p:column headerText="Descrição" width="100" sortBy="#{software.descricao}">
-                                    <h:outputText value="#{software.descricao}"/>
+                                <p:column headerText="Descrição" width="100" sortBy="#{software.descricao}#{software.serialOpenLicenca.idTipoLicense.descricao}">
+                                    <h:outputText value="#{software.descricao}#{software.serialOpenLicenca.idTipoLicense.descricao}"/>
                                 </p:column>
                                 <p:column headerText="Nota Fiscal" width="100" sortBy="#{software.nf}">
                                     <h:outputText value="#{software.nf}"/>
@@ -122,7 +150,7 @@
                                 <p:column headerText="Numero Danf" width="100" sortBy="#{software.danf}">
                                     <h:outputText value="#{software.danf}"/>
                                 </p:column>
-                                
+
                             </p:dataTable> 
                         </div>
                     </h:form>

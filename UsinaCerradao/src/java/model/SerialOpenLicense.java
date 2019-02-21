@@ -22,7 +22,7 @@ import javax.persistence.Table;
  * @author enascimento
  */
 @Entity
-@Table (name = "serial_open_lincese")
+@Table (name = "serial_open_license")
 public class SerialOpenLicense implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,6 +30,8 @@ public class SerialOpenLicense implements Serializable{
     private int idSerial;
     @Column(name = "serial", nullable = true)
     private String serial;
+    @Column(name = "descricao", nullable = true)
+    private String descricao;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_tipo_license", nullable = false, foreignKey = @ForeignKey(name = "id_tipo_license"))
     private TipoLicense idTipoLicense;
@@ -55,6 +57,14 @@ public class SerialOpenLicense implements Serializable{
 
     public void setIdTipoLicense(TipoLicense idTipoLicense) {
         this.idTipoLicense = idTipoLicense;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
 

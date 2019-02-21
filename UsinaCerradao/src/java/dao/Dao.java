@@ -118,11 +118,11 @@ public class Dao implements Serializable {
     //----------------Software -----------------------
 
     public List<SerialOpenLicense> buscarSerialOpen(String nome) {
-        return (List<SerialOpenLicense>) em.createNativeQuery("SELECT * FROM serial_open_lincese where serial like '%" + nome + "%'", SerialOpenLicense.class).getResultList();
+        return (List<SerialOpenLicense>) em.createNativeQuery("SELECT * FROM serial_open_license where serial like '%" + nome + "%'", SerialOpenLicense.class).getResultList();
     }
     
     public SerialOpenLicense buscarSerialOpenConverter(String nome) {
-        return (SerialOpenLicense) em.createNativeQuery("SELECT * FROM serial_open_lincese where serial = '" + nome + "'", SerialOpenLicense.class).getSingleResult();
+        return (SerialOpenLicense) em.createNativeQuery("SELECT * FROM serial_open_license where serial = '" + nome + "'", SerialOpenLicense.class).getSingleResult();
     }
     //----------------CanaDiaFrenteMB -----------------------
 
@@ -182,7 +182,7 @@ public class Dao implements Serializable {
 
     //----------------Serial -----------------------
     public List<SerialOpenLicense> buscarTabelaSerial(BigDecimal numero) {
-        return (List<SerialOpenLicense>) em.createNativeQuery("SELECT * FROM SERIAL_OPEN_LINCESE SE, TIPO_LICENSE TI\n"
+        return (List<SerialOpenLicense>) em.createNativeQuery("SELECT * FROM SERIAL_OPEN_LICENSE SE, TIPO_LICENSE TI\n"
                 + "WHERE SE.ID_TIPO_LICENSE = TI.ID_TIPO_LICENSE\n"
                 + "AND TI.ID_OPEN_LICENSE = " + numero, SerialOpenLicense.class).getResultList();
     }

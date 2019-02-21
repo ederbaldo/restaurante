@@ -121,6 +121,9 @@
                                         <f:selectItems value="#{serialOpenLicenseMB.selectTipoLicense}"/>
                                     </p:selectOneMenu>
 
+                                    <p:outputLabel for="descricao" value="Descricao:  "/>
+                                    <p:inputText id="descricao" value="#{serialOpenLicenseMB.serialOpenLicense.descricao}" />
+                                    
                                     <p:outputLabel for="key" value="key:  "/>
                                     <p:inputText id="key" value="#{serialOpenLicenseMB.serialOpenLicense.serial}" />
                                     
@@ -151,7 +154,7 @@
                                          style="margin-bottom: 10px; margin-top: 15px; 
                                          max-width: 600px; min-width: 300px" reflow="true" editable="true" editMode="cell">
                                 <p:column headerText="Descrição" width="1">
-                                    <h:outputText value="#{serial.idTipoLicense.descricao}" />
+                                    <h:outputText value="#{serial.descricao}" />
                                 </p:column>
                                 <p:column headerText="Serial" width="10">
                                     <h:outputText value="#{serial.serial}" />

@@ -1,0 +1,87 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/templates/Layout.xhtml">
+
+    <ui:define name="head">
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="formRelatorioCusto">
+            <p:messages id="menssagem" showDetail="true" closable="true"/> 
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                            <h1>Relatório de Treinamentos</h1>
+                            <p:inputText  value="#{treinamentoMB.id}">
+                                <p:ajax event="change" update="formRelatorioCusto" listener="#{treinamentoMB.buscarTreinamento}" process="@this" />
+                            </p:inputText>
+                            <p:dataTable id="idTabela" value="#{treinamentoMB.listaTreinamento}" var="treinamento" rows="50" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         rowsPerPageTemplate="10,20,30,40,50,60,70,80,90,100" emptyMessage="Nenhuma informação..." style="margin-bottom: 30px; margin-top: 5px" reflow="true" >                               
+                                <f:facet name="header">
+
+                                    <p:spacer width="25"></p:spacer>
+                                    <p:outputPanel style="float:right;margin-top: 4px">  
+                                        <h:commandLink title="Buscar todos" ><i class="fa fa-search"></i>
+                                        </h:commandLink>
+                                        <p:spacer width="5"></p:spacer>
+                                    </p:outputPanel>
+                                </f:facet>
+                                <p:column headerText="ID" width="5" sortBy="#{treinamento.idTreinamento}">
+                                    <h:outputText value="#{treinamento.idTreinamento}"/>
+                                </p:column> 
+                                <p:column headerText="Treinamento" width="95" sortBy="#{treinamento.treinamento}">
+                                    <h:outputText value="#{treinamento.treinamento}"/>
+                                </p:column> 
+                                <p:column headerText="matricula" width="10" sortBy="#{treinamento.cdColab}">
+                                    <h:outputText value="#{treinamento.cdColab}"/>
+                                </p:column>   
+                                <p:column headerText="Colaborador" width="95" sortBy="#{treinamento.nomeColab}">
+                                    <h:outputText value="#{treinamento.nomeColab}"/>
+                                </p:column>   
+                                <p:column headerText="Função" width="95" sortBy="#{treinamento.nomeCargo}">
+                                    <h:outputText value="#{treinamento.nomeCargo}"/>
+                                </p:column>  
+                                <p:column headerText="LocalTrabalho" width="95" sortBy="#{treinamento.descLocalTrab}">
+                                    <h:outputText value="#{treinamento.descLocalTrab}"/>
+                                </p:column>   
+                                <p:column style="text-align: center; width:1%">                                   
+                                    <p:commandLink actionListener="#{treinamentoMB.treinamentoFeito}" title="Treinamentos Realizados" id="idDialogInfoLink" oncomplete="PF('dialogInfo').show();" update="formRelatorioCusto:idDialogInfo">
+                                        <i class="fa fa-info-circle"></i>
+                                    </p:commandLink>                                 
+                                </p:column>
+                            </p:dataTable>    
+
+                            <p:dialog id="idDialogInfo" header="Treinamentos Realizados" widgetVar="dialogInfo" responsive="true" modal="true" resizable="false">
+                                <p:dataTable id="idTabelaDialog" value="#{treinamentoMB.listaTreinamentoFeito}" class="ui-fluid" var="lista" rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             emptyMessage="Nenhum treinamento.." 
+                                             style="margin-bottom: 10px; margin-top: 15px; 
+                                             max-width: 600px; min-width: 300px" reflow="true" editable="true" editMode="cell">
+                                    <p:column headerText="Mat" width="5">
+                                        <h:outputText value="#{lista.cdColab}" />
+                                    </p:column>
+                                    <p:column headerText="Nome" width="25">
+                                        <h:outputText value="#{lista.nomeColab}" />
+                                    </p:column>
+                                    <p:column headerText="Treinamento" width="50">
+                                        <h:outputText value="#{lista.treinamento}" />
+                                    </p:column>
+                                    <p:column headerText="Conclusao" width="25">
+                                        <h:outputText value="#{lista.data}" >
+                                        <f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime> 
+                                        </h:outputText>
+                                    </p:column>
+                                </p:dataTable>
+
+                            </p:dialog>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

@@ -5,12 +5,12 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/templates/Layout.xhtml">
 
-    <ui:define name="title-tab">Cadastro de Computador e Notebook</ui:define>
+    <ui:define name="title-tab">Cadastro de Computador, Notebook e Macbook</ui:define>
     <ui:define name="content">
         <div class="ui-g-12">
             <h:form id="formCadastro">
                 <p:messages id="menssagem" showDetail="true" closable="true"/>  
-                <p:panel id="basic" header="Cadastro de Computador e Notebook" style="margin-bottom:10px">
+                <p:panel id="basic" header="Cadastro de Computador, Notebook e Macbook" style="margin-bottom:10px">
                     <div class="ui-fluid">
                         <h4>Dados da compra</h4>
                         <p:panelGrid columns="6" columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1,ui-g-12 ui-md-4, ui-g-12 ui-md-1, ui-g-12 ui-md-4" layout="grid" 
@@ -18,8 +18,10 @@
                             <p:outputLabel for="tipo" value="Tipo:"/>
                             <p:selectOneMenu id="tipo" value="#{computadorMB.computador.tipo}">
                                 <f:selectItem itemLabel="Selecionar" itemValue="1"/>
-                                <f:selectItem itemLabel="NOTEBOOK" itemValue="NOTEBOOK"/>
                                 <f:selectItem itemLabel="COMPUTADOR" itemValue="COMPUTADOR"/>
+                                <f:selectItem itemLabel="NOTEBOOK" itemValue="NOTEBOOK"/>
+                                <f:selectItem itemLabel="MACBOOK" itemValue="NOTEBOOK"/>
+
                             </p:selectOneMenu> 
                             <p:outputLabel for="marca" value="Marca:"/>
                             <p:selectOneMenu id="marca" value="#{computadorMB.computador.marca.idMarca}">
@@ -27,59 +29,95 @@
                                 <f:selectItems value="#{computadorMB.selectMarca}"/>
                             </p:selectOneMenu>
                             <p:outputLabel value="Descrição:" indicateRequired="false"/>
-                            <p:inputText id="descricao" value = "#{computadorMB.computador.descricao}" required="true" requiredMessage="Decrição obrigatório!"/> 
-                        </p:panelGrid >
-
-                        <p:panelGrid columns="8" columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1,ui-g-12 ui-md-2, ui-g-12 ui-md-1, ui-g-12 ui-md-2,ui-g-12 ui-md-1, ui-g-12 ui-md-2" layout="grid" 
-                                     styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;"> 
-                            <p:outputLabel value="Fornecedor:" indicateRequired="false"/>
-                            <p:inputText id="fornecedor" value = "#{computadorMB.computador.fornecedor}" disabled="true"/> 
-
-
+                            <p:inputText id="descricao" value = "#{computadorMB.computador.descricao}" required="true" requiredMessage="Decrição obrigatório!"/>  
                             <p:outputLabel value="Data: "/>
                             <p:calendar locale="br" value="#{computadorMB.computador.data}" pattern="dd/MM/yyyy">
                                 <p:ajax event="dateSelect" listener="#{computadorMB.buscarNf}"/> 
                             </p:calendar>
                             <p:outputLabel value="N° Nota: " indicateRequired="false"/>
-
                             <p:inputText  value="#{computadorMB.computador.nf}" required="true" requiredMessage="N° Nota obrigatório!">
                                 <p:ajax event="change" update="formCadastro:fornecedor :formCadastro:numeroDanf" listener="#{computadorMB.buscarNf}" process="@this" />
                             </p:inputText>
-                            <p:outputLabel value="N° Danf: "/>
 
-                            <p:inputText id="numeroDanf" value="#{computadorMB.computador.nroDanf}" disabled="true"/>
+                            <p:outputLabel value="Fornecedor:" indicateRequired="false"/>
+                            <p:inputText id="fornecedor" value = "#{computadorMB.computador.fornecedor}" disabled="true"/>                             
                         </p:panelGrid >
+
+                        <p:panelGrid columns="4" columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-5,ui-g-12 ui-md-1,ui-g-12 ui-md-5" layout="grid" 
+                                     styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;"> 
+                            <p:outputLabel value="N° Danfe: "/>
+                            <p:inputText id="numeroDanf" value="#{computadorMB.computador.nroDanf}" disabled="true"/>
+
+                            <p:outputLabel for="status" value="Status:"/>
+                            <p:inputSwitch onLabel="Ativo" offLabel="Inativo" id="status" value=""/>
+                        </p:panelGrid >
+
                         <h4>Informações Adicionais</h4>
-                        <p:panelGrid columns="8" columnClasses="ui-g-12 ui-md-3,ui-g-12 ui-md-3, ui-g-12 ui-md-3, ui-g-12 ui-md-3" layout="grid" 
-                                     styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">   
+                        <p:panelGrid columns="5" columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2, ui-g-12 ui-md-1, ui-g-12 ui-md-2, ui-g-12 ui-md-6" layout="grid" 
+                                     styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                            <p:outputLabel for="memoria" value="Memória RAM:" indicateRequired="false"/>
+                            <p:selectOneMenu id="memoria" value="#{computadorMB.computador.memoria}" required="true" requiredMessage="Memória Ram obrigatório!">
+                                <f:selectItem itemLabel="Selecionar" itemValue="1"/>
+                                <f:selectItem itemLabel="2GB" itemValue="2GB"/>
+                                <f:selectItem itemLabel="4GB" itemValue="4GB"/>
+                                <f:selectItem itemLabel="6GB" itemValue="6GB"/>
+                                <f:selectItem itemLabel="8GB" itemValue="8GB"/>
+                                <f:selectItem itemLabel="12GB" itemValue="12GB"/>
+                                <f:selectItem itemLabel="16GB" itemValue="16GB"/>
+                                <f:selectItem itemLabel="32GB" itemValue="32GB"/>
+                                <f:selectItem itemLabel="64GB" itemValue="64GB"/>
+                                <f:selectItem itemLabel="128GB" itemValue="128GB"/>
+                                <f:selectItem itemLabel="256GB" itemValue="256GB"/>
+                            </p:selectOneMenu>
 
+                            <p:outputLabel for="processador" value="Processador:" indicateRequired="false" />
+                            <p:selectOneMenu id="processador" value="#{computadorMB.computador.processador}" required="true" requiredMessage="Processador obrigatório!">
+                                <f:selectItem itemLabel="Selecionar" itemValue="1"/>
+                                <f:selectItem itemLabel="Intel Celeron" itemValue="Intel Celeron"/>
+                                <f:selectItem itemLabel="Intel Pentium" itemValue="Intel Pentium"/>
+                                <f:selectItem itemLabel="Intel Core 2" itemValue="Intel Core 2"/>
+                                <f:selectItem itemLabel="Intel Core i3" itemValue="Intel Core i3"/>
+                                <f:selectItem itemLabel="Intel Core i5" itemValue="Intel Core i5"/>
+                                <f:selectItem itemLabel="Intel Core i7" itemValue="Intel Core i7"/>
+                                <f:selectItem itemLabel="Intel Core i9" itemValue="Intel Core i9"/>
+                            </p:selectOneMenu>
 
-                            <p:inputText id="memoriaRam" placeholder="Memoria Ram" value = "#{computadorMB.computador.memoria}" required="true" requiredMessage="Memoria Ram obrigatório!"/>  
+                            <p:panelGrid columns="4" columnClasses="ui-g-12 ui-md-3,ui-g-12 ui-md-4,ui-g-12 ui-md-1, ui-g-12 ui-md-4" layout="grid" 
+                                         styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
 
+                                <p:outputLabel for="armazenamento" value="Modelo / Tamanho:" indicateRequired="false" />
+                                <p:selectOneMenu id="armazenamento" value="#{computadorMB.computador.dipositivoArmazenamento}" required="true" requiredMessage="Dispositivo Armazenamento obrigatório!">
+                                    <f:selectItem itemLabel="Selecionar" itemValue="1"/>
+                                    <f:selectItem itemLabel="HD" itemValue="HD"/>
+                                    <f:selectItem itemLabel="SSD" itemValue="SSD"/>
+                                    <f:selectItem itemLabel="M2" itemValue="M2"/>
+                                    <f:selectItem itemLabel="HÍBRIDO" itemValue="HÍBRIDO"/>
+                                </p:selectOneMenu>
 
-                            <p:inputText id="processador" placeholder="Processador" value = "#{computadorMB.computador.processador}" required="true" requiredMessage="Processador obrigatório!"/> 
+                                <p:outputLabel for="tamanho" indicateRequired="false" />
+                                <p:selectOneMenu id="tamanho" value="" required="true" requiredMessage="Espaço obrigatório!">
+                                    <f:selectItem itemLabel="Selecionar" itemValue="1"/>
+                                    <f:selectItem itemLabel="240GB" itemValue="240GB"/>
+                                    <f:selectItem itemLabel="400GB" itemValue="400GB"/>
+                                    <f:selectItem itemLabel="500GB" itemValue="500GB"/>
+                                    <f:selectItem itemLabel="1TB" itemValue="1TB"/>
+                                </p:selectOneMenu>
+                                <p:outputLabel/>
+                            </p:panelGrid>
+                            <p:outputLabel for="service" value="Service Tag:" indicateRequired="false"/>
+                            <p:inputText id="service" value="#{computadorMB.computador.observacao}" required="true" requiredMessage="Service tag obrigatório!"/>
 
-
-                            <p:inputText id="dipositivoArmazenamento" placeholder="Dispositivo Armazenamento" value="#{computadorMB.computador.dipositivoArmazenamento}" required="true" requiredMessage="Dispositivo Armazenamento obrigatório!"/>
-
-
-                            <p:inputText id="observação" placeholder="Observação" value="#{computadorMB.computador.observacao}"/>
                         </p:panelGrid >  
+
                         <br></br>
                         <p:panelGrid columns="5" layout="grid"
                                      columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-4"
                                      styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
-                            <p:commandButton value="Salvar" update="formCadastro,formCadastro2" actionListener="#{computadorMB.gravar}"  
+                            <p:commandButton value="Salvar" update="formCadastro,formCadastro2, menssagem" actionListener="#{computadorMB.gravar}"  
                                              icon="fa fa-check"/>
                             <p:commandButton value="Cancelar" icon="fa fa-close" onclick="history.go(0); return false;"/>
-                            <p:commandButton value="Desativar" actionListener="#{computadorMB.excluir}"
-                                             icon="fa fa-trash" update="formCadastro,formCadastro2, menssagem" process="@this">
-                                <p:confirm header="Confirmação" message="Você tem certeza ?" icon="ui-icon-alert" />
-                            </p:commandButton>
-                            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                                <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
-                                <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="fa fa-close" />
-                            </p:confirmDialog>
+                            
+                            
                         </p:panelGrid>
                     </div>
                 </p:panel>
@@ -109,22 +147,40 @@
                                 </p:inputText>
                             </p:outputPanel>
                         </f:facet>
-                        <p:column headerText="Descrição" width="100" sortBy="#{computador.descricao}">
+                        <p:column headerText="Tipo" width="10" sortBy="#{computador.tipo}">
+                            <h:outputText value="#{computador.tipo}"/>
+                        </p:column>
+                        <p:column headerText="Marca" width="20" sortBy="#{computador.marca.descricao}">
+                            <h:outputText value="#{computador.marca.descricao}"/>
+                        </p:column>
+                        <p:column headerText="Descrição" width="7" sortBy="#{computador.descricao}">
                             <h:outputText value="#{computador.descricao}"/>
                         </p:column>
-                        <p:column headerText="Nota Fiscal" width="100" sortBy="#{computador.nf}">
+                        <p:column headerText="Nota Fiscal" width="15" sortBy="#{computador.nf}">
                             <h:outputText value="#{computador.nf}"/>
                         </p:column>
-                        <p:column headerText="Data Emissão" width="100" sortBy="#{computador.data}">
-                            <h:outputText value="#{computador.data}"/>
+                        <p:column headerText="Data Emissão" width="10" sortBy="#{computador.data}">
+                            <h:outputText value="#{computador.data}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime>
+                            </h:outputText>
                         </p:column>
-                        <p:column headerText="Numero Danf" width="100" sortBy="#{computador.nroDanf}">
-                            <h:outputText value="#{computador.nroDanf}"/>
+                        <p:column headerText="Status" width="5" sortBy="#{computador.situacao}">
+                            <h:outputText value="#{computador.situacao}"/>
                         </p:column>
                         <p:column style="text-align: center; width:1%">                                   
                             <p:commandLink title="Editar" id="alterar" actionListener="#{computadorMB.alterar()}" update="formCadastro, formCadastro2" process="@this">
-                                <i class="fa fa-pencil-square-o" ></i>
+                                <i class="fa fa-pencil-square-o" style="color: dodgerblue"></i>
                             </p:commandLink>                                 
+                        </p:column>
+                        <p:column style="text-align: center; width:1%">                                   
+                            <p:commandLink title="Excluir" id="excluir" actionListener="#{computadorMB.alterar()}" update="formCadastro, formCadastro2" process="@this">
+                                <i class="fa fa-trash" style="color: red"></i>
+                                <p:confirm header="Confirmação" message="Você tem certeza ?" icon="ui-icon-alert"/>
+                            </p:commandLink>
+                            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
+                                <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="fa fa-close" />
+                            </p:confirmDialog>
                         </p:column>
                     </p:dataTable> 
                 </div>

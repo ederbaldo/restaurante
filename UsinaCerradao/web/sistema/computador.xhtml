@@ -24,7 +24,7 @@
 
                             </p:selectOneMenu> 
                             <p:outputLabel for="marca" value="Marca:"/>
-                            <p:selectOneMenu id="marca" value="#{computadorMB.computador.marca.idMarca}">
+                            <p:selectOneMenu  id="marca" value="#{computadorMB.computador.marca.idMarca}" >
                                 <f:selectItems itemLabel="Selecionar" itemValue="0"/>
                                 <f:selectItems value="#{computadorMB.selectMarca}"/>
                             </p:selectOneMenu>
@@ -40,16 +40,16 @@
                             </p:inputText>
 
                             <p:outputLabel value="Fornecedor:" indicateRequired="false"/>
-                            <p:inputText id="fornecedor" value = "#{computadorMB.computador.fornecedor}" disabled="true"/>                             
+                            <p:inputText id="fornecedor" value = "#{computadorMB.fornecedor}" disabled="true"/>                             
                         </p:panelGrid >
 
                         <p:panelGrid columns="4" columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-5,ui-g-12 ui-md-1,ui-g-12 ui-md-5" layout="grid" 
                                      styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;"> 
                             <p:outputLabel value="N° Danfe: "/>
-                            <p:inputText id="numeroDanf" value="#{computadorMB.computador.nroDanf}" disabled="true"/>
+                            <p:inputText id="numeroDanf" value="#{computadorMB.danfe}" disabled="true"/>
 
                             <p:outputLabel for="status" value="Status:"/>
-                            <p:inputSwitch onLabel="Ativo" offLabel="Inativo" id="status" value=""/>
+                            <p:inputSwitch onLabel="Ativo" offLabel="Inativo" id="status" value="#{computadorMB.computador.situacao}"/>
                         </p:panelGrid >
 
                         <h4>Informações Adicionais</h4>
@@ -105,7 +105,7 @@
                                 <p:outputLabel/>
                             </p:panelGrid>
                             <p:outputLabel for="service" value="Service Tag:" indicateRequired="false"/>
-                            <p:inputText id="service" value="#{computadorMB.computador.observacao}" required="true" requiredMessage="Service tag obrigatório!"/>
+                            <p:inputText id="service" value="#{computadorMB.computador.serviceTag}" required="true" requiredMessage="Service tag obrigatório!"/>
 
                         </p:panelGrid >  
 

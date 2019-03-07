@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import model.Colab;
@@ -30,7 +31,7 @@ public class IpMB implements Serializable {
     private List<SelectItem> selectComputador; 
     private List<Computador> listaComputador;
     private Dao dao = new Dao();
-    List<Ip> listarIp= new ArrayList<Ip>();
+    private List<Ip> listarIp= new ArrayList<Ip>();
     private Colab colab;
     private Integer colabId;
     private Integer solicitanteId;
@@ -67,8 +68,31 @@ public class IpMB implements Serializable {
             colab.setNome((String) result[2]);
             getListaColab().add(colab);
             ip.setColabId(colab.getColabId());
+            setMatricula(colab.getMatricula());
             setNomeColab(colab.getNome());
+            
         }       
+    }
+    public void buscarColaboradoresId() {
+
+    }
+    public void buscarMicro(ActionEvent evt) {
+        ip = (Ip) FacesContext.getCurrentInstance().getExternalContext().getRequestMap().get("ip");
+        System.out.println("-------------" + ip.getColabId());
+        List<Object[]> results = dao.buscarColaboradoresId(ip.getColabId());
+        Colab colab = null;
+        
+        for (Object[] result : results) {
+            colab = new Colab();
+            colab.setColabId((BigDecimal) result[0]);
+            colab.setMatricula((BigDecimal) result[1]);
+            colab.setNome((String) result[2]);
+            getListaColab().add(colab);
+            setMatricula(colab.getMatricula());
+            setNomeColab(colab.getNome());
+            
+        }       
+        System.out.println("-------------" + getNomeColab());
     }
     public void gravar (ActionEvent evt)
     {

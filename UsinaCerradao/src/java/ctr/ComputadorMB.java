@@ -40,7 +40,8 @@ public class ComputadorMB implements Serializable {
     private List<Marca> listaMarca;
     private List<NotaFiscal>listaNf;
     List<Computador> listarComputador= new ArrayList<Computador>();
-    private Date teste;
+    private String fornecedor;
+    private String Danfe;
 
     public ComputadorMB() {
         computador = new  Computador();
@@ -54,7 +55,6 @@ public class ComputadorMB implements Serializable {
     {
         try {
             computador.toUpperCase();
-            computador.setSituacao("ATIVO");
             dao.gravar(computador);
             /*listarMarcaVeiculo = (List<Marca>) dao.buscarTodos(Marca.class);*/
             computador = new Computador();
@@ -71,7 +71,6 @@ public class ComputadorMB implements Serializable {
     {
         try {
             computador.toUpperCase();
-            computador.setSituacao("DESATIVADO");
             dao.gravar(computador);
             /*listarMarcaVeiculo = (List<Marca>) dao.buscarTodos(Marca.class);*/
             computador = new Computador();
@@ -115,8 +114,8 @@ public void buscarNf() throws ParseException {
             nf.setCdProduto((String) result[5]);
             nf.setDescrProduto((String) result[6]);
             getListaNf().add(nf);
-            computador.setFornecedor(nf.getRazaoSocial());
-        computador.setNroDanf(nf.getDanf());
+            setFornecedor(nf.getRazaoSocial());
+            setDanfe(nf.getDanf());
         }
         
        
@@ -173,13 +172,23 @@ public void buscarNf() throws ParseException {
         this.notaFiscal = notaFiscal;
     }
 
-    public Date getTeste() {
-        return teste;
+    public String getFornecedor() {
+        return fornecedor;
     }
 
-    public void setTeste(Date teste) {
-        this.teste = teste;
+    public void setFornecedor(String fornecedor) {
+        this.fornecedor = fornecedor;
     }
+
+    public String getDanfe() {
+        return Danfe;
+    }
+
+    public void setDanfe(String Danfe) {
+        this.Danfe = Danfe;
+    }
+
+    
     
     
 

@@ -42,7 +42,9 @@ public class Dao implements Serializable {
         em.remove(objeto);
         em.getTransaction().commit();
     }
-
+public void flush() {
+        em.flush();
+    }
     public Object buscar(Object objeto, int id) {
         return em.find(objeto.getClass(), id);
     }
@@ -140,6 +142,15 @@ public class Dao implements Serializable {
         TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("select colab_id, cd_colab, nome_colab from v_colab where dt_demis is null and cd_colab = " + mat);
         List<Object[]> results = query.getResultList();
         return results;
+    }
+    
+    
+    //----------------ip -----------------------
+        public List<Object[]> buscarColaboradoresId(BigDecimal id) {
+        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("select colab_id, cd_colab, nome_colab from v_colab where dt_demis is null and colab_id = " + id);
+        List<Object[]> results = query.getResultList();
+        return results;
+      //public List<Object[]> buscarColaboradores(BigDecimal mat) usa esse metodo tbm
     }
 
     //----------------ComputadorSoftwareMB -----------------------

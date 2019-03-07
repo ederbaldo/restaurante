@@ -20,76 +20,61 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import org.hibernate.annotations.Type;
 
 /**
  *
  * @author enascimento
  */
 @Entity
-@Table (name = "computador")
+@Table(name = "computador")
 public class Computador implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "COMPUTADOR_SEQ")
     @SequenceGenerator(sequenceName = "SEQ_COMPUTADOR", allocationSize = 1, name = "COMPUTADOR_SEQ")
-    @Column(name = "id_computador",  unique = true, nullable = false)
-    private int idComputador;
-    @Temporal(value = TemporalType.DATE)
-    @Column(name = "data", nullable = false)
-    private Date data;
-    @Column(name = "descricao", nullable = true)
-    private String descricao;
-    @Column(name = "fornecedor", nullable = true)
-    private String fornecedor;
+    @Column(name = "id_computador", unique = true, nullable = false)
+    private Integer idComputador;
+    @Column(name = "tipo", nullable = true)
+    private String tipo;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_marca", nullable = false, foreignKey = @ForeignKey(name = "id_marca_computador"))
     private Marca marca;
+    @Column(name = "descricao", nullable = false)
+    private String descricao;
+    @Temporal(value = TemporalType.DATE)
+    @Column(name = "data", nullable = false)
+    private Date data;
+    @Column(name = "nf", nullable = false)
+    private Integer nf;
+    @Type(type="true_false")
+    @Column(name = "situacao", nullable = true)
+    private boolean  situacao;
     @Column(name = "memoria", nullable = true)
     private String memoria;
-    @Column(name = "nf", nullable = true)
-    private int nf;
-    @Column(name = "observacao", nullable = true)
-    private String observacao;
     @Column(name = "processador", nullable = true)
     private String processador;
-    @Column(name = "situacao", nullable = true)
-    private String situacao;
-    @Column(name = "dipositivo_armazenamento", nullable = true)
+    @Column(name = "disp_armaz", nullable = true)
     private String dipositivoArmazenamento;
-    @Column(name = "tipo", nullable = true)
-    private String tipo;
-    @Column(name = "nro_danf", nullable = true)
-    private String nroDanf;
+    @Column(name = "tamanho_disp_armaz", nullable = true)
+    private String tamanhoDipositivoArmazenamento;
+    @Column(name = "service_tag", nullable = false)
+    private String serviceTag;
 
-    public int getIdComputador() {
+    public Integer getIdComputador() {
         return idComputador;
     }
 
-    public void setIdComputador(int idComputador) {
+    public void setIdComputador(Integer idComputador) {
         this.idComputador = idComputador;
     }
 
-    public Date getData() {
-        return data;
+    public String getTipo() {
+        return tipo;
     }
 
-    public void setData(Date data) {
-        this.data = data;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public String getFornecedor() {
-        return fornecedor;
-    }
-
-    public void setFornecedor(String fornecedor) {
-        this.fornecedor = fornecedor;
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 
     public Marca getMarca() {
@@ -100,28 +85,46 @@ public class Computador implements Serializable {
         this.marca = marca;
     }
 
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public Date getData() {
+        return data;
+    }
+
+    public void setData(Date data) {
+        this.data = data;
+    }
+
+    public Integer getNf() {
+        return nf;
+    }
+
+    public void setNf(Integer nf) {
+        this.nf = nf;
+    }
+
+    public boolean isSituacao() {
+        return situacao;
+    }
+
+    public void setSituacao(boolean situacao) {
+        this.situacao = situacao;
+    }
+
+   
+
     public String getMemoria() {
         return memoria;
     }
 
     public void setMemoria(String memoria) {
         this.memoria = memoria;
-    }
-
-    public int getNf() {
-        return nf;
-    }
-
-    public void setNf(int nf) {
-        this.nf = nf;
-    }
-
-    public String getObservacao() {
-        return observacao;
-    }
-
-    public void setObservacao(String observacao) {
-        this.observacao = observacao;
     }
 
     public String getProcessador() {
@@ -132,14 +135,6 @@ public class Computador implements Serializable {
         this.processador = processador;
     }
 
-    public String getSituacao() {
-        return situacao;
-    }
-
-    public void setSituacao(String situacao) {
-        this.situacao = situacao;
-    }
-
     public String getDipositivoArmazenamento() {
         return dipositivoArmazenamento;
     }
@@ -148,26 +143,28 @@ public class Computador implements Serializable {
         this.dipositivoArmazenamento = dipositivoArmazenamento;
     }
 
-    public String getTipo() {
-        return tipo;
+    public String getTamanhoDipositivoArmazenamento() {
+        return tamanhoDipositivoArmazenamento;
     }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+    public void setTamanhoDipositivoArmazenamento(String tamanhoDipositivoArmazenamento) {
+        this.tamanhoDipositivoArmazenamento = tamanhoDipositivoArmazenamento;
     }
-    
-     public void toUpperCase() {
+
+    public String getServiceTag() {
+        return serviceTag;
+    }
+
+    public void setServiceTag(String serviceTag) {
+        this.serviceTag = serviceTag;
+    }
+
+   
+
+    public void toUpperCase() {
         this.setDescricao(this.getDescricao().toUpperCase());
+        this.setServiceTag(this.getServiceTag().toUpperCase());
+        this.setProcessador(this.getProcessador().toUpperCase());
     }
-
-    public String getNroDanf() {
-        return nroDanf;
-    }
-
-    public void setNroDanf(String nroDanf) {
-        this.nroDanf = nroDanf;
-    }
-     
-     
 
 }

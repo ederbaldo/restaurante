@@ -32,57 +32,67 @@ import util.FacesUtil;
 @ManagedBean
 @ViewScoped
 public class ComputadorMB implements Serializable {
-    
+
     private Computador computador;
     private NotaFiscal notaFiscal;
-     private Dao dao = new Dao();
-     private List<SelectItem> selectMarca; 
+    private Dao dao = new Dao();
+    private List<SelectItem> selectMarca;
     private List<Marca> listaMarca;
-    private List<NotaFiscal>listaNf;
-    List<Computador> listarComputador= new ArrayList<Computador>();
+    private List<NotaFiscal> listaNf;
+    List<Computador> listarComputador = new ArrayList<Computador>();
     private String fornecedor;
     private String Danfe;
+    private boolean status;
 
     public ComputadorMB() {
-        computador = new  Computador();
-        notaFiscal = new  NotaFiscal();
+        computador = new Computador();
+        notaFiscal = new NotaFiscal();
         computador.setMarca(new Marca());
-        listarComputador= new ArrayList<Computador>();
+        listarComputador = new ArrayList<Computador>();
         listaNf = new ArrayList<NotaFiscal>();
-        listarComputador = (List<Computador>) dao.buscarTodos(Computador.class);
+        //listarComputador = (List<Computador>) dao.buscarTodos(Computador.class);
+        listarComputador = (List<Computador>) dao.buscarTodosComputadores();
     }
-    public void gravar (ActionEvent evt)
-    {
+
+    public void gravar(ActionEvent evt) {
         try {
+            String res;
+            res = (isStatus()) ? "ATIVO" : "INATIVO";
             computador.toUpperCase();
+            computador.setSituacao(res);
             dao.gravar(computador);
             /*listarMarcaVeiculo = (List<Marca>) dao.buscarTodos(Marca.class);*/
             computador = new Computador();
-             FacesUtil.addInfoMessage("Informação", "Computador salva com sucesso!");
+            FacesUtil.addInfoMessage("Informação", "Computador salva com sucesso!");
         } catch (Exception ex) {
             FacesUtil.addErrorMessage("Erro", "Entre em contato com suporte!");
             ex.printStackTrace();
         }
     }
-    public void alterar(){
+
+    public void alterar() throws ParseException {
         computador = (Computador) FacesContext.getCurrentInstance().getExternalContext().getRequestMap().get("computador");
+        boolean res;
+        res = (computador.getSituacao().equals("ATIVO   "));
+        setStatus(res);
+        buscarNf();
+
     }
-    public void excluir(ActionEvent evt)
-    {
+
+    public void excluir(ActionEvent evt) {
         try {
             computador.toUpperCase();
             dao.gravar(computador);
             /*listarMarcaVeiculo = (List<Marca>) dao.buscarTodos(Marca.class);*/
             computador = new Computador();
-             FacesUtil.addInfoMessage("Informação", "Computador desativado com sucesso!");
+            FacesUtil.addInfoMessage("Informação", "Computador desativado com sucesso!");
         } catch (Exception ex) {
             FacesUtil.addErrorMessage("Erro", "Entre em contato com suporte!");
             ex.printStackTrace();
         }
     }
-    
-    
-public List<SelectItem> getSelectMarca() {
+
+    public List<SelectItem> getSelectMarca() {
         selectMarca = new ArrayList<SelectItem>();
         listaMarca = new ArrayList<Marca>();
         listaMarca = (List<Marca>) dao.buscarTodos(Marca.class);
@@ -93,18 +103,18 @@ public List<SelectItem> getSelectMarca() {
         return selectMarca;
     }
 
-public void buscarNf() throws ParseException {
-    DateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");
-    String sData = fmt.format(computador.getData());
-    
-    //computador = new  Computador();
-    System.out.println("-------------------------------" + computador.getNf());
-    System.out.println("-------------------------------" + sData);
-    Date data = fmt.parse(sData);
-    List<Object[]> results = dao.buscarNfPorCodigo(computador.getNf(),sData);
+    public void buscarNf() throws ParseException {
+        DateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");
+        String sData = fmt.format(computador.getData());
+
+        //computador = new  Computador();
+        System.out.println("-------------------------------" + computador.getNf());
+        System.out.println("-------------------------------" + sData);
+        Date data = fmt.parse(sData);
+        List<Object[]> results = dao.buscarNfPorCodigo(computador.getNf(), sData);
         NotaFiscal nf = null;
         for (Object[] result : results) {
-            
+
             nf = new NotaFiscal();
             nf.setNumero((BigDecimal) result[0]);
             nf.setSerie((String) result[1]);
@@ -117,9 +127,9 @@ public void buscarNf() throws ParseException {
             setFornecedor(nf.getRazaoSocial());
             setDanfe(nf.getDanf());
         }
-        
-       
+
     }
+
     public Computador getComputador() {
         return computador;
     }
@@ -188,8 +198,12 @@ public void buscarNf() throws ParseException {
         this.Danfe = Danfe;
     }
 
-    
-    
-    
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
 
 }

@@ -47,9 +47,8 @@ public class Computador implements Serializable {
     private Date data;
     @Column(name = "nf", nullable = false)
     private Integer nf;
-    @Type(type="true_false")
-    @Column(name = "situacao", nullable = true)
-    private boolean  situacao;
+    @Column(name = "situacao", length = 8, nullable = true)
+    private String  situacao;
     @Column(name = "memoria", nullable = true)
     private String memoria;
     @Column(name = "processador", nullable = true)
@@ -109,16 +108,15 @@ public class Computador implements Serializable {
         this.nf = nf;
     }
 
-    public boolean isSituacao() {
+    public String getSituacao() {
         return situacao;
     }
 
-    public void setSituacao(boolean situacao) {
+    public void setSituacao(String situacao) {
         this.situacao = situacao;
     }
 
-   
-
+    
     public String getMemoria() {
         return memoria;
     }

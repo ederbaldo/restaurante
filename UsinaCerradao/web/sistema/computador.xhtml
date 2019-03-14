@@ -48,8 +48,8 @@
                             <p:outputLabel value="N° Danfe: "/>
                             <p:inputText id="numeroDanf" value="#{computadorMB.danfe}" disabled="true"/>
 
-                            <p:outputLabel for="status" value="Status:"/>
-                            <p:inputSwitch onLabel="Ativo" offLabel="Inativo" id="status" value="#{computadorMB.computador.situacao}"/>
+                            <p:outputLabel  value="Status:"/>
+                            <p:inputSwitch onLabel="Ativo"  offLabel="Inativo" id="status" value="#{computadorMB.status}"/>
                         </p:panelGrid >
 
                         <h4>Informações Adicionais</h4>
@@ -95,7 +95,7 @@
                                 </p:selectOneMenu>
 
                                 <p:outputLabel for="tamanho" indicateRequired="false" />
-                                <p:selectOneMenu id="tamanho" value="" required="true" requiredMessage="Espaço obrigatório!">
+                                <p:selectOneMenu id="tamanho" value="#{computadorMB.computador.tamanhoDipositivoArmazenamento}" required="true" requiredMessage="Espaço obrigatório!">
                                     <f:selectItem itemLabel="Selecionar" itemValue="1"/>
                                     <f:selectItem itemLabel="240GB" itemValue="240GB"/>
                                     <f:selectItem itemLabel="400GB" itemValue="400GB"/>
@@ -124,8 +124,8 @@
             </h:form>
             <h:form id="formCadastro2">
                 <div class="card card-w-title">
-                    <p:dataTable id="idTabela" value="#{computadorMB.listarComputador}" var="computador" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                 rowsPerPageTemplate="10,20,30,50" emptyMessage="Nenhuma informação..." style="margin-bottom: 30px; margin-top: 5px" reflow="true" >
+                    <p:dataTable id="idTabela" value="#{computadorMB.listarComputador}" var="computador" rows="100" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="10,20,30,50,100" emptyMessage="Nenhuma informação..." style="margin-bottom: 30px; margin-top: 5px" reflow="true" >
                         <f:facet name="header">
                             <p:outputPanel style="float:left;margin-top: 4px">                                       
                                 <h:commandLink title="Baixar em Excel" ><i class="fa fa-file-excel-o"></i>

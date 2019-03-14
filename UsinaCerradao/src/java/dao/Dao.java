@@ -42,9 +42,11 @@ public class Dao implements Serializable {
         em.remove(objeto);
         em.getTransaction().commit();
     }
-public void flush() {
+
+    public void flush() {
         em.flush();
     }
+
     public Object buscar(Object objeto, int id) {
         return em.find(objeto.getClass(), id);
     }
@@ -77,16 +79,15 @@ public void flush() {
                 + "   VC.NOME_CARGO,\n"
                 + "   VC.DESCR_LOCAL_TRAB\n"
                 + "FROM USINAS.v_colab vc,\n"
-                + "  TI.FUNC_SGI FS,\n"
+                + "-- TI.FUNC_SGI FS,\n"
                 + "  TI.FUNC_MATRIZ_SGI FMS,\n"
                 + "  TI.FUNC_MATRIZ FM,\n"
                 + "  TI.FUNC_MATRIZ_TREINAMENTO FT,\n"
                 + "  TI.TREINAMENTO TE\n"
-                + "WHERE FS.ID           = FMS.ID_SGI\n"
-                + "AND FMS.ID_MATRIZ     = FM.ID\n"
+                + "WHERE FMS.ID_MATRIZ     = FM.ID\n"
                 + "AND FM.ID             = FT.ID_FUNC_MATRIZ\n"
                 + "AND FT.ID_TREINAMENTO = TE.ID\n"
-                + "AND FS.FUNCAO_ID      = vc.FUNCAO_ID\n"
+                + "AND FMS.ID_SGI      = vc.FUNCAO_ID\n"
                 + "AND vc.DT_DEMIS      IS NULL\n"
                 + "AND VC.SIND_ID_ASSOC = 4\n"
                 + "and TE.ID =" + idTreinamento + "\n"
@@ -95,7 +96,7 @@ public void flush() {
         return results;
     }
 
-    public List<Object[]> buscarTreinamentoFeito(Integer idTreinamento,BigDecimal cdColab) {
+    public List<Object[]> buscarTreinamentoFeito(Integer idTreinamento, BigDecimal cdColab) {
         TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT te.id\n"
                 + ",c.CURSO_ID\n"
                 + ",ac.AGENDACURS_ID\n"
@@ -118,7 +119,7 @@ public void flush() {
                 + "  and te.ID = tre.ID_TREINAMENTO\n"
                 + "  and vc.dt_demis is null\n"
                 + "and TE.ID =" + idTreinamento + "\n"
-                 + "and vc.cd_colab =" + cdColab + "\n"       
+                + "and vc.cd_colab =" + cdColab + "\n"
                 + "ORDER BY 1,3"
         );
         List<Object[]> results = query.getResultList();
@@ -143,14 +144,13 @@ public void flush() {
         List<Object[]> results = query.getResultList();
         return results;
     }
-    
-    
+
     //----------------ip -----------------------
-        public List<Object[]> buscarColaboradoresId(BigDecimal id) {
+    public List<Object[]> buscarColaboradoresId(BigDecimal id) {
         TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("select colab_id, cd_colab, nome_colab from v_colab where dt_demis is null and colab_id = " + id);
         List<Object[]> results = query.getResultList();
         return results;
-      //public List<Object[]> buscarColaboradores(BigDecimal mat) usa esse metodo tbm
+        //public List<Object[]> buscarColaboradores(BigDecimal mat) usa esse metodo tbm
     }
 
     //----------------ComputadorSoftwareMB -----------------------
@@ -177,6 +177,10 @@ public void flush() {
 
     public List<Computador> buscarComputador(String nome) {
         return (List<Computador>) em.createNativeQuery("SELECT * FROM computador where descricao like '%" + nome + "%'", Computador.class).getResultList();
+    }
+    
+    public List<Computador> buscarTodosComputadores() {
+        return (List<Computador>) em.createNativeQuery("SELECT * FROM computador order by descricao ", Computador.class).getResultList();
     }
 
     public List<Colab> buscarColaborador(int mat) {

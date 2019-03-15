@@ -69,62 +69,6 @@ public class Dao implements Serializable {
         List<Object[]> results = query.getResultList();
         return results;
     }
-    //-----------------Treinamento -----------------------
-
-    public List<Object[]> buscarTreinamento(Integer idTreinamento) {
-        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT DISTINCT TE.ID,\n"
-                + "  TE.DESCRICAO AS TREINAMENTO,\n"
-                + "  VC. CD_COLAB,\n"
-                + "  VC.NOME_COLAB,\n"
-                + "   VC.NOME_CARGO,\n"
-                + "   VC.DESCR_LOCAL_TRAB\n"
-                + "FROM USINAS.v_colab vc,\n"
-                + "-- TI.FUNC_SGI FS,\n"
-                + "  TI.FUNC_MATRIZ_SGI FMS,\n"
-                + "  TI.FUNC_MATRIZ FM,\n"
-                + "  TI.FUNC_MATRIZ_TREINAMENTO FT,\n"
-                + "  TI.TREINAMENTO TE\n"
-                + "WHERE FMS.ID_MATRIZ     = FM.ID\n"
-                + "AND FM.ID             = FT.ID_FUNC_MATRIZ\n"
-                + "AND FT.ID_TREINAMENTO = TE.ID\n"
-                + "AND FMS.ID_SGI      = vc.FUNCAO_ID\n"
-                + "AND vc.DT_DEMIS      IS NULL\n"
-                + "AND VC.SIND_ID_ASSOC = 4\n"
-                + "and TE.ID =" + idTreinamento + "\n"
-                + "ORDER BY 2,4");
-        List<Object[]> results = query.getResultList();
-        return results;
-    }
-
-    public List<Object[]> buscarTreinamentoFeito(Integer idTreinamento, BigDecimal cdColab) {
-        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT te.id\n"
-                + ",c.CURSO_ID\n"
-                + ",ac.AGENDACURS_ID\n"
-                + ",c.DESCR\n"
-                + ",VC.CD_COLAB\n"
-                + ",VC.NOME_COLAB\n"
-                + ",ac.DT_INIC\n"
-                + "FROM agenda_curso ac\n"
-                + "  ,curso c\n"
-                + "  ,curso_forn cf\n"
-                + "  ,curso_colab cc\n"
-                + "  ,V_COLAB VC\n"
-                + "  ,TREINAMENTO_CURSO_SGI tre\n"
-                + "  ,TREINAMENTO te\n"
-                + "  WHERE ac.CURSOFORN_ID = cf.CURSOFORN_ID\n"
-                + "   and cf.CURSO_ID = c.CURSO_ID\n"
-                + "  and ac.AGENDACURS_ID = cc.AGENDACURS_ID\n"
-                + "  and cc.COLAB_ID = VC.COLAB_ID\n"
-                + "  and c.CURSO_ID = tre.ID_CURSO\n"
-                + "  and te.ID = tre.ID_TREINAMENTO\n"
-                + "  and vc.dt_demis is null\n"
-                + "and TE.ID =" + idTreinamento + "\n"
-                + "and vc.cd_colab =" + cdColab + "\n"
-                + "ORDER BY 1,3"
-        );
-        List<Object[]> results = query.getResultList();
-        return results;
-    }
 
     public List<Object[]> buscarNF() {
         TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT A.NRO,a.SERIE,a.DT_EMISS,a.RAZAO_SOCIAL,a.NRO_NFE,b.CD_PROD,b.DESCR_PROD FROM NF_ENT a, ITNF_ENT b WHERE a.NFENT_ID = b.NFENT_ID AND b.CD_PROD  in ('54578','54579','54160','54164') order by a.DT_EMISS");
@@ -178,7 +122,7 @@ public class Dao implements Serializable {
     public List<Computador> buscarComputador(String nome) {
         return (List<Computador>) em.createNativeQuery("SELECT * FROM computador where descricao like '%" + nome + "%'", Computador.class).getResultList();
     }
-    
+
     public List<Computador> buscarTodosComputadores() {
         return (List<Computador>) em.createNativeQuery("SELECT * FROM computador order by descricao ", Computador.class).getResultList();
     }
@@ -269,6 +213,70 @@ public class Dao implements Serializable {
 
     public Colab buscarColabConverter(String nome) {
         return (Colab) em.createNativeQuery("SELECT nome_colab, cd_colab FROM v_colab where nome_colab = '" + nome + "'", Colab.class).getSingleResult();
+    }
+
+    //-----------------Recursos Humanos -----------------------
+    
+        //-----------------Treinamento -----------------------
+    public List<Object[]> buscarTreinamento(Integer idTreinamento) {
+        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT DISTINCT TE.ID,\n"
+                + "  TE.DESCRICAO AS TREINAMENTO,\n"
+                + "  VC. CD_COLAB,\n"
+                + "  VC.NOME_COLAB,\n"
+                + "   VC.NOME_CARGO,\n"
+                + "   VC.DESCR_LOCAL_TRAB\n"
+                + "FROM USINAS.v_colab vc,\n"
+                + "-- TI.FUNC_SGI FS,\n"
+                + "  TI.FUNC_MATRIZ_SGI FMS,\n"
+                + "  TI.FUNC_MATRIZ FM,\n"
+                + "  TI.FUNC_MATRIZ_TREINAMENTO FT,\n"
+                + "  TI.TREINAMENTO TE\n"
+                + "WHERE FMS.ID_MATRIZ     = FM.ID\n"
+                + "AND FM.ID             = FT.ID_FUNC_MATRIZ\n"
+                + "AND FT.ID_TREINAMENTO = TE.ID\n"
+                + "AND FMS.ID_SGI      = vc.FUNCAO_ID\n"
+                + "AND vc.DT_DEMIS      IS NULL\n"
+                + "AND VC.SIND_ID_ASSOC = 4\n"
+                + "and TE.ID =" + idTreinamento + "\n"
+                + "ORDER BY 2,4");
+        List<Object[]> results = query.getResultList();
+        return results;
+    }
+
+    public List<Object[]> buscarTreinamentoFeito(Integer idTreinamento, BigDecimal cdColab) {
+        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT te.id\n"
+                + ",c.CURSO_ID\n"
+                + ",ac.AGENDACURS_ID\n"
+                + ",c.DESCR\n"
+                + ",VC.CD_COLAB\n"
+                + ",VC.NOME_COLAB\n"
+                + ",ac.DT_INIC\n"
+                + "FROM agenda_curso ac\n"
+                + "  ,curso c\n"
+                + "  ,curso_forn cf\n"
+                + "  ,curso_colab cc\n"
+                + "  ,V_COLAB VC\n"
+                + "  ,TREINAMENTO_CURSO_SGI tre\n"
+                + "  ,TREINAMENTO te\n"
+                + "  WHERE ac.CURSOFORN_ID = cf.CURSOFORN_ID\n"
+                + "   and cf.CURSO_ID = c.CURSO_ID\n"
+                + "  and ac.AGENDACURS_ID = cc.AGENDACURS_ID\n"
+                + "  and cc.COLAB_ID = VC.COLAB_ID\n"
+                + "  and c.CURSO_ID = tre.ID_CURSO\n"
+                + "  and te.ID = tre.ID_TREINAMENTO\n"
+                + "  and vc.dt_demis is null\n"
+                + "and TE.ID =" + idTreinamento + "\n"
+                + "and vc.cd_colab =" + cdColab + "\n"
+                + "ORDER BY 1,3"
+        );
+        List<Object[]> results = query.getResultList();
+        return results;
+    }
+        //-----------------Treinamento Qualidade -----------------------
+    public List<Object[]> buscarTreinamentoQualidade() {
+        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("select ID,DESCRICAO FROM TREINAMENTO ORDER BY ID DESC");
+        List<Object[]> results = query.getResultList();
+        return results;
     }
 
 }

@@ -36,7 +36,7 @@
 
                     <h:form id="formTreinamentoFuncao2">
                         <div class="card card-w-title">
-                            <p:dataTable id="idTabela" value="#{colabMB.listaColab}" var="treinamento" rows="50" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                            <p:dataTable id="idTabela" value="#{treinamentoQualidadeMB.listaTreinamentoQualidade}" var="treinamento" rows="50" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                          rowsPerPageTemplate="10,20,30,40,50,60,70,80,90,100" emptyMessage="Nenhuma informação..." style="margin-bottom: 30px; margin-top: 5px" reflow="true" >                               
                                 <f:facet name="header">
                                     <p:spacer width="25"></p:spacer>
@@ -60,11 +60,11 @@
                                         </p:inputText>
                                     </p:outputPanel>
                                 </f:facet>
-                                <p:column headerText="Código" width="2" sortBy="#{treinamento.matricula}">
-                                    <h:outputText value="#{treinamento.matricula}"/>
+                                <p:column headerText="Código" width="2" sortBy="#{treinamento.idTreinamento}">
+                                    <h:outputText value="#{treinamento.idTreinamento}"/>
                                 </p:column> 
-                                <p:column headerText="Função" width="80" sortBy="#{treinamento.nome}">
-                                    <h:outputText value="#{treinamento.nome}"/>
+                                <p:column headerText="Função" width="80" sortBy="#{treinamento.treinamento}">
+                                    <h:outputText value="#{treinamento.treinamento}"/>
                                 </p:column>  
                                 <p:column style="text-align: center; width:1%">                                   
                                     <p:commandLink title="Vincular a Treinamentos" id="idDialogTrein" oncomplete="PF('dialogInfo').show();" update="formTreinamentoFuncao2:idDialogTrein">

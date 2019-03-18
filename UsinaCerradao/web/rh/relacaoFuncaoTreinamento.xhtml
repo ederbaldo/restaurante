@@ -17,18 +17,18 @@
                             <p:panelGrid columns="4" id="pnlSoftware1" columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1, ui-g-12 ui-md-8" layout="grid" 
                                          styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
                                 <p:outputLabel value="Código Função:"/>
-                                <p:inputText  value="#{treinamentoMB.id}">
-                                    <p:ajax event="change" update="formTreinamentoFuncao, :formTreinamentoFuncao2" listener="#{treinamentoMB.buscarTreinamento}" process="@this" />
+                                <p:inputText  value="#{funcaoQualidadeMB.funcaoID}">
+                                    <p:ajax event="change" update="formTreinamentoFuncao:funcao" listener="#{funcaoQualidadeMB.buscarFuncaoSgi}" process="@this" />
                                 </p:inputText> 
                                 <p:outputLabel value="Função:"/>
-                                <p:inputText id="funcao" value="" disabled="true"/>
+                                <p:inputText id="funcao" value="#{funcaoQualidadeMB.funcao}" style="font-weight: bold;"  disabled="true"/>
                             </p:panelGrid>
                             <br></br>
                             <p:panelGrid columns="5" layout="grid"
                                          columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-4"
                                          styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
-                                <p:commandButton value="Salvar" update="formTreinamentoFuncao,formTreinamentoFuncao2, menssagem" 
-                                                 icon="fa fa-check"/>
+                                <p:commandButton  value="Salvar" update="formTreinamentoFuncao,formTreinamentoFuncao2, menssagem" 
+                                                  actionListener="#{funcaoQualidadeMB.gravar}" icon="fa fa-check" />
                                 <p:commandButton value="Cancelar" icon="fa fa-close" onclick="history.go(0); return false;"/>
                             </p:panelGrid>
                         </p:panel>
@@ -36,7 +36,7 @@
 
                     <h:form id="formTreinamentoFuncao2">
                         <div class="card card-w-title">
-                            <p:dataTable id="idTabela" value="#{treinamentoQualidadeMB.listaTreinamentoQualidade}" var="treinamento" rows="50" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                            <p:dataTable id="idTabela" value="#{funcaoQualidadeMB.listaFuncaoQualidade}" var="funcao" rows="50" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                          rowsPerPageTemplate="10,20,30,40,50,60,70,80,90,100" emptyMessage="Nenhuma informação..." style="margin-bottom: 30px; margin-top: 5px" reflow="true" >                               
                                 <f:facet name="header">
                                     <p:spacer width="25"></p:spacer>
@@ -60,14 +60,14 @@
                                         </p:inputText>
                                     </p:outputPanel>
                                 </f:facet>
-                                <p:column headerText="Código" width="2" sortBy="#{treinamento.idTreinamento}">
-                                    <h:outputText value="#{treinamento.idTreinamento}"/>
+                                <p:column headerText="Código" width="2" sortBy="#{funcao.idFuncao}">
+                                    <h:outputText value="#{funcao.idFuncao}"/>
                                 </p:column> 
-                                <p:column headerText="Função" width="80" sortBy="#{treinamento.treinamento}">
-                                    <h:outputText value="#{treinamento.treinamento}"/>
+                                <p:column headerText="Função" width="80" sortBy="#{funcao.funcao}">
+                                    <h:outputText value="#{funcao.funcao}"/>
                                 </p:column>  
                                 <p:column style="text-align: center; width:1%">                                   
-                                    <p:commandLink title="Vincular a Treinamentos" id="idDialogTrein" oncomplete="PF('dialogInfo').show();" update="formTreinamentoFuncao2:idDialogTrein">
+                                    <p:commandLink actionListener="#{funcaoQualidadeMB.vincularTreinamento}" title="Vincular a Treinamentos" id="idDialogTrein" oncomplete="PF('dialogInfo').show();" update="formTreinamentoFuncao2:idDialogTrein">
                                         <i class="fa fa-graduation-cap" style="color: #1e94d2"></i>
                                     </p:commandLink>                                 
                                 </p:column>
@@ -80,58 +80,57 @@
 
 
                             <p:dialog id="idDialogTrein" header="Vincular Função a Treinamentos" widgetVar="dialogInfo" responsive="true" modal="true" resizable="false">
-                                <div class="ui-fluid">
+                                <div class="ui-fluid" >
                                     <p:panelGrid columns="4" id="pnlVincular" columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-11" layout="grid" 
                                                  styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
                                         <p:outputLabel value="Função:"/>
-                                        <p:inputText id="funcao" value="" disabled="true"/>
+                                        <p:inputText id="funcao" value="#{funcaoQualidadeMB.funcaoQualidade.funcao}" disabled="true"/>
                                     </p:panelGrid>
                                     <br></br>
                                     <p:panelGrid columns="4" id="pnlSelecionar" columnClasses="ui-g-12 ui-md-6,ui-g-12 ui-md-6" layout="grid" 
                                                  styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
 
-                                        <p:selectOneRadio id="relacao" layout="responsive" columns="2" value="" >
+                                        <p:selectOneRadio id="relacao" layout="responsive" columns="2" value="#{funcaoQualidadeMB.tipo}" >
                                             <f:selectItem itemLabel="Disponíveis" itemValue="#{true}" />
                                             <f:selectItem itemLabel="Vinculado" itemValue="#{false}" />
-                                            <p:ajax event="change" update="pnlSelecionar" process="relacao"/>                                  
+                                            <p:ajax event="change" update="pnlSelecionar, idTabelaDialog" process="relacao"/>                                  
                                         </p:selectOneRadio>
+                                        <p:dataTable rendered="#{funcaoQualidadeMB.tipo=='true'}" id="idTabelaDialog" var="treinamento" value="#{funcaoQualidadeMB.listaTreinamentoQualidade}" selection="#{funcaoQualidadeMB.selectTreinamentoQualidade}" rowKey="#{treinamento.idTreinamento}" class="ui-fluid" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                     emptyMessage="Nenhum treinamento.." 
+                                                     style="margin-bottom: 10px; margin-top: 15px; 
+                                                     max-width: 800px; min-width: 400px" reflow="true">                                      
+                                            <f:facet name="header"> 
+                                                Checkbox
+                                            </f:facet>
+                                            <p:column width="2" selectionMode="multiple" style=""/>
+                                            <p:column width="5" headerText="Id">
+                                                <h:outputText value="#{treinamento.idTreinamento}" />
+                                            </p:column>
+                                            <p:column width="80" headerText="Treinamento">
+                                                <h:outputText value="#{treinamento.treinamento}" />
+                                            </p:column >
+                                            <f:facet name="footer">
+                                                <p:commandButton actionListener="#{funcaoQualidadeMB.gravarFuncaoTreinamento}" update="formTreinamentoFuncao,formTreinamentoFuncao2, menssagem" icon="pi pi-search" value="Vincular"/>
+                                            </f:facet>
+                                        </p:dataTable>
+                                        <p:dataTable rendered="#{funcaoQualidadeMB.tipo=='false'}" id="idTabelaDialog2" var="treinamento" value="#{funcaoQualidadeMB.listaFuncaoTreinamento}"  class="ui-fluid" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                     emptyMessage="Nenhum treinamento.." 
+                                                     style="margin-bottom: 10px; margin-top: 15px; 
+                                                     max-width: 800px; min-width: 400px" reflow="true">                                      
+                                            <f:facet name="header"> 
+                                                Vinculados
+                                            </f:facet>
+                                            <p:column width="5" headerText="Id">
+                                                <h:outputText value="#{treinamento.idTreinamento.idTreinamento}" />
+                                            </p:column>
+                                            <p:column width="80" headerText="Treinamento">
+                                                <h:outputText value="#{treinamento.idTreinamento.treinamento}" />
+                                            </p:column >
+                                        </p:dataTable>                                       
                                     </p:panelGrid>
-
-                                    <p:dataTable id="idTabelaDialog" value="" class="ui-fluid" var="lista" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                                 emptyMessage="Nenhum treinamento.." 
-                                                 style="margin-bottom: 10px; margin-top: 15px; 
-                                                 max-width: 800px; min-width: 400px" reflow="true">                                      
-                                        <f:facet name="header">                                   
-                                            <p:spacer width="25"></p:spacer>
-                                            <p:outputPanel style="float:right;margin-top: 4px">  
-                                                <p:spacer width="5"></p:spacer>
-                                                <p:inputText id="globalFilter1"  style="width:300px" placeholder="Pesquisar...">
-                                                    <p:ajax event="change" update="formTreinamentoFuncao2:idTabelaDialog"  process="@this" />
-                                                </p:inputText>
-                                            </p:outputPanel>
-                                            <p:spacer width="30"></p:spacer>
-                                        </f:facet>
-                                        <p:column headerText="Código" width="5">
-                                            <h:outputText value="" />
-                                        </p:column>
-                                        <p:column headerText="Treinamento" width="50">
-                                            <h:outputText value="" />
-                                        </p:column>
-                                    </p:dataTable>
-
-                                    <p:panelGrid columns="5" layout="grid"
-                                                 columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-4"
-                                                 styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
-                                        <p:commandButton value="Salvar" update="formTreinamentoFuncao,formTreinamentoFuncao2, menssagem" 
-                                                         icon="fa fa-check"/>
-                                        <p:commandButton value="Cancelar" icon="fa fa-close" onclick="history.go(0); return false;"/>
-                                    </p:panelGrid>
-
                                 </div>
                             </p:dialog>
-
                         </div>
-
                     </h:form>
                 </div>
             </div>

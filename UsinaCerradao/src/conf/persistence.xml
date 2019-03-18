@@ -13,11 +13,14 @@
     <class>model.Ip</class>
     <class>model.CanaDiaFrente</class>
     <class>model.FrenteCapacDiaria</class>
+    <class>model.TreinamentoQualidade</class>
+    <class>model.FuncaoQualidade</class>
+    <class>model.FuncaoTreinamento</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="hibernate.dialect" value="org.hibernate.dialect.OracleDialect"/>
       <property name="hibernate.connection.driver_class" value="oracle.jdbc.OracleDriver"/>
-      <property name="hibernate.connection.url" value="jdbc:oracle:thin:@172.16.159.157:1521:teste"/>
+      <property name="hibernate.connection.url" value="jdbc:oracle:thin:@172.16.159.156:1521:cerradao"/>
       <property name="hibernate.connection.username" value="ti"/>
       <property name="hibernate.connection.password" value="uc1800abc"/>
     </properties>

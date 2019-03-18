@@ -10,10 +10,12 @@ import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 import model.Computador;
 import model.Colab;
+import model.FuncaoTreinamento;
 import model.OpenLicense;
 import model.SerialOpenLicense;
 import model.Software;
 import model.TipoLicense;
+import model.TreinamentoQualidade;
 
 public class Dao implements Serializable {
 
@@ -274,7 +276,23 @@ public class Dao implements Serializable {
     }
         //-----------------Treinamento Qualidade -----------------------
     public List<Object[]> buscarTreinamentoQualidade() {
-        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("select ID,DESCRICAO FROM TREINAMENTO ORDER BY ID DESC");
+        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("select ID,TREINAMENTO FROM RH_TREINAMENTO_QUALIDADE ORDER BY ID DESC");
+        List<Object[]> results = query.getResultList();
+        return results;
+    }
+    public List<TreinamentoQualidade> buscarTreinamentoQualidadeOrderAlfabetica() {
+        return (List<TreinamentoQualidade>) em.createNativeQuery("SELECT * FROM RH_TREINAMENTO_QUALIDADE ORDER BY 2 ", TreinamentoQualidade.class).getResultList();
+    }
+    public List<FuncaoTreinamento> buscarTreinamentoVinculado(BigDecimal id) {
+        return (List<FuncaoTreinamento>) em.createNativeQuery("SELECT * FROM RH_FUNCAO_TREINAMENTO WHERE ID_FUNCAO = "+ id +"ORDER BY ID_TREINAMENTO", FuncaoTreinamento.class).getResultList();
+    }
+     public List<Object[]> buscarFuncao() {
+        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT * FROM rh_funcao_qualidade order by id desc");
+        List<Object[]> results = query.getResultList();
+        return results;
+    }
+    public List<Object[]> BuscarFuncaoSGI(BigDecimal funcaoId) {
+        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT DISTINCT FUNCAO_ID, NOME_CARGO FROM v_colab WHERE FUNCAO_ID ="+funcaoId);
         List<Object[]> results = query.getResultList();
         return results;
     }

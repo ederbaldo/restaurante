@@ -5,8 +5,8 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/templates/Layout.xhtml">
 
-    <ui:define name="title">Relação Função e Treinamento</ui:define>
 
+    <ui:define name="title-tab">Relação Função e Treinamento</ui:define>
     <ui:define name="content">        
         <p:messages id="menssagem" showDetail="true" closable="true"/> 
         <div class="ui-fluid">
@@ -87,47 +87,41 @@
                                         <p:inputText id="funcao" value="#{funcaoQualidadeMB.funcaoQualidade.funcao}" disabled="true"/>
                                     </p:panelGrid>
                                     <br></br>
-                                    <p:panelGrid columns="4" id="pnlSelecionar" columnClasses="ui-g-12 ui-md-6,ui-g-12 ui-md-6" layout="grid" 
+                                    <p:panelGrid columns="2" id="pnlSelecionar" columnClasses="ui-g-12 ui-md-6,ui-g-12 ui-md-6" layout="grid" 
                                                  styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
 
                                         <p:selectOneRadio id="relacao" layout="responsive" columns="2" value="#{funcaoQualidadeMB.tipo}" >
                                             <f:selectItem itemLabel="Disponíveis" itemValue="#{true}" />
                                             <f:selectItem itemLabel="Vinculado" itemValue="#{false}" />
-                                            <p:ajax event="change" update="pnlSelecionar, idTabelaDialog" process="relacao"/>                                  
+                                            <p:ajax event="change" update="pnlSelecionar, idTabelaDialog" process="@this"/>                                  
                                         </p:selectOneRadio>
-                                        <p:dataTable rendered="#{funcaoQualidadeMB.tipo=='true'}" id="idTabelaDialog" var="treinamento" value="#{funcaoQualidadeMB.listaTreinamentoQualidade}" selection="#{funcaoQualidadeMB.selectTreinamentoQualidade}" rowKey="#{treinamento.idTreinamento}" class="ui-fluid" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                                     emptyMessage="Nenhum treinamento.." 
-                                                     style="margin-bottom: 10px; margin-top: 15px; 
-                                                     max-width: 800px; min-width: 400px" reflow="true">                                      
-                                            <f:facet name="header"> 
-                                                Checkbox
-                                            </f:facet>
-                                            <p:column width="2" selectionMode="multiple" style=""/>
-                                            <p:column width="5" headerText="Id">
-                                                <h:outputText value="#{treinamento.idTreinamento}" />
-                                            </p:column>
-                                            <p:column width="80" headerText="Treinamento">
-                                                <h:outputText value="#{treinamento.treinamento}" />
-                                            </p:column >
-                                            <f:facet name="footer">
-                                                <p:commandButton actionListener="#{funcaoQualidadeMB.gravarFuncaoTreinamento}" update="formTreinamentoFuncao,formTreinamentoFuncao2, menssagem" icon="pi pi-search" value="Vincular"/>
-                                            </f:facet>
-                                        </p:dataTable>
-                                        <p:dataTable rendered="#{funcaoQualidadeMB.tipo=='false'}" id="idTabelaDialog2" var="treinamento" value="#{funcaoQualidadeMB.listaFuncaoTreinamento}"  class="ui-fluid" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                                     emptyMessage="Nenhum treinamento.." 
-                                                     style="margin-bottom: 10px; margin-top: 15px; 
-                                                     max-width: 800px; min-width: 400px" reflow="true">                                      
-                                            <f:facet name="header"> 
-                                                Vinculados
-                                            </f:facet>
-                                            <p:column width="5" headerText="Id">
-                                                <h:outputText value="#{treinamento.idTreinamento.idTreinamento}" />
-                                            </p:column>
-                                            <p:column width="80" headerText="Treinamento">
-                                                <h:outputText value="#{treinamento.idTreinamento.treinamento}" />
-                                            </p:column >
-                                        </p:dataTable>                                       
                                     </p:panelGrid>
+
+                                    <p:dataTable rendered="#{funcaoQualidadeMB.tipo=='true'}" id="idTabelaDialog" var="treinamento" value="#{funcaoQualidadeMB.listaTreinamentoQualidade}" selection="#{funcaoQualidadeMB.selectTreinamentoQualidade}" rowKey="#{treinamento.idTreinamento}" class="ui-fluid" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                 emptyMessage="Nenhum treinamento.." 
+                                                 style="margin-bottom: 10px; margin-top: 15px; 
+                                                 max-width: 800px; min-width: 400px" reflow="true">
+
+                                        <f:facet name="header">
+                                            <p:outputPanel style="float:left;margin-top: 4px">                                       
+                                                <p:commandButton icon="fa fa-arrow-circle-right" value="Vincular" actionListener="#{funcaoQualidadeMB.gravarFuncaoTreinamento}" 
+                                                                 update="formTreinamentoFuncao,formTreinamentoFuncao2, menssagem"/>
+                                            </p:outputPanel>
+                                            <p:spacer width="25"></p:spacer>
+                                            <p:outputPanel style="float:right;margin-top: 4px">  
+                                                <p:spacer width="5"></p:spacer>
+                                                <p:inputText id="globalFilter"  style="width:400px" placeholder="Pesquisar...">
+                                                </p:inputText>
+                                            </p:outputPanel>
+                                        </f:facet>
+                                        <p:column selectionMode="multiple" style="width:1px; text-align:center"/>
+                                        <p:column width="10" headerText="Código">
+                                            <h:outputText value="#{treinamento.idTreinamento}" />
+                                        </p:column>
+                                        <p:column width="90" headerText="Treinamento">
+                                            <h:outputText value="#{treinamento.treinamento}" />
+                                        </p:column > 
+                                    </p:dataTable>               
                                 </div>
                             </p:dialog>
                         </div>

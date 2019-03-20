@@ -5,7 +5,11 @@ $(function () {
     });
 
     $('.aw-item-link').bind('click', function (event) {
-        debugger;
+        event.preventDefault();
+        expandirRecolherItensDoMenu(event);
+    });
+    
+    $('.aw-item-link.expandir').bind('click', function (event) {
         event.preventDefault();
         expandirRecolherItensDoMenu(event);
     });

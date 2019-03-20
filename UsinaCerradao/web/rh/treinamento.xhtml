@@ -5,100 +5,95 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/templates/Layout.xhtml">
 
-    <ui:define name="title">Relatório de Treinamentos</ui:define>
+    <ui:define name="title-tab">Relatório de Treinamentos Realizados</ui:define>
+    <ui:define name="content">
+        <div class="ui-g-12">
+            <h:form id="formTreinamento">
+                <p:messages id="menssagem" showDetail="true" closable="true"/>                
+                <p:panel id="basic" header="Relatório de Treinamentos Realizados por Colaborador" style="margin-bottom:10px">
+                    <div class="ui-fluid">
+                        <p:panelGrid columns="4" id="pnlSoftware1" columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-1,ui-g-12 ui-md-1, ui-g-12 ui-md-8" layout="grid" 
+                                     styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                            <p:outputLabel value="Código do Treinamento:"/>
+                            <p:inputText  value="#{treinamentoMB.id}">
+                                <p:ajax event="change" update="formTreinamento, :formTreinamento2" listener="#{treinamentoMB.buscarTreinamento}" process="@this" />
+                            </p:inputText> 
+                            <p:outputLabel value="Treinamento:"/>
+                            <p:inputText id="treinamento" value="#{treinamentoMB.treinamento.treinamento}" disabled="true"/>
+                        </p:panelGrid>
+                    </div>
+                </p:panel>
+            </h:form>
 
-    <ui:define name="content">        
-        <p:messages id="menssagem" showDetail="true" closable="true"/> 
-        <div class="ui-fluid">
-            <div class="ui-g">
-                <div class="ui-g-12">
-                    <h:form id="formTreinamento">
-                        <p:panel id="basic" header="Relatório de Treinamentos" style="margin-bottom:10px">
-                            <p:panelGrid columns="3" id="pnlSoftware1" columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-g-12 ui-md-6" layout="grid" 
-                                         styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
-                                <p:outputLabel value="Código do Curso:"/>
-                                <p:inputText  value="#{treinamentoMB.id}">
-                                    <p:ajax event="change" update="formTreinamento, :formTreinamento2" listener="#{treinamentoMB.buscarTreinamento}" process="@this" />
-                                </p:inputText> 
-                                <p:outputLabel/>
-                            </p:panelGrid>
-                        </p:panel>
-                    </h:form>
+            <h:form id="formTreinamento2">
+                <div class="card card-w-title">
+                    <p:dataTable id="idTabela" value="#{treinamentoMB.listaTreinamento}" var="treinamento" rows="50" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="10,20,30,40,50,60,70,80,90,100" emptyMessage="Nenhuma informação..." style="margin-bottom: 30px; margin-top: 5px" reflow="true" >                               
+                        <f:facet name="header">
+                            <p:spacer width="25"></p:spacer>
+                            <p:outputPanel style="float:left;margin-top: 4px">                                       
+                                <h:commandLink title="Baixar em Excel" ><i class="fa fa-file-excel-o"></i>
+                                    <p:dataExporter type="xls" target="idTabela" fileName="relatorioTreinamento"/>
+                                </h:commandLink><p:spacer width="10" height="5" />
+                                <h:commandLink title="Baixar em CSV" ><i class="fa fa-file-text-o"></i>
+                                    <p:dataExporter type="csv" target="idTabela" fileName="relatorioTreinamento" />
+                                </h:commandLink><p:spacer width="10" height="5" />
+                                <h:commandLink title="Baixar em PDF" id="marca"><i class="fa fa-file-pdf-o"></i>
+                                    <p:fileDownload value="#{treinamentoMB.relatorio}" />
+                                </h:commandLink>
+                            </p:outputPanel>
+                            <p:spacer width="25"></p:spacer>
+                        </f:facet>
+                        <p:column headerText="Matrícula" width="2" sortBy="#{treinamento.cdColab}">
+                            <h:outputText value="#{treinamento.cdColab}"/>
+                        </p:column> 
+                        <p:column headerText="Colaborador" width="40" sortBy="#{treinamento.nomeColab}">
+                            <h:outputText value="#{treinamento.nomeColab}"/>
+                        </p:column>
+                        <p:column headerText="Função" width="30" sortBy="#{treinamento.nomeCargo}">
+                            <h:outputText value="#{treinamento.nomeCargo}"/>
+                        </p:column> 
+                        <p:column headerText="Local Trabalho" width="25" sortBy="#{treinamento.descLocalTrab}">
+                            <h:outputText value="#{treinamento.descLocalTrab}"/>
+                        </p:column> 
+                        <p:column headerText="Validade" width="5" sortBy="">
+                            <h:outputText value=""/>
+                        </p:column>
+                        <p:column headerText="Dias Restantes" width="5" sortBy="">
+                            <h:outputText value=""/>
+                        </p:column> 
+                        <p:column style="text-align: center; width:1%">                                   
+                            <p:commandLink actionListener="#{treinamentoMB.treinamentoFeito}" title="Treinamentos Realizados" id="idDialogInfoLink" oncomplete="PF('dialogInfo').show();" update="formTreinamento2:idDialogInfo">
+                                <i class="fa fa-graduation-cap" style="color: #1e94d2"></i>
+                            </p:commandLink>                                 
+                        </p:column>
+                    </p:dataTable>    
 
-                    <h:form id="formTreinamento2">
-                        <div class="card card-w-title">
-                            <p:dataTable id="idTabela" value="#{treinamentoMB.listaTreinamento}" var="treinamento" rows="50" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                         rowsPerPageTemplate="10,20,30,40,50,60,70,80,90,100" emptyMessage="Nenhuma informação..." style="margin-bottom: 30px; margin-top: 5px" reflow="true" >                               
-                                <f:facet name="header">
-                                    <p:spacer width="25"></p:spacer>
-                                    <p:outputPanel style="float:left;margin-top: 4px">                                       
-                                        <h:commandLink title="Baixar em Excel" ><i class="fa fa-file-excel-o"></i>
-                                            <p:dataExporter type="xls" target="idTabela" fileName="relatorioTreinamento"/>
-                                        </h:commandLink><p:spacer width="10" height="5" />
-                                        <h:commandLink title="Baixar em CSV" ><i class="fa fa-file-text-o"></i>
-                                            <p:dataExporter type="csv" target="idTabela" fileName="relatorioTreinamento" />
-                                        </h:commandLink><p:spacer width="10" height="5" />
-                                        <h:commandLink title="Baixar em PDF" id="marca"><i class="fa fa-file-pdf-o"></i>
-                                            <p:fileDownload value="#{treinamentoMB.relatorio}" />
-                                        </h:commandLink>
-                                    </p:outputPanel>
-                                    <p:spacer width="25"></p:spacer>
-                                </f:facet>
-                                <p:column headerText="Curso" width="5" sortBy="#{treinamento.idTreinamento}">
-                                    <h:outputText value="#{treinamento.idTreinamento}"/>
-                                </p:column> 
-                                <p:column headerText="Matricula" width="5" sortBy="#{treinamento.cdColab}">
-                                    <h:outputText value="#{treinamento.cdColab}"/>
-                                </p:column> 
-                                <p:column headerText="Colaborador" width="40" sortBy="#{treinamento.nomeColab}">
-                                    <h:outputText value="#{treinamento.nomeColab}"/>
+
+                    <p:dialog id="idDialogInfo" header="Treinamentos Realizados" widgetVar="dialogInfo" responsive="true" modal="true" resizable="false">
+                        <div class="ui-fluid">
+                            <p:dataTable id="idTabelaDialog" value="#{treinamentoMB.listaTreinamentoFeito}" class="ui-fluid" var="lista" rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         emptyMessage="Nenhum treinamento.." 
+                                         style="margin-bottom: 10px; margin-top: 15px; 
+                                         max-width: 800px; min-width: 300px" reflow="true" editable="true" editMode="cell">
+                                <p:column headerText="Nome" width="40">
+                                    <h:outputText value="#{lista.nomeColab}" />
                                 </p:column>
-                                <p:column headerText="Função" width="30" sortBy="#{treinamento.nomeCargo}">
-                                    <h:outputText value="#{treinamento.nomeCargo}"/>
-                                </p:column> 
-                                <p:column headerText="Local Trabalho" width="20" sortBy="#{treinamento.descLocalTrab}">
-                                    <h:outputText value="#{treinamento.descLocalTrab}"/>
-                                </p:column> 
-                                <p:column headerText="Treinamento" width="30" sortBy="#{treinamento.treinamento}">
-                                    <h:outputText value="#{treinamento.treinamento}"/>
-                                </p:column>   
-                                <p:column style="text-align: center; width:1%">                                   
-                                    <p:commandLink actionListener="#{treinamentoMB.treinamentoFeito}" title="Treinamentos Realizados" id="idDialogInfoLink" oncomplete="PF('dialogInfo').show();" update="formTreinamento2:idDialogInfo">
-                                        <i class="fa fa-info-circle" style="color: #1e94d2"></i>
-                                    </p:commandLink>                                 
+                                <p:column headerText="Treinamentos" width="40">
+                                    <h:outputText value="#{lista.treinamento}" />
                                 </p:column>
-                            </p:dataTable>    
-
-
-                            <p:dialog id="idDialogInfo" header="Treinamentos Realizados" widgetVar="dialogInfo" responsive="true" modal="true" resizable="false">
-                                <div class="ui-fluid">
-                                    <p:dataTable id="idTabelaDialog" value="#{treinamentoMB.listaTreinamentoFeito}" class="ui-fluid" var="lista" rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                                 emptyMessage="Nenhum treinamento.." 
-                                                 style="margin-bottom: 10px; margin-top: 15px; 
-                                                 max-width: 600px; min-width: 300px" reflow="true" editable="true" editMode="cell">
-                                        <p:column headerText="Matrícula" width="5">
-                                            <h:outputText value="#{lista.cdColab}" />
-                                        </p:column>
-                                        <p:column headerText="Nome" width="40">
-                                            <h:outputText value="#{lista.nomeColab}" />
-                                        </p:column>
-                                        <p:column headerText="Treinamento" width="50">
-                                            <h:outputText value="#{lista.treinamento}" />
-                                        </p:column>
-                                        <p:column headerText="Conclusão" width="7">
-                                            <h:outputText value="#{lista.data}" >
-                                                <f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime> 
-                                            </h:outputText>
-                                        </p:column>
-                                    </p:dataTable>
-                                </div>
-                            </p:dialog>
-
+                                <p:column headerText="Conclusão" width="7">
+                                    <h:outputText value="#{lista.data}" >
+                                        <f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime> 
+                                    </h:outputText>
+                                </p:column>
+                            </p:dataTable>
                         </div>
+                    </p:dialog>
 
-                    </h:form>
                 </div>
-            </div>
+
+            </h:form>
         </div>
     </ui:define>
 

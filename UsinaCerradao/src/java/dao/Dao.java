@@ -10,6 +10,7 @@ import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 import model.Computador;
 import model.Colab;
+import model.FuncaoQualidade;
 import model.FuncaoTreinamento;
 import model.OpenLicense;
 import model.SerialOpenLicense;
@@ -56,22 +57,30 @@ public class Dao implements Serializable {
     public List<?> buscarTodos(Class classe) {
         return em.createQuery("From " + classe.getName()).getResultList();
     }
-
+//----------------TI-----------------------
+    //----------------Computador----------------
     public Computador buscarFuncionario(String nome) {
         return (Computador) em.createNativeQuery("Select * from usinas.v_colab where nome_colab like '%" + nome + "%'", Computador.class).getResultList();
     }
-
-    //-----------------Metodos para Classes converter -----------------------
+    //----------------converter-----------------
     public Computador buscarFuncionarioConverter(String nome) {
         return (Computador) em.createNativeQuery("Select * from usinas.v_colab where nome_colab like '%" + nome + "%'", Computador.class).getResultList();
     }
-
+    //----------------Colaborador----------------
     public List<Object[]> buscarColab() {
         TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("select nome_colab, cd_colab from v_colab where dt_demis is null");
         List<Object[]> results = query.getResultList();
         return results;
     }
-
+    public List<Object[]> buscarColaboradores(BigDecimal mat) {
+        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("select colab_id, cd_colab, nome_colab from v_colab where dt_demis is null and cd_colab = " + mat);
+        List<Object[]> results = query.getResultList();
+        return results; 
+    }
+    public Colab buscarColabConverter(String nome) {
+        return (Colab) em.createNativeQuery("SELECT nome_colab, cd_colab FROM v_colab where nome_colab = '" + nome + "'", Colab.class).getSingleResult();
+    }
+    //----------------Nota Fiscal----------------
     public List<Object[]> buscarNF() {
         TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT A.NRO,a.SERIE,a.DT_EMISS,a.RAZAO_SOCIAL,a.NRO_NFE,b.CD_PROD,b.DESCR_PROD FROM NF_ENT a, ITNF_ENT b WHERE a.NFENT_ID = b.NFENT_ID AND b.CD_PROD  in ('54578','54579','54160','54164') order by a.DT_EMISS");
         //TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT A.NRO,a.SERIE,a.DT_EMISS,a.RAZAO_SOCIAL,a.NRO_NFE,b.CD_PROD,b.DESCR_PROD FROM NF_ENT a, ITNF_ENT b WHERE a.NFENT_ID = b.NFENT_ID AND b.CD_PROD  in ('54578','54579','54160','54164') and a.nro = 575842 and a.DT_EMISS = '27/04/2012' order by a.DT_EMISS");
@@ -85,13 +94,7 @@ public class Dao implements Serializable {
         return results;
     }
 
-    public List<Object[]> buscarColaboradores(BigDecimal mat) {
-        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("select colab_id, cd_colab, nome_colab from v_colab where dt_demis is null and cd_colab = " + mat);
-        List<Object[]> results = query.getResultList();
-        return results;
-    }
-
-    //----------------ip -----------------------
+    //----------------ip----------------
     public List<Object[]> buscarColaboradoresId(BigDecimal id) {
         TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("select colab_id, cd_colab, nome_colab from v_colab where dt_demis is null and colab_id = " + id);
         List<Object[]> results = query.getResultList();
@@ -99,7 +102,7 @@ public class Dao implements Serializable {
         //public List<Object[]> buscarColaboradores(BigDecimal mat) usa esse metodo tbm
     }
 
-    //----------------ComputadorSoftwareMB -----------------------
+    //----------------ComputadorSoftwareMB----------------
     public List<Object[]> buscarSoftRelacionadoMicro(String key) {
         TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT\n"
                 + "  CO.DESCRICAO MICRO ,\n"
@@ -120,9 +123,15 @@ public class Dao implements Serializable {
     public List<Software> buscarSoftware(String nome) {
         return (List<Software>) em.createNativeQuery("SELECT * FROM software where key like '%" + nome + "%'", Software.class).getResultList();
     }
-
+    //----------------Metodo converter usado no AUTOCOMPLETE----------------
+    public Software buscarSoftwareConverter(String nome) {
+        return (Software) em.createNativeQuery("SELECT * FROM software where key = '" + nome + "'", Software.class).getSingleResult();
+    }
     public List<Computador> buscarComputador(String nome) {
         return (List<Computador>) em.createNativeQuery("SELECT * FROM computador where descricao like '%" + nome + "%'", Computador.class).getResultList();
+    }
+    public Computador buscarComputadorConverter(String nome) {
+        return (Computador) em.createNativeQuery("SELECT * FROM computador where descricao = '" + nome + "'", Computador.class).getSingleResult();
     }
 
     public List<Computador> buscarTodosComputadores() {
@@ -132,8 +141,8 @@ public class Dao implements Serializable {
     public List<Colab> buscarColaborador(int mat) {
         return (List<Colab>) em.createNativeQuery("SELECT nome_colab, cd_colab FROM v_colab where dt_demis is null  and cd_colab = " + mat, Colab.class).getResultList();
     }
-
-    //----------------Software -----------------------
+       
+    //----------------Serial OpenLicense -----------------------
     public List<SerialOpenLicense> buscarSerialOpen(String nome) {
         return (List<SerialOpenLicense>) em.createNativeQuery("SELECT * FROM serial_open_license where serial like '%" + nome + "%'", SerialOpenLicense.class).getResultList();
     }
@@ -141,46 +150,11 @@ public class Dao implements Serializable {
     public SerialOpenLicense buscarSerialOpenConverter(String nome) {
         return (SerialOpenLicense) em.createNativeQuery("SELECT * FROM serial_open_license where serial = '" + nome + "'", SerialOpenLicense.class).getSingleResult();
     }
-    //----------------CanaDiaFrenteMB -----------------------
-
-    public List<Object[]> buscarEntradaDeCanaFrente() {
-        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT FRE.DESCR FRENTE\n"
-                + "      ,FRC.CAPAC_COLHE\n"
-                + "      ,(SELECT SUM(FRC.CAPAC_COLHE)\n"
-                + "        FROM FRENTE_CAPAC_DIARIA FRC\n"
-                + "          ,FRENTE FRE\n"
-                + "        WHERE FRC.FRENTE_ID = FRE.FRENTE_ID\n"
-                + "        AND '18/11/2018' BETWEEN FRC.DT_INIC and FRC.DT_FIM\n"
-                + "        AND FRE.CD IN (1,2,3,4,5,57,72,76,77) \n"
-                + "       ) total  \n"
-                + "       ,FRE.CD\n"
-                + "       ,FRC.DT_INIC\n"
-                + "       ,FRC.DT_FIM\n"
-                + "FROM FRENTE_CAPAC_DIARIA FRC\n"
-                + "    ,FRENTE FRE\n"
-                + "WHERE FRC.FRENTE_ID = FRE.FRENTE_ID\n"
-                + "AND '18/11/2018' BETWEEN FRC.DT_INIC and FRC.DT_FIM\n"
-                + "AND FRE.CD IN (1,2,3,4,5,57,72,76,77) \n"
-                + "ORDER BY 1");
-        List<Object[]> results = query.getResultList();
-        return results;
+    public List<SerialOpenLicense> buscarTabelaSerial(BigDecimal numero) {
+        return (List<SerialOpenLicense>) em.createNativeQuery("SELECT * FROM SERIAL_OPEN_LICENSE SE, TIPO_LICENSE TI\n"
+                + "WHERE SE.ID_TIPO_LICENSE = TI.ID_TIPO_LICENSE\n"
+                + "AND TI.ID_OPEN_LICENSE = " + numero, SerialOpenLicense.class).getResultList();
     }
-
-    public List<Object[]> buscarEntradaDeCanaFrente2(BigDecimal idFrente) {
-        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT (SUM(CC.PESO_BRUTO)-SUM(CC.TARA))/1000 TON_CANA\n"
-                + "FROM CERT_CAMPO CC ,\n"
-                + "  FRENTE FR ,\n"
-                + "  LIB_COLH LC\n"
-                + "WHERE LC.FRENTE_ID   = FR.FRENTE_ID\n"
-                + "AND LC.LIBCOLH_ID  = CC.LIBCOLH_ID\n"
-                + "AND TO_CHAR(CC.DT_HR_REF,'DD/MM/YYYY') = '18/11/2018'\n"
-                + "AND FR.CD = " + idFrente + "\n"
-                + "AND LC.MOTLIBER_ID = '1'\n"
-                + "");
-        List<Object[]> results = query.getResultList();
-        return results;
-    }
-
     //----------------Open License -----------------------
     public List<Object[]> buscarContrato(BigDecimal contrato) {
         TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT ID_OPEN_LICENSE, CONTRATO FROM OPEN_LICENSE where CONTRATO = " + contrato);
@@ -197,29 +171,10 @@ public class Dao implements Serializable {
         return (OpenLicense) em.createNativeQuery("SELECT * FROM open_license where contrato = " + numero, OpenLicense.class).getResultList();
     }
 
-    //----------------Serial -----------------------
-    public List<SerialOpenLicense> buscarTabelaSerial(BigDecimal numero) {
-        return (List<SerialOpenLicense>) em.createNativeQuery("SELECT * FROM SERIAL_OPEN_LICENSE SE, TIPO_LICENSE TI\n"
-                + "WHERE SE.ID_TIPO_LICENSE = TI.ID_TIPO_LICENSE\n"
-                + "AND TI.ID_OPEN_LICENSE = " + numero, SerialOpenLicense.class).getResultList();
-    }
-
-    //----------------Classes converter -----------------------
-    public Software buscarSoftwareConverter(String nome) {
-        return (Software) em.createNativeQuery("SELECT * FROM software where key = '" + nome + "'", Software.class).getSingleResult();
-    }
-
-    public Computador buscarComputadorConverter(String nome) {
-        return (Computador) em.createNativeQuery("SELECT * FROM computador where descricao = '" + nome + "'", Computador.class).getSingleResult();
-    }
-
-    public Colab buscarColabConverter(String nome) {
-        return (Colab) em.createNativeQuery("SELECT nome_colab, cd_colab FROM v_colab where nome_colab = '" + nome + "'", Colab.class).getSingleResult();
-    }
-
-    //-----------------Recursos Humanos -----------------------
     
-        //-----------------Treinamento -----------------------
+//----------------RECURSOS HUMANOS----------------------- 
+    
+    //----------------Treinamento -----------------------
     public List<Object[]> buscarTreinamento(Integer idTreinamento) {
         TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT DISTINCT TE.ID,\n"
                 + "  TE.DESCRICAO AS TREINAMENTO,\n"
@@ -274,7 +229,7 @@ public class Dao implements Serializable {
         List<Object[]> results = query.getResultList();
         return results;
     }
-        //-----------------Treinamento Qualidade -----------------------
+    //----------------Treinamento Qualidade----------------
     public List<Object[]> buscarTreinamentoQualidade() {
         TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("select ID,TREINAMENTO FROM RH_TREINAMENTO_QUALIDADE ORDER BY ID DESC");
         List<Object[]> results = query.getResultList();
@@ -283,7 +238,10 @@ public class Dao implements Serializable {
     public List<TreinamentoQualidade> buscarTreinamentoQualidadeOrderAlfabetica() {
         return (List<TreinamentoQualidade>) em.createNativeQuery("SELECT * FROM RH_TREINAMENTO_QUALIDADE ORDER BY 2 ", TreinamentoQualidade.class).getResultList();
     }
-    public List<FuncaoTreinamento> buscarTreinamentoVinculado(BigDecimal id) {
+    public List<TreinamentoQualidade> buscarTreinamentoVinculado(BigDecimal id) {
+        return (List<TreinamentoQualidade>) em.createNativeQuery("SELECT B.ID,B.TREINAMENTO FROM RH_FUNCAO_TREINAMENTO a, RH_TREINAMENTO_QUALIDADE b WHERE A.ID_TREINAMENTO = B.ID AND  ID_FUNCAO = "+ id +"ORDER BY B.ID", TreinamentoQualidade.class).getResultList();
+    }
+    public List<FuncaoTreinamento> buscarTreinamentoVinculado2(BigDecimal id) {
         return (List<FuncaoTreinamento>) em.createNativeQuery("SELECT * FROM RH_FUNCAO_TREINAMENTO WHERE ID_FUNCAO = "+ id +"ORDER BY ID_TREINAMENTO", FuncaoTreinamento.class).getResultList();
     }
      public List<Object[]> buscarFuncao() {
@@ -293,6 +251,53 @@ public class Dao implements Serializable {
     }
     public List<Object[]> BuscarFuncaoSGI(BigDecimal funcaoId) {
         TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT DISTINCT FUNCAO_ID, NOME_CARGO FROM v_colab WHERE FUNCAO_ID ="+funcaoId);
+        List<Object[]> results = query.getResultList();
+        return results;
+    }
+    public List<FuncaoQualidade> pesquisarFuncaoQualidade(String nome) {
+        return (List<FuncaoQualidade>) em.createNativeQuery("SELECT * FROM RH_FUNCAO_QUALIDADE  WHERE FUNCAO LIKE '%" + nome + "%' ORDER BY ID DESC", FuncaoQualidade.class).getResultList();
+    }
+    public List<TreinamentoQualidade> pesquisarTreinamentolidade(String nome) {
+        return (List<TreinamentoQualidade>) em.createNativeQuery("SELECT * FROM RH_TREINAMENTO_QUALIDADE  WHERE TREINAMENTO LIKE '%" + nome + "%'", TreinamentoQualidade.class).getResultList();
+    }
+    public List<TreinamentoQualidade> pesquisarTreinamentoVinculado(String nome, BigDecimal id) {
+        return (List<TreinamentoQualidade>) em.createNativeQuery("SELECT B.ID,B.TREINAMENTO FROM RH_FUNCAO_TREINAMENTO a, RH_TREINAMENTO_QUALIDADE b WHERE A.ID_TREINAMENTO = B.ID AND B.TREINAMENTO LIKE '%" + nome + "%' AND A.ID_FUNCAO = " + id, TreinamentoQualidade.class).getResultList();
+    }
+//----------------AGRICOLA-----------------------    
+    //----------------CanaDiaFrenteMB----------------
+    public List<Object[]> buscarEntradaDeCanaFrente() {
+        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT FRE.DESCR FRENTE\n"
+                + "      ,FRC.CAPAC_COLHE\n"
+                + "      ,(SELECT SUM(FRC.CAPAC_COLHE)\n"
+                + "        FROM FRENTE_CAPAC_DIARIA FRC\n"
+                + "          ,FRENTE FRE\n"
+                + "        WHERE FRC.FRENTE_ID = FRE.FRENTE_ID\n"
+                + "        AND '18/11/2018' BETWEEN FRC.DT_INIC and FRC.DT_FIM\n"
+                + "        AND FRE.CD IN (1,2,3,4,5,57,72,76,77) \n"
+                + "       ) total  \n"
+                + "       ,FRE.CD\n"
+                + "       ,FRC.DT_INIC\n"
+                + "       ,FRC.DT_FIM\n"
+                + "FROM FRENTE_CAPAC_DIARIA FRC\n"
+                + "    ,FRENTE FRE\n"
+                + "WHERE FRC.FRENTE_ID = FRE.FRENTE_ID\n"
+                + "AND '18/11/2018' BETWEEN FRC.DT_INIC and FRC.DT_FIM\n"
+                + "AND FRE.CD IN (1,2,3,4,5,57,72,76,77) \n"
+                + "ORDER BY 1");
+        List<Object[]> results = query.getResultList();
+        return results;
+    }
+    public List<Object[]> buscarEntradaDeCanaFrente2(BigDecimal idFrente) {
+        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT (SUM(CC.PESO_BRUTO)-SUM(CC.TARA))/1000 TON_CANA\n"
+                + "FROM CERT_CAMPO CC ,\n"
+                + "  FRENTE FR ,\n"
+                + "  LIB_COLH LC\n"
+                + "WHERE LC.FRENTE_ID   = FR.FRENTE_ID\n"
+                + "AND LC.LIBCOLH_ID  = CC.LIBCOLH_ID\n"
+                + "AND TO_CHAR(CC.DT_HR_REF,'DD/MM/YYYY') = '18/11/2018'\n"
+                + "AND FR.CD = " + idFrente + "\n"
+                + "AND LC.MOTLIBER_ID = '1'\n"
+                + "");
         List<Object[]> results = query.getResultList();
         return results;
     }

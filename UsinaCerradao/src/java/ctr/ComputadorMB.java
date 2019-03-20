@@ -57,7 +57,7 @@ public class ComputadorMB implements Serializable {
     public void gravar(ActionEvent evt) {
         try {
             String res;
-            res = (isStatus()) ? "ATIVO" : "INATIVO";
+            res = (isStatus()) ? "ATIVO" : "INATIVO";//VERIFICA A STATUS E SETA A SITACAO DO CUMPUATDOR
             computador.toUpperCase();
             computador.setSituacao(res);
             dao.gravar(computador);
@@ -91,7 +91,7 @@ public class ComputadorMB implements Serializable {
             ex.printStackTrace();
         }
     }
-
+//METODO PARA CRIAR O SelectOneMenu
     public List<SelectItem> getSelectMarca() {
         selectMarca = new ArrayList<SelectItem>();
         listaMarca = new ArrayList<Marca>();

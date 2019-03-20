@@ -62,9 +62,7 @@ public class FuncaoTreinamento implements Serializable{
         this.idFuncao = idFuncao;
     }
 
-    public void setIdFuncao(BigDecimal func) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    
     
     
     

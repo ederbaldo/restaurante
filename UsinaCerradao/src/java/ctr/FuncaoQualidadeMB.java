@@ -17,7 +17,6 @@ import javax.faces.event.ActionEvent;
 import model.FuncaoQualidade;
 import model.FuncaoTreinamento;
 import model.TreinamentoQualidade;
-import org.apache.jasper.tagplugins.jstl.core.ForEach;
 import org.hibernate.annotations.Type;
 import util.FacesUtil;
 
@@ -39,14 +38,26 @@ public class FuncaoQualidadeMB implements Serializable {
     private Boolean tipo;
     private FuncaoTreinamento funcaoTreinamento;
     private List<FuncaoTreinamento> listaFuncaoTreinamento;
+    private List<FuncaoTreinamento> selectFuncaoTreinamento;
     private List<TreinamentoQualidade> listaTreinamentoQualidade;
     private List<TreinamentoQualidade> selectTreinamentoQualidade;
+    private String nomeSelecionado;
 
     public FuncaoQualidadeMB() {
         funcaoQualidade = new FuncaoQualidade();
         funcaoTreinamento = new FuncaoTreinamento();
         listaFuncaoQualidade = new ArrayList<FuncaoQualidade>();
+        listaTreinamentoQualidade = new ArrayList<TreinamentoQualidade>();
         buscarFuncao();
+    }
+
+    public void verificar() {
+        if (getTipo()) {
+            listaTreinamentoQualidade = (List<TreinamentoQualidade>) dao.buscarTreinamentoQualidadeOrderAlfabetica();
+        } else {
+            listaTreinamentoQualidade = (List<TreinamentoQualidade>) dao.buscarTreinamentoVinculado(funcaoQualidade.getIdFuncao());
+            listaFuncaoTreinamento = (List<FuncaoTreinamento>) dao.buscarTreinamentoVinculado2(funcaoQualidade.getIdFuncao());
+        }
     }
 
     public void buscarFuncaoSgi() {
@@ -92,10 +103,39 @@ public class FuncaoQualidadeMB implements Serializable {
         }
     }
 
+    public void excluirTreinamentoVinculado(ActionEvent evt) {
+        try {
+            BigDecimal idFuncao, ftIdFuncao, resIdTreinamento, ftIdTreinamento;
+            for (TreinamentoQualidade res : selectTreinamentoQualidade) {
+                //System.out.println("------------ " + getFuncaoQualidade().getIdFuncao());
+                //System.out.println("------------ " + res.getIdTreinamento() + " " + res.getTreinamento());
+                for (FuncaoTreinamento ft : listaFuncaoTreinamento) {
+                    //System.out.println("------------ " + ft.getIdFuncao().getFuncao() + " " + ft.getIdTreinamento().getIdTreinamento());
+                    idFuncao = getFuncaoQualidade().getIdFuncao();
+                    ftIdFuncao = ft.getIdFuncao().getIdFuncao();
+                    resIdTreinamento = res.getIdTreinamento();
+                    ftIdTreinamento = ft.getIdTreinamento().getIdTreinamento();
+                    //System.out.println("------------ " + idFuncao + "  " + ftIdFuncao + " " + resIdTreinamento + " " + ftIdTreinamento);
+                    if (idFuncao.equals(ftIdFuncao) && ftIdTreinamento.equals(resIdTreinamento)) {
+                        //System.out.println("------------" + idFuncao + "" + ftIdFuncao + "" + resIdTreinamento + "" + ftIdTreinamento);
+                        dao.remover(ft);
+                    }
+                }
+            }
+
+//            for (FuncaoTreinamento res : selectFuncaoTreinamento) {
+//                System.out.println("------ " + res);
+//                //dao.remover(res);
+//            }
+            FacesUtil.addInfoMessage("Informação", "Treinamento removido com sucesso!");
+        } catch (Exception ex) {
+            FacesUtil.addErrorMessage("Erro", "Entre em contato com suporte!");
+            ex.printStackTrace();
+        }
+    }
+
     public void vincularTreinamento() {
         funcaoQualidade = (FuncaoQualidade) FacesContext.getCurrentInstance().getExternalContext().getRequestMap().get("funcao");
-        listaTreinamentoQualidade = (List<TreinamentoQualidade>) dao.buscarTreinamentoQualidadeOrderAlfabetica();
-        listaFuncaoTreinamento = (List<FuncaoTreinamento>) dao.buscarTreinamentoVinculado(funcaoQualidade.getIdFuncao());
         System.out.println("------------------------------" + funcaoQualidade.getFuncao());
     }
 
@@ -112,6 +152,15 @@ public class FuncaoQualidadeMB implements Serializable {
         }
     }
 
+    public void pesquisarFuncaoQualidade(){
+        setListaFuncaoQualidade(dao.pesquisarFuncaoQualidade(getNomeSelecionado()));
+    }
+    public void pesquisarTreinamentoQualidade(){
+        setListaTreinamentoQualidade(dao.pesquisarTreinamentolidade(getNomeSelecionado()));
+    }
+    public void pesquisarTreinamentoVinculado(){
+        setListaTreinamentoQualidade(dao.pesquisarTreinamentoVinculado(getNomeSelecionado(),getFuncaoQualidade().getIdFuncao()));
+    }
     public Dao getDao() {
         return dao;
     }
@@ -198,6 +247,22 @@ public class FuncaoQualidadeMB implements Serializable {
 
     public void setSelectTreinamentoQualidade(List<TreinamentoQualidade> selectTreinamentoQualidade) {
         this.selectTreinamentoQualidade = selectTreinamentoQualidade;
+    }
+
+    public List<FuncaoTreinamento> getSelectFuncaoTreinamento() {
+        return selectFuncaoTreinamento;
+    }
+
+    public void setSelectFuncaoTreinamento(List<FuncaoTreinamento> selectFuncaoTreinamento) {
+        this.selectFuncaoTreinamento = selectFuncaoTreinamento;
+    }
+
+    public String getNomeSelecionado() {
+        return nomeSelecionado;
+    }
+
+    public void setNomeSelecionado(String nomeSelecionado) {
+        this.nomeSelecionado = nomeSelecionado;
     }
 
 }

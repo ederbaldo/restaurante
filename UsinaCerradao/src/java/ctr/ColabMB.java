@@ -38,7 +38,7 @@ public class ColabMB implements Serializable {
         setListaColab(new ArrayList<Colab>());
         BuscarColab();
     }
-
+//BUSCA TODOS COLABORADORES ATIVOS DO SGI E JOGA NA LISTACOLAB
 public void BuscarColab() {
         //novoTotal();
         

@@ -8,8 +8,17 @@ package ctr;
 import dao.Dao;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -33,6 +42,7 @@ public class TreinamentoMB implements Serializable {
     private TreinamentoFeito treinamentoFeito;
     //private BigDecimal id;
     private Integer id;
+    private String nomeTreinamento;
 
     public TreinamentoMB() {
         dao = new Dao();
@@ -41,12 +51,12 @@ public class TreinamentoMB implements Serializable {
 
     }
 
-    public void buscarTreinamento() {
+    public void buscarTreinamento() throws ParseException {
         setListaTreinamento(new ArrayList<Treinamento>());
         List<Object[]> results = dao.buscarTreinamento(getId());
         System.out.println("----------------id---------------" + getId());
         Treinamento trei;
-
+        Date data = new Date();
         for (Object[] result : results) {
             trei = new Treinamento();
             trei.setIdTreinamento((BigDecimal) result[0]);
@@ -55,7 +65,34 @@ public class TreinamentoMB implements Serializable {
             trei.setNomeColab((String) result[3]);
             trei.setNomeCargo((String) result[4]);
             trei.setDescLocalTrab((String) result[5]);
+            trei.setValidade((BigDecimal) result[6]);
+            trei.setData((Date) result[7]);
+
+            if (trei.getData() != (null)) {
+                Calendar cal1 = new GregorianCalendar();
+                cal1.setTime(trei.getData());
+                Calendar cal2 = new GregorianCalendar();
+                cal2.setTime(data);
+
+                Integer validades = trei.getValidade().intValue();
+
+                long dia = ((cal2.getTimeInMillis() - cal1.getTimeInMillis()) / (24 * 60 * 60 * 1000));
+
+                Integer totalDia = (int)(long) dia;
+                Integer validade = (validades * 365)-totalDia;
+//                System.out.println("Validade = " + validade + " dias");
+//                System.out.println("Data Atual = " + data);
+//                System.out.println("Data ultimo Treinamento = " + trei.getData() + " dias");
+//                System.out.println("Contador = " + (validade - totalDia)  + " dias");
+                
+                String diasRestantes = String.valueOf(validade);
+                trei.setContadorDiasRestantes(diasRestantes);
+//                 System.out.println("---------------" + trei.getNomeColab());
+//                System.out.println("total de dias = " + dias + " dias");
+            }
+
             getListaTreinamento().add(trei);
+            setNomeTreinamento(trei.getTreinamento());
 
         }
     }
@@ -134,6 +171,14 @@ public class TreinamentoMB implements Serializable {
 
     public void setTreinamentoFeito(TreinamentoFeito treinamentoFeito) {
         this.treinamentoFeito = treinamentoFeito;
+    }
+
+    public String getNomeTreinamento() {
+        return nomeTreinamento;
+    }
+
+    public void setNomeTreinamento(String nomeTreinamento) {
+        this.nomeTreinamento = nomeTreinamento;
     }
 
 }

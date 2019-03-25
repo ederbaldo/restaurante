@@ -7,6 +7,9 @@ package model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -19,6 +22,11 @@ public class Treinamento implements Serializable{
     private String nomeColab;
     private String nomeCargo;
     private String descLocalTrab;
+    private BigDecimal validade;
+    @Temporal(value = TemporalType.DATE)
+    private Date data;
+    private String contadorDiasRestantes;
+
 
     public BigDecimal getIdTreinamento() {
         return idTreinamento;
@@ -69,7 +77,32 @@ public class Treinamento implements Serializable{
     public void setDescLocalTrab(String descLocalTrab) {
         this.descLocalTrab = descLocalTrab;
     }
-    
+
+    public BigDecimal getValidade() {
+        return validade;
+    }
+
+    public void setValidade(BigDecimal validade) {
+        this.validade = validade;
+    }
+
+    public Date getData() {
+        return data;
+    }
+
+    public void setData(Date data) {
+        this.data = data;
+    }
+
+    public String getContadorDiasRestantes() {
+        return contadorDiasRestantes;
+    }
+
+    public void setContadorDiasRestantes(String contadorDiasRestantes) {
+        this.contadorDiasRestantes = contadorDiasRestantes;
+    }
+
+       
     
     
 }

@@ -19,7 +19,7 @@
                                 <p:ajax event="change" update="formTreinamento, :formTreinamento2" listener="#{treinamentoMB.buscarTreinamento}" process="@this" />
                             </p:inputText> 
                             <p:outputLabel value="Treinamento:"/>
-                            <p:inputText id="treinamento" value="#{treinamentoMB.treinamento.treinamento}" disabled="true"/>
+                            <p:inputText id="treinamento" value="#{treinamentoMB.nomeTreinamento}" disabled="true"/>
                         </p:panelGrid>
                     </div>
                 </p:panel>
@@ -56,11 +56,16 @@
                         <p:column headerText="Local Trabalho" width="25" sortBy="#{treinamento.descLocalTrab}">
                             <h:outputText value="#{treinamento.descLocalTrab}"/>
                         </p:column> 
-                        <p:column headerText="Validade" width="5" sortBy="">
-                            <h:outputText value=""/>
+                        <p:column headerText="Vencimento" width="5" sortBy="#{treinamento.data}">
+                             <h:outputText value="#{treinamento.data}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime>
+                            </h:outputText>
                         </p:column>
-                        <p:column headerText="Dias Restantes" width="5" sortBy="">
-                            <h:outputText value=""/>
+                        <p:column headerText="Validade" width="5" sortBy="#{treinamento.validade}">
+                            <h:outputText value="#{treinamento.validade} anos"/>
+                        </p:column>
+                        <p:column headerText="Dias Restantes" width="5" sortBy="#{treinamento.contadorDiasRestantes}">
+                            <h:outputText value="#{treinamento.contadorDiasRestantes}"/>
                         </p:column> 
                         <p:column style="text-align: center; width:1%">                                   
                             <p:commandLink actionListener="#{treinamentoMB.treinamentoFeito}" title="Treinamentos Realizados" id="idDialogInfoLink" oncomplete="PF('dialogInfo').show();" update="formTreinamento2:idDialogInfo">

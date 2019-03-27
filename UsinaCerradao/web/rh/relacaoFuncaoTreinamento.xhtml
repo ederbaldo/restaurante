@@ -24,14 +24,46 @@
                                 <p:inputText id="funcao" value="#{funcaoQualidadeMB.funcao}" style="font-weight: bold;"  disabled="true"/>
                             </p:panelGrid>
                             <br></br>
-                            <p:panelGrid columns="5" layout="grid"
-                                         columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-4"
+                            <p:panelGrid columns="4" layout="grid"
+                                         columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-6,ui-g-12 ui-md-2"
                                          styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
                                 <p:commandButton  value="Salvar" update="formTreinamentoFuncao,formTreinamentoFuncao2, menssagem" 
                                                   actionListener="#{funcaoQualidadeMB.gravar}" icon="fa fa-check" />
                                 <p:commandButton value="Cancelar" icon="fa fa-close" onclick="history.go(0); return false;"/>
+
+                                <p:outputLabel/>
+                                <p:commandButton value="Novas Funções" icon="fa fa-exclamation-triangle" oncomplete="PF('dialogInfoNovo').show();" />
                             </p:panelGrid>
+
+
+                            <p:dialog id="idDialogNovaFunc" header="Novas Funções" widgetVar="dialogInfoNovo" responsive="true" modal="true" resizable="false">
+                                <div class="ui-fluid" >
+
+                                    <p:dataTable  id="idTabelaDialog" var="nova" class="ui-fluid" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                  emptyMessage="Nenhuma função nova.." 
+                                                  style="margin-bottom: 10px; margin-top: 15px; 
+                                                  max-width: 800px; min-width: 300px" reflow="true">
+
+                                        <p:column width="5" headerText="Codígo">
+                                            <h:outputText value="" />
+                                        </p:column >
+                                        <p:column width="30" headerText="Nova Função">
+                                            <h:outputText value="" />
+                                        </p:column>
+                                        <p:column width="4" headerText="Mat.">
+                                            <h:outputText value="" />
+                                        </p:column >
+                                        <p:column width="50" headerText="Colaborador">
+                                            <h:outputText value="" />
+                                        </p:column >
+                                        <p:column width="5" headerText="C. Custo">
+                                            <h:outputText value="" />
+                                        </p:column > 
+                                    </p:dataTable>               
+                                </div>
+                            </p:dialog>
                         </p:panel>
+
                     </h:form>
 
                     <h:form id="formTreinamentoFuncao2">
@@ -55,7 +87,7 @@
                                     <p:outputPanel style="float:right;margin-top: 4px">  
 
                                         <p:spacer width="5"></p:spacer>
-                                        <p:inputText id="globalFilter" value="#{funcaoQualidadeMB.nomeSelecionado}" style="width:200px" placeholder="Pesquisar...">
+                                        <p:inputText id="globalFilter" value="#{funcaoQualidadeMB.nomeSelecionado}" style="width:400px" placeholder="Pesquisar...">
                                             <p:ajax event="change" update="formTreinamentoFuncao2:idTabela" listener="#{funcaoQualidadeMB.pesquisarFuncaoQualidade()}"  process="@this" />
                                         </p:inputText>
                                     </p:outputPanel>
@@ -72,7 +104,7 @@
                                     </p:commandLink>                                 
                                 </p:column>
                                 <p:column style="text-align: center; width:1%">                                   
-                                    <p:commandLink title="Vincular Funções Filhas" id="idDialogFuncao" >
+                                    <p:commandLink title="Vincular Funções Filhas" oncomplete="PF('dialogFilha').show();">
                                         <i class="fa fa-clipboard" style="color: tomato"></i>
                                     </p:commandLink>                                 
                                 </p:column>
@@ -108,7 +140,7 @@
                                                                  update="formTreinamentoFuncao,formTreinamentoFuncao2, menssagem"/>
                                             </p:outputPanel>
                                             <p:outputPanel rendered="#{funcaoQualidadeMB.tipo=='false'}" style="float:left;margin-top: 4px">                                       
-                                                <p:commandButton icon="fa fa-arrow-circle-right" value="Desvincular" actionListener="#{funcaoQualidadeMB.excluirTreinamentoVinculado}" 
+                                                <p:commandButton icon="fa fa-arrow-circle-left" value="Desvincular" actionListener="#{funcaoQualidadeMB.excluirTreinamentoVinculado}" 
                                                                  update="formTreinamentoFuncao,formTreinamentoFuncao2, menssagem"/>
                                             </p:outputPanel>
                                             <p:spacer width="25"></p:spacer>
@@ -128,6 +160,39 @@
                                         </p:column>
                                         <p:column width="90" headerText="Treinamento">
                                             <h:outputText value="#{treinamento.treinamento}" />
+                                        </p:column > 
+                                    </p:dataTable>               
+                                </div>
+                            </p:dialog>
+
+
+                            <p:dialog id="idDialogFilha" header="Vincular Função a Filhas" widgetVar="dialogFilha" responsive="true" modal="true" resizable="false">
+                                <div class="ui-fluid" >
+                                    <p:panelGrid columns="4" id="pnlVincularFilha" columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-11" layout="grid" 
+                                                 styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                                        <p:outputLabel value="Função:"/>
+                                        <p:inputText id="funcaoMae" disabled="true"/>
+                                    </p:panelGrid>
+                                    <br></br>
+
+                                    <p:dataTable  id="idTabelaDialogFilha" var="filha" class="ui-fluid" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                  emptyMessage="Nenhuma filha.." 
+                                                  style="margin-bottom: 10px; margin-top: 15px; 
+                                                  max-width: 800px; min-width: 300px" reflow="true">
+
+                                        <f:facet name="header">
+                                            <p:outputPanel style="float:left;margin-top: 4px">                                       
+                                                <p:commandButton icon="fa fa-arrow-circle-right" value="Vincular" 
+                                                                 />
+                                            </p:outputPanel>
+                                            <p:spacer width="25"></p:spacer>                                        
+                                        </f:facet>
+
+                                        <p:column width="10" headerText="Código">
+                                            <h:outputText value="" />
+                                        </p:column>
+                                        <p:column width="90" headerText="Função Filha">
+                                            <h:outputText value="" />
                                         </p:column > 
                                     </p:dataTable>               
                                 </div>

@@ -23,7 +23,7 @@
                         <p:panelGrid columns="4" layout="grid"
                                      columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2, ui-grid-col-6"
                                      styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
-                            <p:commandButton value="Salvar" update="formOpenLicense"
+                            <p:commandButton value="Salvar" update="formOpenLicense,formOpenLicense2:idTabela"
                                              icon="fa fa-check" actionListener="#{openLicenseMB.gravar}"/>
                             <p:commandButton onclick="history.go(0); return false;" value="Cancelar" update="formOpenLicense"
                                              icon="fa fa-close" />
@@ -34,7 +34,7 @@
 
             <h:form id="formOpenLicense2">
                 <div class="card card-w-title">
-                    <p:dataTable id="idTabela" value="" var="tipoSoftware" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                    <p:dataTable id="idTabela" value="#{openLicenseMB.listaTabelaOpenLicense}" var="openLicense" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                  rowsPerPageTemplate="10,20,30,50" emptyMessage="Nenhuma informação..." style="margin-bottom: 30px; margin-top: 5px" reflow="true" >
                         <f:facet name="header">
                             <p:outputPanel style="float:left;margin-top: 4px">                                       
@@ -45,7 +45,7 @@
                                     <p:dataExporter type="csv" target="idTabela" fileName="relatorioOpenLicense" />
                                 </h:commandLink><p:spacer width="10" height="5" />
                                 <h:commandLink title="Baixar em PDF" id="marca"><i class="fa fa-file-pdf-o"></i>
-                                    <p:fileDownload value="" />
+
                                 </h:commandLink>
                             </p:outputPanel>
                             <p:spacer width="25"></p:spacer>
@@ -58,22 +58,25 @@
                             </p:outputPanel>
                         </f:facet>
                         <p:column headerText="Contrato" width="10" >
-                            <h:outputText value=""/>
+                            <h:outputText value="#{openLicense.contrato}"/>
                         </p:column>
-                        <p:column headerText="Fornecedor" width="60" >
-                            <h:outputText value=""/>
+                        <p:column headerText="Descrição" width="50" >
+                            <h:outputText value="#{openLicense.tipoDescricao}"/>
+                        </p:column>
+                        <p:column headerText="Fornecedor" width="50" >
+                            <h:outputText value="#{openLicense.tipofornecedor}"/>
                         </p:column>
                         <p:column headerText="Quantidade" width="5" >
-                            <h:outputText value=""/>
+                            <h:outputText value="#{openLicense.tipoQtde}"/>
                         </p:column>
 
                         <p:column style="text-align: center; width:1%">                                   
-                            <p:commandLink title="Licença" id="license" oncomplete="PF('dialogLicenca').show();" update="formOpenLicense, formOpenLicense2" process="@this">
+                            <p:commandLink title="Licença" actionListener="#{openLicenseMB.adicionar}" id="license" oncomplete="PF('dialogLicenca').show();" update="formOpenLicense2:tipo,formOpenLicense2:idTabelaDialog" process="@this">
                                 <i class="fa fa-windows" style="color: #1e94d2"></i>
                             </p:commandLink>                                 
                         </p:column>
                         <p:column style="text-align: center; width:1%">                                   
-                            <p:commandLink title="Serial" id="serial" oncomplete="PF('dialogSerial').show();" update="formOpenLicense, formOpenLicense2" process="@this">
+                            <p:commandLink title="Serial" id="serial" oncomplete="PF('dialogSerial').show();" update="formOpenLicense, formOpenLicense2, formOpenLicense2:idTabelaDialog" process="@this">
                                 <i class="fa  fa-key" style="color: darkgreen"></i>
                             </p:commandLink>                                 
                         </p:column>
@@ -93,30 +96,30 @@
                 <p:dialog header="Licenças do Contrato/ Cadastro" widgetVar="dialogLicenca" modal="true">
                     <div class="ui-fluid" >
                         <p:messages id="menssagem" showDetail="true" closable="true"/>                  
-                        <p:panelGrid columns="4" layout="grid"
+                        <p:panelGrid id="tipo" columns="4" layout="grid"
                                      columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-7"
                                      styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
-                            <p:outputLabel for="numeroContrato" value="Contrato: "/>
-                            <p:inputText  id="numeroContrato" value="#{tipoLicenseMB.numeroContrato}">
-                                <p:ajax event="change" listener="#{tipoLicenseMB.buscarContrato}" process="@this" />
-                            </p:inputText>
-                            <p:outputLabel for="tipoLicenca" value="Tipo de licença:  "/>
-                            <p:inputText id="tipoLicenca" value="#{tipoLicenseMB.tipoLicense.descricao}" />
+                            <p:outputLabel for="numeroContrato" value="Contrato: " />
+                            <p:inputText id="numeroContrato" value="#{openLicenseMB.tabelaOpenLicense.contrato}" />
+                            <p:autoComplete id="idSoftware" maxResults="20" value="#{openLicenseMB.tipoLicenca.license}" completeMethod="#{openLicenseMB.buscarLicense}" converter="licenseConverter"
+                                            var="license" itemLabel="#{license.descricao}" itemValue="#{license}"
+                                            forceSelection="true" required="true" requiredMessage="Licença obrigatório!">
+                            </p:autoComplete> 
                             <p:outputLabel for="qtde" value="Quant.:  "/>
-                            <p:inputText id="qtde" value="#{tipoLicenseMB.tipoLicense.quantidade}" />
+                            <p:inputText id="qtde" value="#{openLicenseMB.tipoLicenca.quantidade}" />
                             <p:outputLabel for="fornecedor" value="Fornecedor:  "/>
-                            <p:inputText id="fornecedor" value="#{tipoLicenseMB.tipoLicense.fornecedor}" />             
+                            <p:inputText id="fornecedor" value="#{openLicenseMB.tipoLicenca.fornecedor}" />             
                         </p:panelGrid>
                         <br/>
 
                         <p:panelGrid columns="4" layout="grid"
                                      columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2, ui-grid-col-6"
                                      styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
-                            <p:commandButton value="Salvar" update=""
-                                             icon="fa fa-check" actionListener="#{tipoLicenseMB.gravar}"/>
+                            <p:commandButton value="Salvar" update="menssagem, idTabelaDialog"
+                                             icon="fa fa-check" actionListener="#{openLicenseMB.gravarTipoLicenca}"/>
                             <p:commandButton onclick="history.go(0); return false;" value="Cancelar"
                                              icon="fa fa-close" />
-                            <p:commandButton value="Excluir" actionListener="#{ipMB.excluir}"
+                            <p:commandButton value="Excluir" 
                                              icon="fa fa-trash" update="menssagem" process="@this">
                                 <p:confirm header="Confirmação" message="Você tem certeza ?" icon="ui-icon-alert" />
                             </p:commandButton>
@@ -126,7 +129,7 @@
                             </p:confirmDialog>
                         </p:panelGrid>
 
-                        <p:dataTable id="idTabelaDialog" value="#{tipoLicenseMB.listaTipoLincense}" class="ui-fluid" var="tipoLicense" rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                        <p:dataTable id="idTabelaDialog" value="#{openLicenseMB.listaTipoLicense}" class="ui-fluid" var="tipoLicense" rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                      emptyMessage="Nenhuma parcela.." 
                                      style="margin-bottom: 10px; margin-top: 15px; 
                                      max-width: 800px; min-width: 300px" reflow="true" editable="true" editMode="cell">
@@ -150,8 +153,8 @@
                             <p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2, ui-grid-col-6" layout="grid" 
                                          styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
                                 <p:outputLabel for="numeroContrato2" value="Contrato: "/>
-                                <p:inputText  id="numeroContrato2" value="#{serialOpenLicenseMB.numeroContrato}">
-                                    <p:ajax event="change" update="tipoLicense"  listener="#{serialOpenLicenseMB.buscarContrato}" process="@this" />
+                                <p:inputText  id="numeroContrato2" >
+                                    <p:ajax event="change" update="tipoLicense"   process="@this" />
                                 </p:inputText>
                                 <p:outputLabel for="tipoLicense" value="Tipo Licença:"/>
                                 <p:inputText id="tipoLicense" />                                                        
@@ -160,9 +163,9 @@
                             <p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-10" layout="grid" 
                                          styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
                                 <p:outputLabel for="descricao" value="Descrição:  "/>
-                                <p:inputText id="descricao" value="#{serialOpenLicenseMB.serialOpenLicense.descricao}" />   
+                                <p:inputText id="descricao" />   
                                 <p:outputLabel for="key" value="key:  "/>
-                                <p:inputText id="key" value="#{serialOpenLicenseMB.serialOpenLicense.serial}" />           
+                                <p:inputText id="key"  />           
                             </p:panelGrid>
 
                             <br/>
@@ -170,10 +173,10 @@
                                          columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2, ui-grid-col-6"
                                          styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
                                 <p:commandButton value="Salvar"
-                                                 icon="fa fa-check" actionListener="#{serialOpenLicenseMB.gravar}"/>
+                                                 icon="fa fa-check" />
                                 <p:commandButton onclick="history.go(0); return false;" value="Cancelar"
                                                  icon="fa fa-close" />
-                                <p:commandButton value="Excluir" actionListener="#{ipMB.excluir}"
+                                <p:commandButton value="Excluir" 
                                                  icon="fa fa-trash" update="menssagem" process="@this">
                                     <p:confirm header="Confirmação" message="Você tem certeza ?" icon="ui-icon-alert" />
                                 </p:commandButton>
@@ -184,15 +187,15 @@
                             </p:panelGrid>
 
 
-                            <p:dataTable id="idTabelaDialog2" value="#{serialOpenLicenseMB.listaSerialOpenLicense}" class="ui-fluid" var="serial" rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                            <p:dataTable id="idTabelaDialog2"  class="ui-fluid" var="serial" rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                          emptyMessage="Nenhuma parcela.." 
                                          style="margin-bottom: 10px; margin-top: 15px; 
                                          max-width: 800px; min-width: 300px" reflow="true" editable="true" editMode="cell">
                                 <p:column headerText="Descrição" width="1">
-                                    <h:outputText value="#{serial.descricao}" />
+                                    <h:outputText  />
                                 </p:column>
                                 <p:column headerText="Serial" width="10">
-                                    <h:outputText value="#{serial.serial}" />
+                                    <h:outputText />
                                 </p:column>
                             </p:dataTable>
                         </h:form>

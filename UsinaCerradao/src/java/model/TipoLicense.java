@@ -24,12 +24,13 @@ import javax.persistence.Table;
  * @author enascimento
  */
 @Entity
-@Table (name = "tipo_license")
+@Table(name = "tipo_license")
 public class TipoLicense implements Serializable {
+
     @Id
-   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "TIPO_LICENSE_SEQ")
-    @SequenceGenerator(sequenceName = "SEQ_TIPO_LICENSE", allocationSize = 1, name = "TIPO_LICENSE_SEQ")
-    @Column(name = "id_tipo_license",  unique = true, nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "TIPO_LICENSE_SEQ")
+    @SequenceGenerator(sequenceName = "SEQ_TIPO_LICENSE", allocationSize = 6, name = "TIPO_LICENSE_SEQ")
+    @Column(name = "id_tipo_license", unique = true, nullable = false)
     private Integer idTipoLicense;
     @Column(name = "descricao", nullable = true)
     private String descricao;
@@ -37,9 +38,15 @@ public class TipoLicense implements Serializable {
     private String fornecedor;
     @Column(name = "quantidade", nullable = true)
     private Integer quantidade;
-    @Column(name = "id_open_license", nullable = true)
-    private BigDecimal idOpenLicense;
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_open_license", nullable = false, foreignKey = @ForeignKey(name = "id_tipo_open"))
+    private OpenLicense idOpenLicense;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_license", nullable = false, foreignKey = @ForeignKey(name = "id_tipo_license"))
+    private License license;
+//    @Column(name = "id_open_license", nullable = true)
+//    private Integer idOpenLicense;
 
     public Integer getIdTipoLicense() {
         return idTipoLicense;
@@ -73,16 +80,30 @@ public class TipoLicense implements Serializable {
         this.quantidade = quantidade;
     }
 
-    public BigDecimal getIdOpenLicense() {
+//    public Integer getIdOpenLicense() {
+//        return idOpenLicense;
+//    }
+//
+//    public void setIdOpenLicense(Integer idOpenLicense) {
+//        this.idOpenLicense = idOpenLicense;
+//    }
+
+    public OpenLicense getIdOpenLicense() {
         return idOpenLicense;
     }
 
-    public void setIdOpenLicense(BigDecimal idOpenLicense) {
+    public void setIdOpenLicense(OpenLicense idOpenLicense) {
         this.idOpenLicense = idOpenLicense;
     }
 
+    public License getLicense() {
+        return license;
+    }
+
+    public void setLicense(License license) {
+        this.license = license;
+    }
 
     
-   
-    
+
 }

@@ -8,17 +8,16 @@ package ctr;
 import dao.Dao;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
-import model.NotaFiscal;
+import javax.faces.model.SelectItem;
+import model.License;
+import model.ListaOpenLicense;
+import model.Marca;
 import model.OpenLicense;
 import model.SerialOpenLicense;
 import model.TipoLicense;
@@ -32,44 +31,94 @@ import util.FacesUtil;
 @ViewScoped
 public class OpenLicenseMB implements Serializable {
 
-    private OpenLicense openLicense;
-    private TipoLicense tipoLicense;
-    private SerialOpenLicense serialOpenLicense;
-    List<OpenLicense> listaOpenLicense = new ArrayList<OpenLicense>();
     private Dao dao = new Dao();
-    private BigDecimal numeroContrato;
-    private BigDecimal idContrato;
+    private OpenLicense openLicense;
+    private List<OpenLicense> listarContrato;
+    private TipoLicense tipoLicenca;
+    private List<TipoLicense> listaTipoLicense;
+    private List<ListaOpenLicense> listaTabelaOpenLicense;
+    private ListaOpenLicense tabelaOpenLicense;
+    private List<License>listaLicense;
 
     public OpenLicenseMB() {
         novo();
     }
 
     public void novo() {
+        dao = new Dao();
         openLicense = new OpenLicense();
-        tipoLicense = new TipoLicense();
-        serialOpenLicense = new SerialOpenLicense();
-        listaOpenLicense = new ArrayList<OpenLicense>();
-        listaOpenLicense = (List<OpenLicense>) dao.buscarTodos(OpenLicense.class);
+        tipoLicenca = new TipoLicense();
+        tabelaOpenLicense = new ListaOpenLicense();
+        //listaOpenLicense = new ArrayList<OpenLicense>();
+        //listaTipoLicense = new ArrayList<TipoLicense>();
+        setListaTabelaOpenLicense(new ArrayList<ListaOpenLicense>());
+        tabOpenLicense();
     }
 
     public void gravar(ActionEvent evt) {
         try {
-
             dao.gravar(openLicense);
-            
-            /*listarMarcaVeiculo = (List<Marca>) dao.buscarTodos(Marca.class);*/
             openLicense = new OpenLicense();
-            
-            FacesUtil.addInfoMessage("Informação", "Tipo License salva com sucesso!");
+
+            FacesUtil.addInfoMessage("Informação", " Contrato salvo com sucesso!");
         } catch (Exception ex) {
             FacesUtil.addErrorMessage("Erro", "Entre em contato com suporte!");
             ex.printStackTrace();
         }
     }
+
+    public void adicionar() {
+        tabelaOpenLicense = (ListaOpenLicense) FacesContext.getCurrentInstance().getExternalContext().getRequestMap().get("openLicense");
+        openLicense.setIdOpenLicense(tabelaOpenLicense.getIdOpen().intValue());
+        openLicense.setContrato(tabelaOpenLicense.getContrato().intValue());
+        tipoLicenca.setIdOpenLicense(openLicense);
+        //System.out.println("----------------------------" + tipoLicenca.getIdOpenLicense().getIdOpenLicense());
+        listaTipoLicense = (List<TipoLicense>) dao.buscarContrato(tabelaOpenLicense.getIdOpen());
+
+    }
+
+    public void gravarTipoLicenca(ActionEvent evt) {
+        try {
+            
+            tipoLicenca.setIdOpenLicense(openLicense);
+            //tipoLicenca.setIdOpenLicense(tabelaOpenLicense.getIdOpen().intValue());
+            dao.gravar(tipoLicenca);
+            tipoLicenca = new TipoLicense();
+
+            FacesUtil.addInfoMessage("Informação", " Tipo de Licença salvo com sucesso!");
+        } catch (Exception ex) {
+            FacesUtil.addErrorMessage("Erro", "Entre em contato com suporte!");
+            ex.printStackTrace();
+        }
+    }
+
     
+    public void tabOpenLicense() {
+        //setListaTabelaOpenLicense(new ArrayList<ListaOpenLicense>());
+        List<Object[]> results = dao.listarTabelaOpenLicense();
+        ListaOpenLicense lis;
 
-    public void adicionar(ActionEvent evt) {
+        for (Object[] result : results) {
+            lis = new ListaOpenLicense();
+            lis.setContrato((BigDecimal) result[0]);
+            lis.setTipoDescricao((String) result[1]);
+            lis.setTipofornecedor((String) result[2]);
+            lis.setTipoQtde((BigDecimal) result[3]);
+            lis.setIdOpen((BigDecimal) result[4]);
+            getListaTabelaOpenLicense().add(lis);
+        }
+    }
 
+    public List<License> buscarLicense(String nome){
+        setListaLicense((List<License>) dao.buscarLicense(nome));
+        return getListaLicense();
+    }
+    public Dao getDao() {
+        return dao;
+    }
+
+    public void setDao(Dao dao) {
+        this.dao = dao;
     }
 
     public OpenLicense getOpenLicense() {
@@ -80,55 +129,50 @@ public class OpenLicenseMB implements Serializable {
         this.openLicense = openLicense;
     }
 
-    public TipoLicense getTipoLicense() {
-        return tipoLicense;
+    public List<OpenLicense> getListarContrato() {
+        return listarContrato;
     }
 
-    public void setTipoLicense(TipoLicense tipoLicense) {
-        this.tipoLicense = tipoLicense;
+    public void setListarContrato(List<OpenLicense> listarContrato) {
+        this.listarContrato = listarContrato;
     }
 
-    public SerialOpenLicense getSerialOpenLicense() {
-        return serialOpenLicense;
+    public TipoLicense getTipoLicenca() {
+        return tipoLicenca;
     }
 
-    public void setSerialOpenLicense(SerialOpenLicense serialOpenLicense) {
-        this.serialOpenLicense = serialOpenLicense;
+    public void setTipoLicenca(TipoLicense tipoLicenca) {
+        this.tipoLicenca = tipoLicenca;
     }
 
-    public Dao getDao() {
-        return dao;
+    public List<TipoLicense> getListaTipoLicense() {
+        return listaTipoLicense;
     }
 
-    public void setDao(Dao dao) {
-        this.dao = dao;
+    public void setListaTipoLicense(List<TipoLicense> listaTipoLicense) {
+        this.listaTipoLicense = listaTipoLicense;
     }
 
-    public List<OpenLicense> getListaOpenLicense() {
-        return listaOpenLicense;
+    public List<ListaOpenLicense> getListaTabelaOpenLicense() {
+        return listaTabelaOpenLicense;
     }
 
-    public void setListaOpenLicense(List<OpenLicense> listaOpenLicense) {
-        this.listaOpenLicense = listaOpenLicense;
+    public void setListaTabelaOpenLicense(List<ListaOpenLicense> listaTabelaOpenLicense) {
+        this.listaTabelaOpenLicense = listaTabelaOpenLicense;
     }
 
-    public BigDecimal getNumeroContrato() {
-        return numeroContrato;
+    public ListaOpenLicense getTabelaOpenLicense() {
+        return tabelaOpenLicense;
     }
 
-    public void setNumeroContrato(BigDecimal numeroContrato) {
-        this.numeroContrato = numeroContrato;
+    public List<License> getListaLicense() {
+        return listaLicense;
     }
 
-   
+    public void setListaLicense(List<License> listaLicense) {
+        this.listaLicense = listaLicense;
+    }
+
     
-
-    public BigDecimal getIdContrato() {
-        return idContrato;
-    }
-
-    public void setIdContrato(BigDecimal idContrato) {
-        this.idContrato = idContrato;
-    }
 
 }

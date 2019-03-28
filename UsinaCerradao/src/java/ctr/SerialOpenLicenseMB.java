@@ -61,17 +61,17 @@ public class SerialOpenLicenseMB implements Serializable {
         }
     }
 
-    public void buscarContrato() throws ParseException {
-        List<Object[]> results = dao.buscarContrato(getNumeroContrato());
-        results.stream().map((result) -> {
-            setIdContrato((BigDecimal) result[0]);
-            return result;
-        }).forEachOrdered((result) -> {
-            setNumeroContrato((BigDecimal) result[1]);
-        });
-        System.out.println("-----------CONTRATO-----------" + getIdContrato());
-        buscarTabelaTipoLicense(getIdContrato());
-    }
+//    public void buscarContrato() throws ParseException {
+//        List<Object[]> results = dao.buscarContrato(getNumeroContrato());
+//        results.stream().map((result) -> {
+//            setIdContrato((BigDecimal) result[0]);
+//            return result;
+//        }).forEachOrdered((result) -> {
+//            setNumeroContrato((BigDecimal) result[1]);
+//        });
+//        System.out.println("-----------CONTRATO-----------" + getIdContrato());
+//        buscarTabelaTipoLicense(getIdContrato());
+//    }
 
     public List<SerialOpenLicense> buscarTabelaTipoLicense(BigDecimal numero) {
         System.out.println("-----------CONTRATO2-----------" + numero);
@@ -82,7 +82,7 @@ public class SerialOpenLicenseMB implements Serializable {
 
         selectTipoLicense = new ArrayList<SelectItem>();
         listTipoLicense = new ArrayList<TipoLicense>();
-        listTipoLicense = (List<TipoLicense>) dao.buscarTabelaTipoLicense(getIdContrato());
+        //listTipoLicense = (List<TipoLicense>) dao.buscarTabelaTipoLicense(getIdContrato());
         selectTipoLicense.add(new SelectItem(0, "Selecione"));
         for (TipoLicense c : listTipoLicense) {
             selectTipoLicense.add(new SelectItem(c.getIdTipoLicense(), c.getDescricao()));

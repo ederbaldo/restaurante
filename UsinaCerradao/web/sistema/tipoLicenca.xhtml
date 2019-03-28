@@ -16,7 +16,7 @@
                                      columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-5,ui-g-12 ui-md-6"
                                      styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">                                                  
                             <p:outputLabel for="idTipoLicenca" value="Tipo de Licença:" indicateRequired="false"/>
-                            <p:inputText id="idTipoLicenca" value="#{tipoLicencaMB.tipoLicenca.descricao}" required="true" requiredMessage="Tipo de Licença obrigatória!"/> 
+                            <p:inputText id="idTipoLicenca" value="#{licenseMB.license.descricao}" required="true" requiredMessage="Tipo de Licença obrigatória!"/> 
                             <p:outputLabel/>
                         </p:panelGrid >
                         <br/>
@@ -24,7 +24,7 @@
                                      columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-4"
                                      styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
                             <p:commandButton value="Salvar" update="formTipoLicenca,formTipoLicenca2"
-                                             icon="fa fa-check" actionListener="#{tipoLicencaMBMB.gravar}"/>
+                                             icon="fa fa-check" actionListener="#{licenseMB.gravar}"/>
                             <p:commandButton value="Cancelar" icon="fa fa-close" onclick="history.go(0); return false;"/>
                         </p:panelGrid>
                     </div>
@@ -32,7 +32,7 @@
             </h:form>
             <h:form id="formTipoLicenca2">
                 <div class="card card-w-title">
-                    <p:dataTable id="idTabela" value="#{tipoLicencaMB.listaTipoLicenca}" var="tipoLicenca" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                    <p:dataTable id="idTabela" value="#{licenseMB.listaLicense}" var="tipoLicenca" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                  rowsPerPageTemplate="10,20,30,50" emptyMessage="Nenhuma informação..." style="margin-bottom: 30px; margin-top: 5px" reflow="true" >
                         <f:facet name="header">
                             <p:outputPanel style="float:left;margin-top: 4px">                                       
@@ -50,8 +50,8 @@
                             <p:outputPanel style="float:right;margin-top: 4px">  
 
                                 <p:spacer width="5"></p:spacer>
-                                <p:inputText id="globalFilter"  style="width:400px" placeholder="Pesquisar...">
-                                    <p:ajax event="change" update="formTipoLicenca2:idTabela"  process="@this" />
+                                <p:inputText id="globalFilter" value="#{licenseMB.nomeSelecionado}"  style="width:400px" placeholder="Pesquisar...">
+                                    <p:ajax event="change" update="formTipoLicenca2:idTabela" listener="#{licenseMB.pesquisarLicense}"  process="@this" />
                                 </p:inputText>
                             </p:outputPanel>
                         </f:facet>
@@ -59,12 +59,12 @@
                             <h:outputText value="#{tipoLicenca.descricao}"/>
                         </p:column> 
                         <p:column style="text-align: center; width:1%">                                   
-                            <p:commandLink title="Editar" id="alterar" actionListener="#{tipoLicencaMB.alterar()}" update="formTipoLicenca, formTipoLicenca2" process="@this">
+                            <p:commandLink title="Editar" id="alterar" actionListener="#{licenseMB.alterar()}" update="formTipoLicenca,formTipoLicenca2" process="@this">
                                 <i class="fa fa-pencil-square-o" style="color: dodgerblue"></i>
                             </p:commandLink>                                 
                         </p:column>
                         <p:column style="text-align: center; width:1%">                                   
-                            <p:commandLink title="Excluir" id="excluir" actionListener="#{tipoLicencaMB.excluir()}" update="formTipoLicenca, formTipoLicenca2" process="@this">
+                            <p:commandLink title="Excluir" id="excluir" actionListener="#{licenseMB.excluir}" update="formTipoLicenca,formTipoLicenca2" process="@this">
                                 <i class="fa fa-trash" style="color: red"></i>
                                 <p:confirm header="Confirmação" message="Você tem certeza ?" icon="ui-icon-alert"/>
                             </p:commandLink>

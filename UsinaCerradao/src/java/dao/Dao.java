@@ -12,6 +12,7 @@ import model.Computador;
 import model.Colab;
 import model.FuncaoQualidade;
 import model.FuncaoTreinamento;
+import model.License;
 import model.OpenLicense;
 import model.SerialOpenLicense;
 import model.Software;
@@ -84,6 +85,19 @@ public class Dao implements Serializable {
 
     public Colab buscarColabConverter(String nome) {
         return (Colab) em.createNativeQuery("SELECT nome_colab, cd_colab FROM v_colab where nome_colab = '" + nome + "'", Colab.class).getSingleResult();
+    }
+
+    //----------------Fornecedor----------------
+    public List<Object[]> buscarFornecedor(String nome) {
+        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT NOME, NOME_FANT, CORR_ID FROM CORR WHERE NOME like '%" + nome + "%'");
+        List<Object[]> results = query.getResultList();
+        return results;
+    }
+
+    public List<Object[]> buscarFornecedorConverter(String nome) {
+        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT NOME, NOME_FANT, CORR_ID FROM corr WHERE NOME = '" + nome + "'");
+        List<Object[]> results = query.getResultList();
+        return results;
     }
 
     //----------------Nota Fiscal----------------
@@ -167,21 +181,45 @@ public class Dao implements Serializable {
     }
 
     //----------------Open License -----------------------
-    public List<Object[]> buscarContrato(BigDecimal contrato) {
-        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT ID_OPEN_LICENSE, CONTRATO FROM OPEN_LICENSE where CONTRATO = " + contrato);
-        List<Object[]> results = query.getResultList();
-        return results;
+//    public List<Object[]> buscarContrato(BigDecimal contrato) {
+//        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT ID_OPEN_LICENSE, CONTRATO FROM OPEN_LICENSE where CONTRATO = " + contrato);
+//        List<Object[]> results = query.getResultList();
+//        return results;
+//    }
+    public License buscarLicense(String nome) {
+        return (License) em.createNativeQuery("SELECT * FROM license where descricao like '%" + nome + "%'", License.class).getSingleResult();
+    }
+    
+    public License buscarLicenseConverter(String nome) {
+        return (License) em.createNativeQuery("SELECT * FROM license where descricao = '" + nome + "'", License.class).getSingleResult();
+    }
+    public List<TipoLicense> buscarContrato(BigDecimal contrato) {
+        return (List<TipoLicense>) em.createNativeQuery("SELECT * FROM TIPO_LICENSE where ID_OPEN_LICENSE = " + contrato, TipoLicense.class).getResultList();
     }
 
-    //----------------Tipo License -----------------------        
-    public List<TipoLicense> buscarTabelaTipoLicense(BigDecimal numero) {
+    public List<Object[]> listarTabelaOpenLicense() {
+        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT A.CONTRATO,\n"
+                + "B.DESCRICAO,\n"
+                + "B.FORNECEDOR,\n"
+                + "B.QUANTIDADE,\n"
+                + "A.ID_OPEN_LICENSE\n"
+                + "FROM OPEN_LICENSE A,\n"
+                + "  TIPO_LICENSE B\n"
+                + "WHERE A.ID_OPEN_LICENSE = B.ID_OPEN_LICENSE(+)");
+        List<Object[]> results = query.getResultList();
+        return results;
+    }      
+    public List<TipoLicense> buscarTabelaTipoLicense(Integer numero) {
         return (List<TipoLicense>) em.createNativeQuery("SELECT * FROM tipo_license where id_open_license = " + numero, TipoLicense.class).getResultList();
     }
 
     public OpenLicense buscarContratoConverter(String numero) {
         return (OpenLicense) em.createNativeQuery("SELECT * FROM open_license where contrato = " + numero, OpenLicense.class).getResultList();
     }
-
+//----------------License -----------------------
+    public List<License> pesquisarLicense(String nome) {
+        return (List<License>) em.createNativeQuery("SELECT * FROM license where descricao like '%" + nome + "%'", License.class).getResultList();
+    }
 //----------------RECURSOS HUMANOS----------------------- 
     //----------------Treinamento -----------------------
 //    public List<Object[]> buscarTreinamento(Integer idTreinamento) {

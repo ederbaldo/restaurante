@@ -94,12 +94,6 @@ public class Dao implements Serializable {
         return results;
     }
 
-    public List<Object[]> buscarFornecedorConverter(String nome) {
-        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT NOME, NOME_FANT, CORR_ID FROM corr WHERE NOME = '" + nome + "'");
-        List<Object[]> results = query.getResultList();
-        return results;
-    }
-
     //----------------Nota Fiscal----------------
     public List<Object[]> buscarNF() {
         TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT A.NRO,a.SERIE,a.DT_EMISS,a.RAZAO_SOCIAL,a.NRO_NFE,b.CD_PROD,b.DESCR_PROD FROM NF_ENT a, ITNF_ENT b WHERE a.NFENT_ID = b.NFENT_ID AND b.CD_PROD  in ('54578','54579','54160','54164') order by a.DT_EMISS");
@@ -186,8 +180,8 @@ public class Dao implements Serializable {
 //        List<Object[]> results = query.getResultList();
 //        return results;
 //    }
-    public License buscarLicense(String nome) {
-        return (License) em.createNativeQuery("SELECT * FROM license where descricao like '%" + nome + "%'", License.class).getSingleResult();
+    public List<License> buscarLicense(String nome) {
+        return (List<License>) em.createNativeQuery("SELECT * FROM license where descricao like '%" + nome + "%'", License.class).getResultList();
     }
 
     public License buscarLicenseConverter(String nome) {
@@ -200,13 +194,15 @@ public class Dao implements Serializable {
 
     public List<Object[]> listarTabelaOpenLicense() {
         TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT A.CONTRATO,\n"
-                + "B.DESCRICAO,\n"
-                + "B.FORNECEDOR,\n"
-                + "B.QUANTIDADE,\n"
-                + "A.ID_OPEN_LICENSE\n"
+                + "  C.DESCRICAO,\n"
+                + "  B.FORNECEDOR,\n"
+                + "  B.QUANTIDADE,\n"
+                + "  A.ID_OPEN_LICENSE\n"
                 + "FROM OPEN_LICENSE A,\n"
-                + "  TIPO_LICENSE B\n"
-                + "WHERE A.ID_OPEN_LICENSE = B.ID_OPEN_LICENSE(+)");
+                + "  TIPO_LICENSE B,\n"
+                + "  LICENSE C\n"
+                + "WHERE A.ID_OPEN_LICENSE = B.ID_OPEN_LICENSE(+)\n"
+                + "AND C.ID_LICENSE        = B.ID_LICENSE");
         List<Object[]> results = query.getResultList();
         return results;
     }
@@ -365,6 +361,7 @@ public class Dao implements Serializable {
         List<Object[]> results = query.getResultList();
         return results;
     }
+
     public List<Object[]> BuscarFuncaoFilha() {
         TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT DISTINCT\n"
                 + "                a.nome_cargo,\n"

@@ -101,9 +101,11 @@
                                      styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
                             <p:outputLabel for="numeroContrato" value="Contrato: " />
                             <p:inputText id="numeroContrato" value="#{openLicenseMB.tabelaOpenLicense.contrato}" />
-                            <p:autoComplete id="idSoftware" maxResults="20" value="#{openLicenseMB.tipoLicenca.license}" completeMethod="#{openLicenseMB.buscarLicense}" converter="licenseConverter"
+                            
+                            <p:outputLabel for="descricao" value="Descrição:  " />
+                            <p:autoComplete id="descricao" maxResults="20" value="#{openLicenseMB.tipoLicenca.license}" completeMethod="#{openLicenseMB.buscarLicense}" converter="licenseConverter"
                                             var="license" itemLabel="#{license.descricao}" itemValue="#{license}"
-                                            forceSelection="true" required="true" requiredMessage="Licença obrigatório!">
+                                            forceSelection="true">
                             </p:autoComplete> 
                             <p:outputLabel for="qtde" value="Quant.:  "/>
                             <p:inputText id="qtde" value="#{openLicenseMB.tipoLicenca.quantidade}" />

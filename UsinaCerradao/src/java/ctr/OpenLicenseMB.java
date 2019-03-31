@@ -7,6 +7,7 @@ package ctr;
 
 import dao.Dao;
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +50,7 @@ public class OpenLicenseMB implements Serializable {
         openLicense = new OpenLicense();
         tipoLicenca = new TipoLicense();
         tabelaOpenLicense = new ListaOpenLicense();
+        tipoLicenca.setLicense(new License());
         //listaOpenLicense = new ArrayList<OpenLicense>();
         //listaTipoLicense = new ArrayList<TipoLicense>();
         setListaTabelaOpenLicense(new ArrayList<ListaOpenLicense>());
@@ -110,9 +112,11 @@ public class OpenLicenseMB implements Serializable {
     }
 
     public List<License> buscarLicense(String nome){
+        System.out.println("-----------------------" + nome);
         setListaLicense((List<License>) dao.buscarLicense(nome));
         return getListaLicense();
     }
+    
     public Dao getDao() {
         return dao;
     }

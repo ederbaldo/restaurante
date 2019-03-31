@@ -23,15 +23,15 @@ public class LicenseConverter implements Converter {
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String string) {
         Dao dao = new Dao();
-        License license = dao.buscarLicenseConverter(string);
-        return license;
+        License lic = dao.buscarLicenseConverter(string);
+        return lic;
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object o) {
-        License license = new License();
-        license = (License) o;
-        return license.getDescricao();
+        License lic = new License();
+        lic = (License) o;
+        return lic.getDescricao();
     }
     
 }

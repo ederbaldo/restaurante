@@ -16,6 +16,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import model.FuncaoQualidade;
 import model.FuncaoTreinamento;
+import model.ListaNovasFuncoes;
 import model.TreinamentoQualidade;
 import org.hibernate.annotations.Type;
 import util.FacesUtil;
@@ -42,13 +43,18 @@ public class FuncaoQualidadeMB implements Serializable {
     private List<TreinamentoQualidade> listaTreinamentoQualidade;
     private List<TreinamentoQualidade> selectTreinamentoQualidade;
     private String nomeSelecionado;
+    private List<ListaNovasFuncoes> listaNovasFuncoes;
+    private List<ListaNovasFuncoes> listaFuncaoFilha;
+    private List<ListaNovasFuncoes> selectFuncaoFilha;
 
     public FuncaoQualidadeMB() {
         funcaoQualidade = new FuncaoQualidade();
         funcaoTreinamento = new FuncaoTreinamento();
         listaFuncaoQualidade = new ArrayList<FuncaoQualidade>();
         listaTreinamentoQualidade = new ArrayList<TreinamentoQualidade>();
+        listaNovasFuncoes = new ArrayList<ListaNovasFuncoes>();
         buscarFuncao();
+        buscarNovaFuncao();
     }
 
     public void verificar() {
@@ -70,6 +76,34 @@ public class FuncaoQualidadeMB implements Serializable {
         }).forEachOrdered((result) -> {
             setFuncao((String) result[1]);
         });
+
+    }
+
+    public void buscarNovaFuncao() {
+        List<Object[]> results = dao.BuscarNovaFuncao();
+        ListaNovasFuncoes fun;
+
+        for (Object[] result : results) {
+            fun = new ListaNovasFuncoes();
+            fun.setMatricula((BigDecimal) result[0]);
+            fun.setNomeColab((String) result[1]);
+            fun.setNomeCargo((String) result[2]);
+            fun.setCdCusto((BigDecimal) result[3]);
+            fun.setFuncaoId((BigDecimal) result[4]);
+            getListaNovasFuncoes().add(fun);
+        }
+
+    }
+    public void buscarFuncaoFilha() {
+        List<Object[]> results = dao.BuscarFuncaoFilha();
+        ListaNovasFuncoes fun;
+
+        for (Object[] result : results) {
+            fun = new ListaNovasFuncoes();
+            fun.setNomeCargo((String) result[0]);
+            fun.setFuncaoId((BigDecimal) result[1]);
+            getListaNovasFuncoes().add(fun);
+        }
 
     }
 
@@ -152,15 +186,18 @@ public class FuncaoQualidadeMB implements Serializable {
         }
     }
 
-    public void pesquisarFuncaoQualidade(){
+    public void pesquisarFuncaoQualidade() {
         setListaFuncaoQualidade(dao.pesquisarFuncaoQualidade(getNomeSelecionado()));
     }
-    public void pesquisarTreinamentoQualidade(){
+
+    public void pesquisarTreinamentoQualidade() {
         setListaTreinamentoQualidade(dao.pesquisarTreinamentolidade(getNomeSelecionado()));
     }
-    public void pesquisarTreinamentoVinculado(){
-        setListaTreinamentoQualidade(dao.pesquisarTreinamentoVinculado(getNomeSelecionado(),getFuncaoQualidade().getIdFuncao()));
+
+    public void pesquisarTreinamentoVinculado() {
+        setListaTreinamentoQualidade(dao.pesquisarTreinamentoVinculado(getNomeSelecionado(), getFuncaoQualidade().getIdFuncao()));
     }
+
     public Dao getDao() {
         return dao;
     }
@@ -264,5 +301,32 @@ public class FuncaoQualidadeMB implements Serializable {
     public void setNomeSelecionado(String nomeSelecionado) {
         this.nomeSelecionado = nomeSelecionado;
     }
+
+    public List<ListaNovasFuncoes> getListaNovasFuncoes() {
+        return listaNovasFuncoes;
+    }
+
+    public void setListaNovasFuncoes(List<ListaNovasFuncoes> listaNovasFuncoes) {
+        this.listaNovasFuncoes = listaNovasFuncoes;
+    }
+
+    public List<ListaNovasFuncoes> getListaFuncaoFilha() {
+        return listaFuncaoFilha;
+    }
+
+    public void setListaFuncaoFilha(List<ListaNovasFuncoes> listaFuncaoFilha) {
+        this.listaFuncaoFilha = listaFuncaoFilha;
+    }
+
+    public List<ListaNovasFuncoes> getSelectFuncaoFilha() {
+        return selectFuncaoFilha;
+    }
+
+    public void setSelectFuncaoFilha(List<ListaNovasFuncoes> selectFuncaoFilha) {
+        this.selectFuncaoFilha = selectFuncaoFilha;
+    }
+
+    
+    
 
 }

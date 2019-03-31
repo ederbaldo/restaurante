@@ -189,10 +189,11 @@ public class Dao implements Serializable {
     public License buscarLicense(String nome) {
         return (License) em.createNativeQuery("SELECT * FROM license where descricao like '%" + nome + "%'", License.class).getSingleResult();
     }
-    
+
     public License buscarLicenseConverter(String nome) {
         return (License) em.createNativeQuery("SELECT * FROM license where descricao = '" + nome + "'", License.class).getSingleResult();
     }
+
     public List<TipoLicense> buscarContrato(BigDecimal contrato) {
         return (List<TipoLicense>) em.createNativeQuery("SELECT * FROM TIPO_LICENSE where ID_OPEN_LICENSE = " + contrato, TipoLicense.class).getResultList();
     }
@@ -208,7 +209,8 @@ public class Dao implements Serializable {
                 + "WHERE A.ID_OPEN_LICENSE = B.ID_OPEN_LICENSE(+)");
         List<Object[]> results = query.getResultList();
         return results;
-    }      
+    }
+
     public List<TipoLicense> buscarTabelaTipoLicense(Integer numero) {
         return (List<TipoLicense>) em.createNativeQuery("SELECT * FROM tipo_license where id_open_license = " + numero, TipoLicense.class).getResultList();
     }
@@ -217,6 +219,7 @@ public class Dao implements Serializable {
         return (OpenLicense) em.createNativeQuery("SELECT * FROM open_license where contrato = " + numero, OpenLicense.class).getResultList();
     }
 //----------------License -----------------------
+
     public List<License> pesquisarLicense(String nome) {
         return (List<License>) em.createNativeQuery("SELECT * FROM license where descricao like '%" + nome + "%'", License.class).getResultList();
     }
@@ -246,6 +249,7 @@ public class Dao implements Serializable {
 //        List<Object[]> results = query.getResultList();
 //        return results;
 //    }
+
     public List<Object[]> buscarTreinamento(Integer idTreinamento) {
         TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT  TE.ID,\n"
                 + "    TE.DESCRICAO AS TREINAMENTO,\n"
@@ -343,6 +347,33 @@ public class Dao implements Serializable {
 
     public List<Object[]> BuscarFuncaoSGI(BigDecimal funcaoId) {
         TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT DISTINCT FUNCAO_ID, NOME_CARGO FROM v_colab WHERE FUNCAO_ID =" + funcaoId);
+        List<Object[]> results = query.getResultList();
+        return results;
+    }
+
+    public List<Object[]> BuscarNovaFuncao() {
+        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT DISTINCT a.cd_colab,\n"
+                + "                a.nome_colab,\n"
+                + "                a.nome_cargo,\n"
+                + "                a.CD_CCUSTO,\n"
+                + "                a.FUNCAO_ID\n"
+                + "FROM v_colab     a \n"
+                + "WHERE a.dt_demis  IS NULL\n"
+                + "AND SUBSTR(a.CD_CCUSTO,1,1) IN('1','2')\n"
+                + "and not EXISTS (SELECT * FROM TI.FUNC_MATRIZ_SGI b where a.FUNCAO_ID = b.ID_SGI)\n"
+                + "ORDER BY 1");
+        List<Object[]> results = query.getResultList();
+        return results;
+    }
+    public List<Object[]> BuscarFuncaoFilha() {
+        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT DISTINCT\n"
+                + "                a.nome_cargo,\n"
+                + "                a.FUNCAO_ID\n"
+                + "FROM v_colab     a \n"
+                + "WHERE a.dt_demis  IS NULL\n"
+                + "AND SUBSTR(a.CD_CCUSTO,1,1) IN('1','2')\n"
+                + "and not EXISTS (SELECT * FROM TI.FUNC_MATRIZ_SGI b where a.FUNCAO_ID = b.ID_SGI)\n"
+                + "ORDER BY 1");
         List<Object[]> results = query.getResultList();
         return results;
     }

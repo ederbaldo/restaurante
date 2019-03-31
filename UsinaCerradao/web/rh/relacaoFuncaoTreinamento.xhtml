@@ -36,28 +36,28 @@
                             </p:panelGrid>
 
 
-                            <p:dialog id="idDialogNovaFunc" header="Novas Funções" widgetVar="dialogInfoNovo" responsive="true" modal="true" resizable="false">
+                            <p:dialog id="idDialogNovaFunc"  header="Novas Funções" widgetVar="dialogInfoNovo" responsive="true" modal="true" resizable="false">
                                 <div class="ui-fluid" >
 
-                                    <p:dataTable  id="idTabelaDialog" var="nova" class="ui-fluid" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                    <p:dataTable  id="idTabelaDialog" value="#{funcaoQualidadeMB.listaNovasFuncoes}" var="nova" class="ui-fluid" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                                   emptyMessage="Nenhuma função nova.." 
                                                   style="margin-bottom: 10px; margin-top: 15px; 
                                                   max-width: 800px; min-width: 300px" reflow="true">
 
                                         <p:column width="5" headerText="Codígo">
-                                            <h:outputText value="" />
+                                            <h:outputText value="#{nova.funcaoId}" />
                                         </p:column >
                                         <p:column width="30" headerText="Nova Função">
-                                            <h:outputText value="" />
+                                            <h:outputText value="#{nova.nomeCargo}" />
                                         </p:column>
                                         <p:column width="4" headerText="Mat.">
-                                            <h:outputText value="" />
+                                            <h:outputText value="#{nova.matricula}" />
                                         </p:column >
                                         <p:column width="50" headerText="Colaborador">
-                                            <h:outputText value="" />
+                                            <h:outputText value="#{nova.nomeColab}" />
                                         </p:column >
                                         <p:column width="5" headerText="C. Custo">
-                                            <h:outputText value="" />
+                                            <h:outputText value="#{nova.cdCusto}" />
                                         </p:column > 
                                     </p:dataTable>               
                                 </div>
@@ -175,10 +175,10 @@
                                     </p:panelGrid>
                                     <br></br>
 
-                                    <p:dataTable  id="idTabelaDialogFilha" var="filha" class="ui-fluid" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                                  emptyMessage="Nenhuma filha.." 
+                                    <p:dataTable  id="idTabelaDialogFilha" value="#{funcaoQualidadeMB.listaNovasFuncoes}" selection="#{funcaoQualidadeMB.selectNovasFuncoes}" rowKey="#{filha.funcaoId}" var="filha" class="ui-fluid" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                  emptyMessage="Nenhum treinamento.." 
                                                   style="margin-bottom: 10px; margin-top: 15px; 
-                                                  max-width: 800px; min-width: 300px" reflow="true">
+                                                  max-width: 800px; min-width: 400px" reflow="true">
 
                                         <f:facet name="header">
                                             <p:outputPanel style="float:left;margin-top: 4px">                                       
@@ -188,11 +188,12 @@
                                             <p:spacer width="25"></p:spacer>                                        
                                         </f:facet>
 
+                                        <p:column selectionMode="multiple" style="width:1px; text-align:center"/>
                                         <p:column width="10" headerText="Código">
-                                            <h:outputText value="" />
+                                            <h:outputText value="#{filha.funcaoId}" />
                                         </p:column>
                                         <p:column width="90" headerText="Função Filha">
-                                            <h:outputText value="" />
+                                            <h:outputText value="#{filha.nomeCargo}" />
                                         </p:column > 
                                     </p:dataTable>               
                                 </div>

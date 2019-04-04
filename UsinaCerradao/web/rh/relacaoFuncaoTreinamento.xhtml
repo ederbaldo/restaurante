@@ -104,7 +104,7 @@
                                     </p:commandLink>                                 
                                 </p:column>
                                 <p:column style="text-align: center; width:1%">                                   
-                                    <p:commandLink title="Vincular Funções Filhas" oncomplete="PF('dialogFilha').show();">
+                                    <p:commandLink actionListener="#{funcaoQualidadeMB.vincularFuncaoFilha()}" title="Vincular Funções Filhas" oncomplete="PF('dialogFilha').show();" update="formTreinamentoFuncao2:idDialogFilha">
                                         <i class="fa fa-clipboard" style="color: tomato"></i>
                                     </p:commandLink>                                 
                                 </p:column>
@@ -168,26 +168,49 @@
 
                             <p:dialog id="idDialogFilha" header="Vincular Função a Filhas" widgetVar="dialogFilha" responsive="true" modal="true" resizable="false">
                                 <div class="ui-fluid" >
-                                    <p:panelGrid columns="4" id="pnlVincularFilha" columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-11" layout="grid" 
+                                    <p:panelGrid columns="4" id="pnlVincular2" columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-11" layout="grid" 
                                                  styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
                                         <p:outputLabel value="Função:"/>
-                                        <p:inputText id="funcaoMae" disabled="true"/>
+                                        <p:inputText id="funcao2" value="#{funcaoQualidadeMB.funcaoQualidade.funcao}" disabled="true"/>
+                                    </p:panelGrid>
+                                    <br></br>
+                                    <p:panelGrid columns="2" id="pnlSelecionar2" columnClasses="ui-g-12 ui-md-6,ui-g-12 ui-md-6" layout="grid" 
+                                                 styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+
+                                        <p:selectOneRadio id="relacao2" layout="responsive" columns="2" value="#{funcaoQualidadeMB.tipo}" >
+                                            <f:selectItem itemLabel="Não Vinculado" itemValue="#{true}" />
+                                            <f:selectItem itemLabel="Vinculado" itemValue="#{false}" />
+                                            <p:ajax  event="change" listener="#{funcaoQualidadeMB.verificarFuncaoFilha}" update="pnlSelecionar2, idTabelaFilha" process="@this"/>                                  
+                                        </p:selectOneRadio>
                                     </p:panelGrid>
                                     <br></br>
 
-                                    <p:dataTable  id="idTabelaDialogFilha" value="#{funcaoQualidadeMB.listaNovasFuncoes}" selection="#{funcaoQualidadeMB.selectNovasFuncoes}" rowKey="#{filha.funcaoId}" var="filha" class="ui-fluid" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                    <p:dataTable  id="idTabelaFilha" var="filha" value="#{funcaoQualidadeMB.listaFuncaoFilhas}" selection="#{funcaoQualidadeMB.selectFuncaoFilhas}" rowKey="#{filha.funcaoId}" class="ui-fluid" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                                   emptyMessage="Nenhum treinamento.." 
                                                   style="margin-bottom: 10px; margin-top: 15px; 
                                                   max-width: 800px; min-width: 400px" reflow="true">
+                                        
 
                                         <f:facet name="header">
-                                            <p:outputPanel style="float:left;margin-top: 4px">                                       
-                                                <p:commandButton icon="fa fa-arrow-circle-right" value="Vincular" 
-                                                                 />
+                                            <p:outputPanel rendered="#{funcaoQualidadeMB.tipo=='true'}" style="float:left;margin-top: 4px">                                       
+                                                <p:commandButton icon="fa fa-arrow-circle-right" value="Vincular" actionListener="#{funcaoQualidadeMB.gravarFuncaoFilha}" 
+                                                                 update="formTreinamentoFuncao,formTreinamentoFuncao2, menssagem"/>
                                             </p:outputPanel>
-                                            <p:spacer width="25"></p:spacer>                                        
+                                            <p:outputPanel rendered="#{funcaoQualidadeMB.tipo=='false'}" style="float:left;margin-top: 4px">                                       
+                                                <p:commandButton icon="fa fa-arrow-circle-left" value="Desvincular" actionListener="#{funcaoQualidadeMB.excluirFuncaoFilhaVinculado}" 
+                                                                 update="formTreinamentoFuncao,formTreinamentoFuncao2, menssagem"/>
+                                            </p:outputPanel>
+                                            <p:spacer width="25"></p:spacer>
+                                            <p:outputPanel style="float:right;margin-top: 4px">  
+                                                <p:spacer width="5"></p:spacer>
+                                                <p:inputText rendered="#{funcaoQualidadeMB.tipo=='true'}" id="globalFilter" value="#{funcaoQualidadeMB.nomeSelecionado}"  style="width:400px" placeholder="Pesquisar...">
+                                                    <p:ajax event="change" update="formTreinamentoFuncao2:idTabelaDialog" listener="#{funcaoQualidadeMB.pesquisarTreinamentoQualidade()}"  process="@this" />
+                                                </p:inputText>
+                                                <p:inputText rendered="#{funcaoQualidadeMB.tipo=='false'}" id="globalFilter2" value="#{funcaoQualidadeMB.nomeSelecionado}"  style="width:400px" placeholder="Pesquisar...">
+                                                    <p:ajax event="change" update="formTreinamentoFuncao2:idTabelaDialog" listener="#{funcaoQualidadeMB.pesquisarTreinamentoVinculado()}"  process="@this" />
+                                                </p:inputText>
+                                            </p:outputPanel>
                                         </f:facet>
-
                                         <p:column selectionMode="multiple" style="width:1px; text-align:center"/>
                                         <p:column width="10" headerText="Código">
                                             <h:outputText value="#{filha.funcaoId}" />

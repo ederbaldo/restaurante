@@ -43,7 +43,7 @@ public class TipoLicense implements Serializable {
     private OpenLicense idOpenLicense;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_license", nullable = false, foreignKey = @ForeignKey(name = "id_tipo_license"))
+    @JoinColumn(name = "id_license", nullable = false, foreignKey = @ForeignKey(name = "id_tipo_licen"))
     private License license;
 //    @Column(name = "id_open_license", nullable = true)
 //    private Integer idOpenLicense;

@@ -15,18 +15,24 @@
                         <p:panelGrid columns="4" id="pnlSoftware1" columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-1,ui-g-12 ui-md-1, ui-g-12 ui-md-8" layout="grid" 
                                      styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
                             <p:outputLabel value="Matrícula:"/>
-                            <p:inputText  value="#{treinamentoMB.id}">
-                                <p:ajax event="change" update="formTreinamentoColab, :formTreinamentoColab2" listener="#{treinamentoMB.buscarTreinamento}" process="@this" />
+                            <p:inputText  value="#{colaboradorTreinamentoMB.mat}">
+                                <p:ajax event="change" listener="#{colaboradorTreinamentoMB.setarMatricula}" update="formTreinamentoColab, :formTreinamentoColab2,colaborador,relacao" process="@this" />  
                             </p:inputText> 
                             <p:outputLabel value="Colaborador:"/>
-                            <p:inputText id="colaborador" value="#{treinamentoMB.nomeTreinamento}" disabled="true"/>
+                            <p:inputText id="colaborador" value="#{colaboradorTreinamentoMB.nomeColab}" disabled="true"/>
+                            
+                            <p:selectOneRadio id="relacao" layout="responsive" columns="2" value="#{colaboradorTreinamentoMB.tipo}" >
+                                <f:selectItem itemLabel="obrigatorio" itemValue="#{true}" />
+                                <f:selectItem itemLabel="Cursado" itemValue="#{false}" />
+                                <p:ajax event="change" listener="#{colaboradorTreinamentoMB.typo}" update="formTreinamentoColab, :formTreinamentoColab2,colaborador" process="@this" />                               
+                            </p:selectOneRadio>
                         </p:panelGrid>
                     </div>
                 </p:panel>
             </h:form>
             <h:form id="formTreinamentoColab2">
                 <div class="card card-w-title">
-                    <p:dataTable id="idTabela" var="colaborador" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                    <p:dataTable id="idTabela" var="colaborador" value="#{colaboradorTreinamentoMB.listaColaboradorTreinamento}" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                  rowsPerPageTemplate="10,20,30,50" emptyMessage="Nenhuma informação..." style="margin-bottom: 30px; margin-top: 5px" reflow="true" >
                         <f:facet name="header">
                             <p:outputPanel style="float:left;margin-top: 4px">                                       
@@ -41,21 +47,16 @@
                                 </h:commandLink>
                             </p:outputPanel>
                             <p:spacer width="25"></p:spacer>
-                            <p:outputPanel style="float:right;margin-top: 4px">  
-                                <p:spacer width="5"></p:spacer>
-                                <p:inputText id="globalFilter"  style="width:200px" placeholder="Pesquisar...">
-                                    <p:ajax event="change" update="formTreinamentoColab2:idTabela"  process="@this" />
-                                </p:inputText>
-                            </p:outputPanel>
+                            
                         </f:facet>
-                        <p:column headerText="Colaborador" width="40" sortBy="#{colaborador.descricao}">
-                            <h:outputText value="#{colaborador.descricao}"/>
+                        <p:column headerText="Colaborador" width="40" sortBy="#{colaborador.nome}">
+                            <h:outputText value="#{colaborador.nome}"/>
                         </p:column>
-                        <p:column headerText="Treinamento" width="40" sortBy="#{colaborador.descricao}">
-                            <h:outputText value="#{colaborador.descricao}"/>
+                        <p:column headerText="Treinamento" width="40" sortBy="#{colaborador.treinamento}">
+                            <h:outputText value="#{colaborador.treinamento}"/>
                         </p:column> 
-                        <p:column headerText="Conclusão" width="5" sortBy="#{colaborador.descricao}">
-                            <h:outputText value="#{colaborador.descricao}"/>
+                        <p:column headerText="Data" width="5" sortBy="#{colaborador.data}">
+                            <h:outputText value="#{colaborador.data}"/>
                         </p:column> 
                         <p:column style="text-align: center; width:1%">                                   
                             <p:commandLink title="Editar" id="alterar" update="formTreinamentoColab, formTreinamentoColab2" process="@this">

@@ -30,6 +30,9 @@ public class TreinamentoQualidade implements Serializable {
     
     @Column(name = "treinamento", nullable = false)
     private String treinamento;
+    
+    @Column(name = "validade", nullable = false)
+    private Integer validade;
 
     public BigDecimal getIdTreinamento() {
         return idTreinamento;
@@ -47,6 +50,14 @@ public class TreinamentoQualidade implements Serializable {
 
     public void setTreinamento(String treinamento) {
         this.treinamento = treinamento;
+    }
+
+    public Integer getValidade() {
+        return validade;
+    }
+
+    public void setValidade(Integer validade) {
+        this.validade = validade;
     }
     
 }

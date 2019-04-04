@@ -11,6 +11,7 @@ import javax.persistence.TypedQuery;
 import model.Computador;
 import model.Colab;
 import model.FuncaoQualidade;
+import model.FuncaoQualidadeSgi;
 import model.FuncaoTreinamento;
 import model.License;
 import model.OpenLicense;
@@ -78,7 +79,7 @@ public class Dao implements Serializable {
     }
 
     public List<Object[]> buscarColaboradores(BigDecimal mat) {
-        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("select colab_id, cd_colab, nome_colab from v_colab where dt_demis is null and cd_colab = " + mat);
+        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("select colab_id, cd_colab, nome_colab from USINAS.v_colab where dt_demis is null and cd_colab = " + mat);
         List<Object[]> results = query.getResultList();
         return results;
     }
@@ -328,11 +329,14 @@ public class Dao implements Serializable {
     }
 
     public List<TreinamentoQualidade> buscarTreinamentoVinculado(BigDecimal id) {
-        return (List<TreinamentoQualidade>) em.createNativeQuery("SELECT B.ID,B.TREINAMENTO FROM RH_FUNCAO_TREINAMENTO a, RH_TREINAMENTO_QUALIDADE b WHERE A.ID_TREINAMENTO = B.ID AND  ID_FUNCAO = " + id + "ORDER BY B.ID", TreinamentoQualidade.class).getResultList();
+        return (List<TreinamentoQualidade>) em.createNativeQuery("SELECT B.ID,B.TREINAMENTO,B.VALIDADE FROM RH_FUNCAO_TREINAMENTO a, RH_TREINAMENTO_QUALIDADE b WHERE A.ID_TREINAMENTO = B.ID AND  A.ID_FUNCAO = " + id + "ORDER BY B.ID", TreinamentoQualidade.class).getResultList();
     }
 
     public List<FuncaoTreinamento> buscarTreinamentoVinculado2(BigDecimal id) {
         return (List<FuncaoTreinamento>) em.createNativeQuery("SELECT * FROM RH_FUNCAO_TREINAMENTO WHERE ID_FUNCAO = " + id + "ORDER BY ID_TREINAMENTO", FuncaoTreinamento.class).getResultList();
+    }
+    public List<FuncaoQualidadeSgi> buscarFuncaoFilhaVinculadas2(BigDecimal id) {
+        return (List<FuncaoQualidadeSgi>) em.createNativeQuery("SELECT * FROM RH_FUNC_QUAL_SGI WHERE ID_FUNCAO_QUALIDADE = " + id + "ORDER BY ID_FUNCAO_QUALIDADE", FuncaoQualidadeSgi.class).getResultList();
     }
 
     public List<Object[]> buscarFuncao() {
@@ -356,7 +360,7 @@ public class Dao implements Serializable {
                 + "FROM v_colab     a \n"
                 + "WHERE a.dt_demis  IS NULL\n"
                 + "AND SUBSTR(a.CD_CCUSTO,1,1) IN('1','2')\n"
-                + "and not EXISTS (SELECT * FROM TI.FUNC_MATRIZ_SGI b where a.FUNCAO_ID = b.ID_SGI)\n"
+                + "and not EXISTS (SELECT * FROM TI.RH_FUNC_QUAL_SGI b where a.FUNCAO_ID = b.FUNCAO_SGI)\n"
                 + "ORDER BY 1");
         List<Object[]> results = query.getResultList();
         return results;
@@ -369,8 +373,23 @@ public class Dao implements Serializable {
                 + "FROM v_colab     a \n"
                 + "WHERE a.dt_demis  IS NULL\n"
                 + "AND SUBSTR(a.CD_CCUSTO,1,1) IN('1','2')\n"
-                + "and not EXISTS (SELECT * FROM TI.FUNC_MATRIZ_SGI b where a.FUNCAO_ID = b.ID_SGI)\n"
+                + "and not EXISTS (SELECT * FROM TI.RH_FUNC_QUAL_SGI b where a.FUNCAO_ID = b.FUNCAO_SGI)\n"
                 + "ORDER BY 1");
+        List<Object[]> results = query.getResultList();
+        return results;
+    }
+
+    public List<Object[]> BuscarFuncaoFilhaVinculadas(BigDecimal id) {
+        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT DISTINCT\n"
+                + "VC.NOME_CARGO\n"
+                + ",VC.FUNCAO_ID\n"
+                + "FROM V_COLAB VC\n"
+                + ",RH_FUNC_QUAL_SGI RS\n"
+                + ",RH_FUNCAO_QUALIDADE FQ\n"
+                + "WHERE VC.FUNCAO_ID = RS.FUNCAO_SGI\n"
+                + "AND RS.ID_FUNCAO_QUALIDADE = FQ.ID\n"
+                + "AND VC.DT_DEMIS IS NULL\n"
+                + "AND FQ.ID ="+id);
         List<Object[]> results = query.getResultList();
         return results;
     }
@@ -385,6 +404,57 @@ public class Dao implements Serializable {
 
     public List<TreinamentoQualidade> pesquisarTreinamentoVinculado(String nome, BigDecimal id) {
         return (List<TreinamentoQualidade>) em.createNativeQuery("SELECT B.ID,B.TREINAMENTO FROM RH_FUNCAO_TREINAMENTO a, RH_TREINAMENTO_QUALIDADE b WHERE A.ID_TREINAMENTO = B.ID AND B.TREINAMENTO LIKE '%" + nome + "%' AND A.ID_FUNCAO = " + id, TreinamentoQualidade.class).getResultList();
+    }
+
+    //----------------TreinamentoColaborador----------------
+    public List<Object[]> buscarColabTreinamentoObrigatorio(BigDecimal matricula) {
+        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT VC. CD_COLAB,\n"
+                + "  VC.NOME_COLAB,\n"
+                + "  TE.ID,\n"
+                + "  TE.DESCRICAO AS TREINAMENTO,\n"
+                + "  null data\n"
+                + "FROM USINAS.v_colab vc,\n"
+                + "  TI.FUNC_MATRIZ_SGI FMS,\n"
+                + "  TI.FUNC_MATRIZ FM,\n"
+                + "  TI.FUNC_MATRIZ_TREINAMENTO FT,\n"
+                + "  TI.TREINAMENTO TE\n"
+                + "WHERE vc.FUNCAO_ID           = FMS.ID_SGI\n"
+                + "AND FMS.ID_MATRIZ     = FM.ID\n"
+                + "AND FM.ID             = FT.ID_FUNC_MATRIZ\n"
+                + "AND FT.ID_TREINAMENTO = TE.ID\n"
+                + "AND vc.DT_DEMIS      IS NULL\n"
+                + "AND VC.CD_COLAB =" + matricula
+                + "ORDER BY 2");
+        List<Object[]> results = query.getResultList();
+        return results;
+    }
+
+    public List<Object[]> buscarColabTreinamentoRealizado(BigDecimal matricula) {
+        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT vc.cd_colab MAT,\n"
+                + "  vc.nome_colab,\n"
+                + "  ac.cursoforn_id  TURMA,\n"
+                + "  c.descr CURSO,\n"
+                + "  dt_fim\n"
+                + "FROM USINAS.agenda_curso ac,\n"
+                + "  USINAS.curso c,\n"
+                + "  USINAS.curso_forn cf,\n"
+                + "  USINAS.curso_colab cc,\n"
+                + "  USINAS.v_colab vc,\n"
+                + "  USINAS.forn f,\n"
+                + "  USINAS.corr co,\n"
+                + "  USINAS.funcao fu\n"
+                + "WHERE ac.cursoforn_id = cf.cursoforn_id\n"
+                + "AND cf.curso_id = c.curso_id\n"
+                + "AND ac.agendacurs_id = cc.agendacurs_id\n"
+                + "AND vc.colab_id = cc.colab_id\n"
+                + "AND cf.forn_id = f.forn_id\n"
+                + "AND f.corr_id = co.corr_id\n"
+                + "AND fu.funcao_id = vc.funcao_id\n"
+                + "and vc.dt_demis is null\n"
+                + "AND VC.CD_COLAB =" + matricula
+                + "order by 4");
+        List<Object[]> results = query.getResultList();
+        return results;
     }
 //----------------AGRICOLA-----------------------    
     //----------------CanaDiaFrenteMB----------------

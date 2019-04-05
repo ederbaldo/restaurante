@@ -14,37 +14,43 @@
                 <div class="ui-g-12">
                     <h:form id="formTreinamentoFuncao">
                         <p:panel id="basic" header="Relação Função e Treinamento" style="margin-bottom:10px">
-                            <p:panelGrid columns="4" id="pnlSoftware1" columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1, ui-g-12 ui-md-8" layout="grid" 
-                                         styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
-                                <p:outputLabel value="Código Função:"/>
-                                <p:inputText  value="#{funcaoQualidadeMB.funcaoID}">
-                                    <p:ajax event="change" update="formTreinamentoFuncao:funcao" listener="#{funcaoQualidadeMB.buscarFuncaoSgi}" process="@this" />
-                                </p:inputText> 
-                                <p:outputLabel value="Função:"/>
-                                <p:inputText id="funcao" value="#{funcaoQualidadeMB.funcao}" style="font-weight: bold;"  disabled="true"/>
-                            </p:panelGrid>
-                            <br></br>
                             <p:panelGrid columns="4" layout="grid"
-                                         columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-6,ui-g-12 ui-md-2"
+                                         columnClasses="ui-g-12 ui-md-4,ui-g-12 ui-md-4,ui-g-12 ui-md-4"
                                          styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
-                                <p:commandButton  value="Salvar" update="formTreinamentoFuncao,formTreinamentoFuncao2, menssagem" 
-                                                  actionListener="#{funcaoQualidadeMB.gravar}" icon="fa fa-check" />
-                                <p:commandButton value="Cancelar" icon="fa fa-close" onclick="history.go(0); return false;"/>
-
-                                <p:outputLabel/>
-                                <p:commandButton value="Novas Funções" icon="fa fa-exclamation-triangle" oncomplete="PF('dialogInfoNovo').show();" />
+                                <p:commandButton value="Cadastrar Função" icon="fa fa-user-plus" oncomplete="PF('dialogInfoNovo').show();" />
+                                <p:commandButton value="Cadastrar Treinamento" icon="fa fa-graduation-cap" oncomplete="PF('dialogInfoNovoTrein').show();"/>                                
                             </p:panelGrid>
 
-
-                            <p:dialog id="idDialogNovaFunc"  header="Novas Funções" widgetVar="dialogInfoNovo" responsive="true" modal="true" resizable="false">
+                            <p:dialog id="idDialogNovaFunc"  header="Cadastrar Funções" widgetVar="dialogInfoNovo" responsive="true" modal="true" resizable="false">
                                 <div class="ui-fluid" >
+                                    <p:panelGrid columns="4" id="pnlSoftware1" columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1, ui-g-12 ui-md-8" layout="grid" 
+                                                 styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                                        <p:outputLabel value="Código:"/>
+                                        <p:inputText  value="#{funcaoQualidadeMB.funcaoID}">
+                                            <p:ajax event="change" update="formTreinamentoFuncao:funcao" listener="#{funcaoQualidadeMB.buscarFuncaoSgi}" process="@this" />
+                                        </p:inputText> 
+                                        <p:outputLabel value="Função:"/>
+                                        <p:inputText id="funcao" value="#{funcaoQualidadeMB.funcao}"/>
+                                    </p:panelGrid>
+                                    <br></br>
+
+                                    <p:panelGrid columns="4" id="pnlSalvarFunc" columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-6,ui-g-12 ui-md-2" layout="grid" 
+                                                 styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                                        <p:commandButton  value="Salvar" update="formTreinamentoFuncao,formTreinamentoFuncao2, menssagem" 
+                                                          actionListener="#{funcaoQualidadeMB.gravar}" icon="fa fa-check" />
+                                        <p:commandButton value="Cancelar" icon="fa fa-close" onclick="history.go(0); return false;"/>      
+                                    </p:panelGrid>
+                                    <br></br>
 
                                     <p:dataTable  id="idTabelaDialog" value="#{funcaoQualidadeMB.listaNovasFuncoes}" var="nova" class="ui-fluid" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                                   emptyMessage="Nenhuma função nova.." 
                                                   style="margin-bottom: 10px; margin-top: 15px; 
                                                   max-width: 800px; min-width: 300px" reflow="true">
+                                        <f:facet name="header">
+                                            Funções Disponíveis
+                                        </f:facet>
 
-                                        <p:column width="5" headerText="Codígo">
+                                        <p:column width="5" headerText="Código">
                                             <h:outputText value="#{nova.funcaoId}" />
                                         </p:column >
                                         <p:column width="30" headerText="Nova Função">
@@ -62,6 +68,58 @@
                                     </p:dataTable>               
                                 </div>
                             </p:dialog>
+
+
+                            <p:dialog id="idDialogNovaTrein"  header="Cadastrar Treinamento" widgetVar="dialogInfoNovoTrein" responsive="true" modal="true" resizable="false">
+                                <div class="ui-fluid" >
+                                    <p:panelGrid columns="4" id="pnlTrein1" columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-8,ui-g-12 ui-md-1, ui-g-12 ui-md-2" layout="grid" 
+                                                 styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                                        <p:outputLabel value="Nome:"/>
+                                        <p:inputText  value="">
+                                            <p:ajax event="change" />
+                                        </p:inputText> 
+                                        <p:outputLabel value="Validade:"/>
+                                        <p:inputText id="data" value=""/>
+                                    </p:panelGrid>
+                                    <br></br>
+
+                                    <p:panelGrid columns="4" id="pnlSalvar" columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-6,ui-g-12 ui-md-2" layout="grid" 
+                                                 styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                                        <p:commandButton  value="Salvar" icon="fa fa-check" />
+                                        <p:commandButton value="Cancelar" icon="fa fa-close" onclick="history.go(0); return false;"/>      
+                                    </p:panelGrid>
+                                    <br></br>
+
+                                    <p:dataTable  id="idTabelaDialogTrein" var="treinamento" class="ui-fluid" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                  emptyMessage="Nenhuma treinamento.." 
+                                                  style="margin-bottom: 10px; margin-top: 15px; 
+                                                  max-width: 800px; min-width: 300px" reflow="true">
+
+                                        <p:column width="50" headerText="Treinamento">
+                                            <h:outputText />
+                                        </p:column >
+                                        <p:column width="5" headerText="Validade">
+                                            <h:outputText  />
+                                        </p:column>
+                                        <p:column style="text-align: center; width:1%">                                   
+                                            <p:commandLink title="Editar" id="alterar" >
+                                                <i class="fa fa-pencil-square-o" style="color: dodgerblue"></i>
+                                            </p:commandLink>                                 
+                                        </p:column>
+                                        <p:column style="text-align: center; width:1%">                                   
+                                            <p:commandLink title="Excluir" id="excluir" >
+                                                <i class="fa fa-trash" style="color: red"></i>
+                                                <p:confirm header="Confirmação" message="Você tem certeza ?" icon="ui-icon-alert"/>
+                                            </p:commandLink>
+                                            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                                <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
+                                                <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="fa fa-close" />
+                                            </p:confirmDialog>
+                                        </p:column>
+                                    </p:dataTable>               
+                                </div>
+                            </p:dialog>
+
                         </p:panel>
 
                     </h:form>
@@ -123,8 +181,8 @@
                                                  styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
 
                                         <p:selectOneRadio id="relacao" layout="responsive" columns="2" value="#{funcaoQualidadeMB.tipo}" >
-                                            <f:selectItem itemLabel="Disponíveis" itemValue="#{true}" />
                                             <f:selectItem itemLabel="Vinculado" itemValue="#{false}" />
+                                            <f:selectItem itemLabel="Disponíveis" itemValue="#{true}" />                                           
                                             <p:ajax  event="change" listener="#{funcaoQualidadeMB.verificar}" update="pnlSelecionar, idTabelaDialog" process="@this"/>                                  
                                         </p:selectOneRadio>
                                     </p:panelGrid>
@@ -155,12 +213,15 @@
                                             </p:outputPanel>
                                         </f:facet>
                                         <p:column selectionMode="multiple" style="width:1px; text-align:center"/>
-                                        <p:column width="10" headerText="Código">
+                                        <p:column width="10" headerText="Código" sortBy="#{treinamento.idTreinamento}">
                                             <h:outputText value="#{treinamento.idTreinamento}" />
                                         </p:column>
-                                        <p:column width="90" headerText="Treinamento">
+                                        <p:column width="90" headerText="Treinamento" sortBy="#{treinamento.treinamento}">
                                             <h:outputText value="#{treinamento.treinamento}" />
-                                        </p:column > 
+                                        </p:column >
+                                        <p:column width="5" headerText="Validade" sortBy="#{treinamento.validade}">
+                                            <h:outputText value="#{treinamento.validade} anos"/>
+                                        </p:column>
                                     </p:dataTable>               
                                 </div>
                             </p:dialog>
@@ -178,8 +239,8 @@
                                                  styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
 
                                         <p:selectOneRadio id="relacao2" layout="responsive" columns="2" value="#{funcaoQualidadeMB.tipo}" >
-                                            <f:selectItem itemLabel="Não Vinculado" itemValue="#{true}" />
                                             <f:selectItem itemLabel="Vinculado" itemValue="#{false}" />
+                                            <f:selectItem itemLabel="Não Vinculado" itemValue="#{true}" />                                          
                                             <p:ajax  event="change" listener="#{funcaoQualidadeMB.verificarFuncaoFilha}" update="pnlSelecionar2, idTabelaFilha" process="@this"/>                                  
                                         </p:selectOneRadio>
                                     </p:panelGrid>
@@ -189,7 +250,7 @@
                                                   emptyMessage="Nenhum treinamento.." 
                                                   style="margin-bottom: 10px; margin-top: 15px; 
                                                   max-width: 800px; min-width: 400px" reflow="true">
-                                        
+
 
                                         <f:facet name="header">
                                             <p:outputPanel rendered="#{funcaoQualidadeMB.tipo=='true'}" style="float:left;margin-top: 4px">                                       

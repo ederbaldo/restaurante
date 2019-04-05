@@ -53,11 +53,11 @@
                         <p:column headerText="Função" width="30" sortBy="#{treinamento.nomeCargo}">
                             <h:outputText value="#{treinamento.nomeCargo}"/>
                         </p:column> 
-                        <p:column headerText="Local Trabalho" width="25" sortBy="#{treinamento.descLocalTrab}">
+                        <p:column headerText="Local Trabalho" width="30" sortBy="#{treinamento.descLocalTrab}">
                             <h:outputText value="#{treinamento.descLocalTrab}"/>
                         </p:column> 
                         <p:column headerText="Vencimento" width="5" sortBy="#{treinamento.data}">
-                             <h:outputText value="#{treinamento.data}">
+                            <h:outputText value="#{treinamento.data}">
                                 <f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime>
                             </h:outputText>
                         </p:column>
@@ -77,13 +77,16 @@
 
                     <p:dialog id="idDialogInfo" header="Treinamentos Realizados" widgetVar="dialogInfo" responsive="true" modal="true" resizable="false">
                         <div class="ui-fluid">
+                            <p:panelGrid columns="2" id="pnlVincular2" columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-10" layout="grid" 
+                                         styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                                <p:outputLabel value="Colaborador:"/>
+                                <p:inputText id="funcao2" value="#{treinamentoMB.treinamento.nomeColab}" disabled="true"/>
+                            </p:panelGrid>
+                            <br></br>
                             <p:dataTable id="idTabelaDialog" value="#{treinamentoMB.listaTreinamentoFeito}" class="ui-fluid" var="lista" rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}  {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                          emptyMessage="Nenhum treinamento.." 
                                          style="margin-bottom: 10px; margin-top: 15px; 
                                          max-width: 800px; min-width: 300px" reflow="true" editable="true" editMode="cell">
-                                <p:column headerText="Nome" width="40">
-                                    <h:outputText value="#{lista.nomeColab}" />
-                                </p:column>
                                 <p:column headerText="Treinamentos" width="40">
                                     <h:outputText value="#{lista.treinamento}" />
                                 </p:column>

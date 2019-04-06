@@ -34,6 +34,7 @@ public class ColaboradorTreinamentoMB implements Serializable {
     private Boolean tipo;
     private BigDecimal mat;
     private String nomeSelecionado;
+    private BigDecimal empresa;
 
     public ColaboradorTreinamentoMB() {
         dao = new Dao();
@@ -45,7 +46,9 @@ public class ColaboradorTreinamentoMB implements Serializable {
 
     public void typo() {
         if (getTipo()) {
+            System.out.println("---------------EMPRESA------------" + getEmpresa());
             System.out.println("---------------matricula------------" + colabTreinamento.getMatricula());
+            
             listaColaboradorTreinamento = new ArrayList<ColaboradorTreinamento>();
             buscarColabTreinamentoObrigatorio();
         } else {
@@ -54,8 +57,10 @@ public class ColaboradorTreinamentoMB implements Serializable {
         }
     }
 
+
     public void setarMatricula() {
         colabTreinamento.setMatricula(getMat());
+        System.out.println("---------------EMPRESA------------" + getEmpresa());
         listaColaboradorTreinamento = new ArrayList<ColaboradorTreinamento>();
         setTipo(true);
         typo();
@@ -63,7 +68,7 @@ public class ColaboradorTreinamentoMB implements Serializable {
     }
 
     public void buscarColabTreinamentoObrigatorio() {
-        List<Object[]> results = dao.buscarColabTreinamentoObrigatorio(colabTreinamento.getMatricula());
+        List<Object[]> results = dao.buscarColabTreinamentoObrigatorio(colabTreinamento.getMatricula(),getEmpresa());
         ColaboradorTreinamento col = null;
         for (Object[] result : results) {
 
@@ -80,7 +85,7 @@ public class ColaboradorTreinamentoMB implements Serializable {
     }
 
     public void buscarColabTreinamentoRealizado() {
-        List<Object[]> results = dao.buscarColabTreinamentoRealizado(colabTreinamento.getMatricula());
+        List<Object[]> results = dao.buscarColabTreinamentoRealizado(colabTreinamento.getMatricula(),getEmpresa());
         ColaboradorTreinamento col = null;
         for (Object[] result : results) {
 
@@ -99,7 +104,7 @@ public class ColaboradorTreinamentoMB implements Serializable {
     public void BuscarColab() {
         //novoTotal();
 
-        List<Object[]> results = dao.buscarColaboradores(colabTreinamento.getMatricula());
+        List<Object[]> results = dao.buscarColaboradoresT(colabTreinamento.getMatricula(),getEmpresa());
         Colab colab;
         for (Object[] result : results) {
             colab = new Colab();
@@ -176,5 +181,16 @@ public class ColaboradorTreinamentoMB implements Serializable {
         this.nomeSelecionado = nomeSelecionado;
     }
 
+    public BigDecimal getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(BigDecimal empresa) {
+        this.empresa = empresa;
+    }
+
+    
+
+    
     
 }

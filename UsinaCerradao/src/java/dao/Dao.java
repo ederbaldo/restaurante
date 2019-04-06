@@ -407,7 +407,12 @@ public class Dao implements Serializable {
     }
 
     //----------------TreinamentoColaborador----------------
-    public List<Object[]> buscarColabTreinamentoObrigatorio(BigDecimal matricula) {
+    public List<Object[]> buscarColaboradoresT(BigDecimal mat, BigDecimal empresa) {
+        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("select colab_id, cd_colab, nome_colab from USINAS.v_colab where dt_demis is null and cd_colab = " + mat + "and cd_empr = " + empresa);
+        List<Object[]> results = query.getResultList();
+        return results;
+    }
+    public List<Object[]> buscarColabTreinamentoObrigatorio(BigDecimal matricula, BigDecimal empresa) {
         TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT VC. CD_COLAB,\n"
                 + "  VC.NOME_COLAB,\n"
                 + "  TE.ID,\n"
@@ -423,13 +428,14 @@ public class Dao implements Serializable {
                 + "AND FM.ID             = FT.ID_FUNC_MATRIZ\n"
                 + "AND FT.ID_TREINAMENTO = TE.ID\n"
                 + "AND vc.DT_DEMIS      IS NULL\n"
-                + "AND VC.CD_COLAB =" + matricula
+                + "AND VC.CD_EMPR = " + empresa
+                + "\n AND VC.CD_COLAB =" + matricula
                 + "ORDER BY 2");
         List<Object[]> results = query.getResultList();
         return results;
     }
 
-    public List<Object[]> buscarColabTreinamentoRealizado(BigDecimal matricula) {
+    public List<Object[]> buscarColabTreinamentoRealizado(BigDecimal matricula, BigDecimal empresa) {
         TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNativeQuery("SELECT vc.cd_colab MAT,\n"
                 + "  vc.nome_colab,\n"
                 + "  ac.cursoforn_id  TURMA,\n"
@@ -451,7 +457,8 @@ public class Dao implements Serializable {
                 + "AND f.corr_id = co.corr_id\n"
                 + "AND fu.funcao_id = vc.funcao_id\n"
                 + "and vc.dt_demis is null\n"
-                + "AND VC.CD_COLAB =" + matricula
+                + "AND VC.CD_EMPR = " + empresa
+                + "\n AND VC.CD_COLAB =" + matricula
                 + "order by 4");
         List<Object[]> results = query.getResultList();
         return results;

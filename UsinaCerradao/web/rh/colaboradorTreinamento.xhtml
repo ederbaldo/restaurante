@@ -12,8 +12,19 @@
                 <p:messages id="menssagem" showDetail="true" closable="true"/>                
                 <p:panel id="basic" header="Treinamentos Realizados por Colaborador" style="margin-bottom:10px">
                     <div class="ui-fluid">
-                        <p:panelGrid columns="6" id="pnlSoftware1" columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-1,ui-g-12 ui-md-1, ui-g-12 ui-md-5, ui-g-12 ui-md-1,ui-g-12 ui-md-3" layout="grid" 
+                        <p:panelGrid columns="6" id="pnlSoftware1" columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-3,ui-g-12 ui-md-1, ui-g-12 ui-md-1, ui-g-12 ui-md-1,ui-g-12 ui-md-5" layout="grid" 
                                      styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                            <p:outputLabel for="empresa" value="Empresa:"/>
+                            <p:selectOneMenu id="empresa" value="#{colaboradorTreinamentoMB.empresa}">
+                                <f:selectItem itemLabel="Selecionar" itemValue="1"/>
+                                <f:selectItem itemLabel="USINA CERRADAO" itemValue="5"/>
+                                <f:selectItem itemLabel="AGRICOLA CERRADAO" itemValue="4"/>
+                                <f:selectItem itemLabel="BIOENERGIA CERRADAO" itemValue="20"/>
+                                <f:selectItem itemLabel="LEVEDURA CERRADAO" itemValue="23"/>
+                                <f:selectItem itemLabel="BACURI AGRICOLA" itemValue="6"/>
+                                <p:ajax event="change" update="formTreinamentoColab, :formTreinamentoColab2,colaborador,relacao"/> 
+                            </p:selectOneMenu> 
+                            
                             <p:outputLabel value="Matrícula:"/>
                             <p:inputText  value="#{colaboradorTreinamentoMB.mat}">
                                 <p:ajax event="change" listener="#{colaboradorTreinamentoMB.setarMatricula}" update="formTreinamentoColab, :formTreinamentoColab2,colaborador,relacao" process="@this" />  
@@ -21,22 +32,14 @@
                             <p:outputLabel value="Colaborador:"/>
                             <p:inputText id="colaborador" value="#{colaboradorTreinamentoMB.nomeColab}" disabled="true"/>
                             
-                            <p:outputLabel for="empresa" value="Empresa:"/>
-                            <p:selectOneMenu id="empresa">
-                                <f:selectItem itemLabel="Selecionar" itemValue="1"/>
-                                <f:selectItem itemLabel="USINA CERRADAO" itemValue="5"/>
-                                <f:selectItem itemLabel="AGRICOLA CERRADAO" itemValue="4"/>
-                                <f:selectItem itemLabel="BIOENERGIA CERRADAO" itemValue="20"/>
-                                <f:selectItem itemLabel="LEVEDURA CERRADAO" itemValue="23"/>
-                                <f:selectItem itemLabel="BACURI AGRICOLA" itemValue="6"/>
-                            </p:selectOneMenu> 
+                            
                         </p:panelGrid>
                         <p:panelGrid columns="4" id="pnlSoftware2" columnClasses="ui-g-12 ui-md-3,ui-g-12 ui-md-3,ui-g-12 ui-md-3, ui-g-12 ui-md-3" layout="grid" 
                                      styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
                             <p:selectOneRadio id="relacao" layout="responsive" columns="2" value="#{colaboradorTreinamentoMB.tipo}" >
                                 <f:selectItem itemLabel="Obrigatório" itemValue="#{true}" />
                                 <f:selectItem itemLabel="Realizado" itemValue="#{false}" />
-                                <p:ajax event="change" listener="#{colaboradorTreinamentoMB.typo}" update="formTreinamentoColab, :formTreinamentoColab2,colaborador" process="@this" />                               
+                                <p:ajax event="change" listener="#{colaboradorTreinamentoMB.typo}" update=" :formTreinamentoColab2,colaborador" process="@this" />                               
                             </p:selectOneRadio>         
                         </p:panelGrid>
 

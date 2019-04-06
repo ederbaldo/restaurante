@@ -327,6 +327,9 @@ public class Dao implements Serializable {
     public List<TreinamentoQualidade> buscarTreinamentoQualidadeOrderAlfabetica() {
         return (List<TreinamentoQualidade>) em.createNativeQuery("SELECT * FROM RH_TREINAMENTO_QUALIDADE ORDER BY 2 ", TreinamentoQualidade.class).getResultList();
     }
+    public List<TreinamentoQualidade> buscarTreinamentoOrdenDesc() {
+        return (List<TreinamentoQualidade>) em.createNativeQuery("SELECT * FROM RH_TREINAMENTO_QUALIDADE ORDER BY 1 DESC ", TreinamentoQualidade.class).getResultList();
+    }
 
     public List<TreinamentoQualidade> buscarTreinamentoVinculado(BigDecimal id) {
         return (List<TreinamentoQualidade>) em.createNativeQuery("SELECT B.ID,B.TREINAMENTO,B.VALIDADE FROM RH_FUNCAO_TREINAMENTO a, RH_TREINAMENTO_QUALIDADE b WHERE A.ID_TREINAMENTO = B.ID AND  A.ID_FUNCAO = " + id + "ORDER BY B.ID", TreinamentoQualidade.class).getResultList();

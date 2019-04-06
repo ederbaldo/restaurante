@@ -33,29 +33,33 @@ public class FuncaoQualidadeMB implements Serializable {
 
     Dao dao = new Dao();
     private FuncaoQualidade funcaoQualidade;
+    private FuncaoTreinamento funcaoTreinamento;
+    private TreinamentoQualidade treinamentoQualidade;
+    private ListaFuncaoFilha funcaoFilha;
+    private FuncaoQualidadeSgi funcaoQualidadeSgi;
+    
     private List<FuncaoQualidade> listaFuncaoQualidade;
+    private List<FuncaoTreinamento> listaFuncaoTreinamento;
+    private List<FuncaoTreinamento> selectFuncaoTreinamento;
+    private List<TreinamentoQualidade> listaTreinamentoQualidade;
+    private List<TreinamentoQualidade> selectTreinamentoQualidade;
+    private List<ListaNovasFuncoes> listaNovasFuncoes;
+    private List<ListaFuncaoFilha> listaFuncaoFilhas;
+    private List<ListaFuncaoFilha> selectFuncaoFilhas;
+    private List<FuncaoQualidadeSgi> listaFuncaoQualidadeSgi;
+
+    private String nomeSelecionado;
     private BigDecimal funcaoID;
     private BigDecimal id;
     private String funcao;
     @Type(type = "yes_no")
     private Boolean tipo;
-    private FuncaoTreinamento funcaoTreinamento;
-    private List<FuncaoTreinamento> listaFuncaoTreinamento;
-    private List<FuncaoTreinamento> selectFuncaoTreinamento;
-    private List<TreinamentoQualidade> listaTreinamentoQualidade;
-    private List<TreinamentoQualidade> selectTreinamentoQualidade;
-    private String nomeSelecionado;
-    private List<ListaNovasFuncoes> listaNovasFuncoes;
-    private ListaFuncaoFilha funcaoFilha;
-    private List<ListaFuncaoFilha> listaFuncaoFilhas;
-    private List<ListaFuncaoFilha> selectFuncaoFilhas;
-    private FuncaoQualidadeSgi funcaoQualidadeSgi;
-    private List<FuncaoQualidadeSgi> listaFuncaoQualidadeSgi;
 
     public FuncaoQualidadeMB() {
         funcaoQualidade = new FuncaoQualidade();
         funcaoTreinamento = new FuncaoTreinamento();
         funcaoQualidadeSgi = new FuncaoQualidadeSgi();
+        treinamentoQualidade = new TreinamentoQualidade();
         listaFuncaoQualidade = new ArrayList<FuncaoQualidade>();
         listaTreinamentoQualidade = new ArrayList<TreinamentoQualidade>();
         listaNovasFuncoes = new ArrayList<ListaNovasFuncoes>();
@@ -64,7 +68,7 @@ public class FuncaoQualidadeMB implements Serializable {
         buscarNovaFuncao();
         //buscarFilha();
     }
-
+//----------------------Cadastrar nova função---------------------------
     public void buscarFuncaoSgi() {
 //        //setListaColab((List<Colab>) dao.buscarColaborador(mat));
         List<Object[]> results = dao.BuscarFuncaoSGI(getFuncaoID());
@@ -76,6 +80,19 @@ public class FuncaoQualidadeMB implements Serializable {
             setFuncao((String) result[1]);
         });
 
+    }
+    public void gravar(ActionEvent evt) {
+        try {
+            System.out.println("---------------------" + getFuncao());
+            funcaoQualidade.setFuncao(getFuncao());
+            dao.gravar(funcaoQualidade);
+            /*listarMarcaVeiculo = (List<Marca>) dao.buscarTodos(Marca.class);*/
+            funcaoQualidade = new FuncaoQualidade();
+            FacesUtil.addInfoMessage("Informação", "Função salva com sucesso!");
+        } catch (Exception ex) {
+            FacesUtil.addErrorMessage("Erro", "Entre em contato com suporte!");
+            ex.printStackTrace();
+        }
     }
 
     public void buscarNovaFuncao() {
@@ -93,7 +110,22 @@ public class FuncaoQualidadeMB implements Serializable {
         }
 
     }
-
+//----------------------Cadastrar novo treinamento---------------------------
+    public void buscarTodosTreinamentosQualidade(){
+        listaTreinamentoQualidade = (List<TreinamentoQualidade>) dao.buscarTreinamentoOrdenDesc();
+    }
+    public void gravarTreinamentoQualidade(ActionEvent evt) {
+        try {
+            dao.gravar(treinamentoQualidade);
+            treinamentoQualidade = new TreinamentoQualidade();
+            FacesUtil.addInfoMessage("Informação", "Treinamento salvo com sucesso!");
+        } catch (Exception ex) {
+            FacesUtil.addErrorMessage("Erro", "Entre em contato com suporte!");
+            ex.printStackTrace();
+        }
+    }
+    
+    
 //    public void buscarFuncaoFilha() {
 //        List<Object[]> results = dao.BuscarFuncaoFilha();
 //        ListaFuncaoFilha fun;
@@ -106,19 +138,7 @@ public class FuncaoQualidadeMB implements Serializable {
 //        }
 //
 //    }
-    public void gravar(ActionEvent evt) {
-        try {
-            System.out.println("---------------------" + getFuncao());
-            funcaoQualidade.setFuncao(getFuncao());
-            dao.gravar(funcaoQualidade);
-            /*listarMarcaVeiculo = (List<Marca>) dao.buscarTodos(Marca.class);*/
-            funcaoQualidade = new FuncaoQualidade();
-            FacesUtil.addInfoMessage("Informação", "Função salva com sucesso!");
-        } catch (Exception ex) {
-            FacesUtil.addErrorMessage("Erro", "Entre em contato com suporte!");
-            ex.printStackTrace();
-        }
-    }
+    
 
     public void gravarFuncaoTreinamento(ActionEvent evt) {
         try {
@@ -459,4 +479,13 @@ public class FuncaoQualidadeMB implements Serializable {
         this.listaFuncaoQualidadeSgi = listaFuncaoQualidadeSgi;
     }
 
+    public TreinamentoQualidade getTreinamentoQualidade() {
+        return treinamentoQualidade;
+    }
+
+    public void setTreinamentoQualidade(TreinamentoQualidade treinamentoQualidade) {
+        this.treinamentoQualidade = treinamentoQualidade;
+    }
+
+    
 }

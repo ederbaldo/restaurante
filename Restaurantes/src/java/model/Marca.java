@@ -22,8 +22,7 @@ import javax.persistence.Table;
 @Table (name = "marca")
 public class Marca implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MARCA_SEQ")
-    @SequenceGenerator(sequenceName = "SEQ_MARCA", allocationSize = 1, name = "MARCA_SEQ")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_marca", unique = true, nullable = false)
     private int idMarca;
     @Column(name = "descricao", length = 20, nullable = false)
